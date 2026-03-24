@@ -10,11 +10,13 @@ import {
 	Sun,
 	Moon,
 	SquarePen,
+	MessageCircle,
 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import PricingModal from '~/components/PricingModal'
 import type { User } from '~/.server/database/schema'
+import AiTutor from '~/components/AiTutor'
 
 const baseNavItems = [
 	{ label: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -27,6 +29,7 @@ export default function MainLayout() {
 	const location = useLocation()
 	const matches = useMatches()
 	const [isPricingOpen, setIsPricingOpen] = useState(false)
+	const [aiOpen, setAiOpen] = useState(false)
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 	const [sidebarWidth, setSidebarWidth] = useState(256)
 	const [theme, setTheme] = useState<'light' | 'dark'>('dark')
@@ -50,13 +53,13 @@ export default function MainLayout() {
 	const navItems =
 		currentUser?.role === 'staff'
 			? [
-					...baseNavItems,
-					{
-						label: 'Course Builder',
-						href: '/course-builder',
-						icon: SquarePen,
-					},
-				]
+				...baseNavItems,
+				{
+					label: 'Course Builder',
+					href: '/course-builder',
+					icon: SquarePen,
+				},
+			]
 			: baseNavItems
 
 	useEffect(() => {
@@ -158,10 +161,9 @@ export default function MainLayout() {
 								key={item.href}
 								to={item.href}
 								className={
-									`flex items-center px-6 py-3 text-sm font-medium transition-colors relative ${
-										isSidebarCollapsed
-											? 'justify-center'
-											: 'gap-3'
+									`flex items-center px-6 py-3 text-sm font-medium transition-colors relative ${isSidebarCollapsed
+										? 'justify-center'
+										: 'gap-3'
 									} ` +
 									(isActive
 										? 'bg-emerald-500/10 text-emerald-400 border-r-2 border-emerald-500'
@@ -266,6 +268,15 @@ export default function MainLayout() {
 					</motion.div>
 				</div>
 			</main>
+
+			<button
+				onClick={() => setAiOpen(true)}
+				style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999, display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px', background: '#059669', color: 'white', border: 'none', borderRadius: '16px', fontWeight: 700, fontSize: '14px', cursor: 'pointer', boxShadow: '0 8px 32px rgba(5,150,105,0.5)' }}
+			>
+				<MessageCircle style={{ width: 16, height: 16 }} />
+				AI Tutor
+			</button>
+			<AiTutor isOpen={aiOpen} onClose={() => setAiOpen(false)} />
 		</div>
 	)
 }

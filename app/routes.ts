@@ -6,6 +6,8 @@ import {
 } from '@react-router/dev/routes'
 
 export default [
+	route('ai-chat', './routes/ai-chat.ts'),
+
 	route('login', './pages/Login.tsx'),
 	route('register', './pages/Register.tsx'),
 	route('regsitraion-success', './pages/RegisterSuccess.tsx'),
