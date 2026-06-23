@@ -87,15 +87,15 @@ export default function CourseDetailsForm({
 					<span className="text-xs font-medium text-slate-400">
 						Thumbnail URL
 					</span>
-				<input
-					type="url"
-					value={draft.thumbnail}
-					placeholder="https://example.com/thumbnail.jpg"
-					onChange={(event) =>
-						onFieldChange('thumbnail', event.target.value)
-					}
-					className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
-				/>
+					<input
+						type="url"
+						value={draft.thumbnail}
+						placeholder="https://example.com/thumbnail.jpg"
+						onChange={(event) =>
+							onFieldChange('thumbnail', event.target.value)
+						}
+						className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
+					/>
 				</label>
 
 				<label className="space-y-1.5">
@@ -117,7 +117,11 @@ export default function CourseDetailsForm({
 						Category
 					</span>
 					<select
-						value={draft.categoryId == null ? '' : String(draft.categoryId)}
+						value={
+							draft.categoryId == null
+								? ''
+								: String(draft.categoryId)
+						}
 						onChange={handleCategorySelect}
 						className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
 					>

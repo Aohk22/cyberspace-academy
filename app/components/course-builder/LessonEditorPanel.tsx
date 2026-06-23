@@ -72,14 +72,15 @@ export default function LessonEditorPanel({
 	onChallengeQuestionChange,
 }: LessonEditorPanelProps) {
 	const selectedModule =
-		modules.find((module) => module.clientId === selectedModuleClientId) ?? null
+		modules.find((module) => module.clientId === selectedModuleClientId) ??
+		null
 	const selectedLesson =
 		selectedModule?.lessons.find(
 			(lesson) => lesson.clientId === selectedLessonClientId,
 		) ?? null
-	const [activeTab, setActiveTab] = useState<'write' | 'preview' | 'challenge'>(
-		'write',
-	)
+	const [activeTab, setActiveTab] = useState<
+		'write' | 'preview' | 'challenge'
+	>('write')
 
 	const challengeQuestions = selectedLesson?.challengeQuestions ?? []
 
@@ -180,8 +181,8 @@ export default function LessonEditorPanel({
 						Lesson Editor
 					</h2>
 					<p className="mt-1 text-xs text-slate-400">
-						Write markdown freely. Nothing is submitted until you save
-						the draft.
+						Write markdown freely. Nothing is submitted until you
+						save the draft.
 					</p>
 				</div>
 				{courseId != null && selectedLesson?.id != null ? (
@@ -282,11 +283,16 @@ export default function LessonEditorPanel({
 								</span>
 								<select
 									value={selectedModule.clientId}
-									onChange={(event) => onSelectModule(event.target.value)}
+									onChange={(event) =>
+										onSelectModule(event.target.value)
+									}
 									className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 								>
 									{modules.map((module) => (
-										<option key={module.clientId} value={module.clientId}>
+										<option
+											key={module.clientId}
+											value={module.clientId}
+										>
 											{module.title || 'Untitled module'}
 										</option>
 									))}
@@ -318,7 +324,9 @@ export default function LessonEditorPanel({
 					{activeTab === 'preview' && (
 						<div className="mt-4 rounded-3xl border border-slate-800 bg-slate-950/50 p-5">
 							{selectedLesson.contentMd.trim() ? (
-								<MarkdownContent content={selectedLesson.contentMd} />
+								<MarkdownContent
+									content={selectedLesson.contentMd}
+								/>
 							) : (
 								<p className="text-sm text-slate-400">
 									No markdown yet for this lesson.
@@ -362,7 +370,9 @@ export default function LessonEditorPanel({
 										</span>
 										<button
 											type="button"
-											onClick={() => removeQuestion(q.clientId)}
+											onClick={() =>
+												removeQuestion(q.clientId)
+											}
 											className="text-red-400 hover:text-red-300 transition-colors"
 										>
 											<Trash2 className="w-4 h-4" />
@@ -439,7 +449,9 @@ export default function LessonEditorPanel({
 												</span>
 												<button
 													type="button"
-													onClick={() => addOption(q.clientId)}
+													onClick={() =>
+														addOption(q.clientId)
+													}
 													className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2 py-1 text-xs text-slate-300 hover:bg-slate-700 transition-colors"
 												>
 													<Plus className="w-3 h-3" />
@@ -465,13 +477,11 @@ export default function LessonEditorPanel({
 																		opt.clientId
 																			? {
 																					...o,
-																					isCorrect:
-																						true,
+																					isCorrect: true,
 																				}
 																			: {
 																					...o,
-																					isCorrect:
-																						false,
+																					isCorrect: false,
 																				},
 																),
 															)

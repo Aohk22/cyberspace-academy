@@ -3,11 +3,7 @@ import { Link } from 'react-router'
 import type { LearningPathWithCount } from '~/.server/database/types'
 import { formatCourseLength } from '~/utils/format-course-length'
 
-export default function PathCard({
-	path,
-}: {
-	path: LearningPathWithCount
-}) {
+export default function PathCard({ path }: { path: LearningPathWithCount }) {
 	return (
 		<Link
 			to={`/paths/${path.id}`}

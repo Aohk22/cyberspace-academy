@@ -45,11 +45,13 @@ export async function getCourseDetailData(
 	courseId: number,
 	userId: number,
 ): Promise<{ enrolled: boolean; course: CourseDetails } | null> {
-	const enrolled = (
-		await db.execute(sql`
+	const enrolled =
+		(
+			await db.execute(sql`
 			SELECT * FROM users_to_courses 
 			WHERE user_id = ${userId} AND course_id = ${courseId}
-		`)).rows.length > 0
+		`)
+		).rows.length > 0
 
 	const res = await db.execute(sql`
 		SELECT
@@ -74,10 +76,13 @@ export async function getCourseDetailData(
 		INNER JOIN categories cat ON c.category_id = cat.id
 		INNER JOIN modules m ON c.id = m.course_id
 		INNER JOIN lessons l ON m.id = l.module_id 
-		${enrolled ? sql`
+		${
+			enrolled
+				? sql`
 			INNER JOIN users_to_lessons utl 
 			ON utl.lesson_id = l.id AND utl.user_id = ${userId}
-			` : sql``
+			`
+				: sql``
 		}
 		WHERE c.id = ${courseId}
 		ORDER BY m.id, l.id

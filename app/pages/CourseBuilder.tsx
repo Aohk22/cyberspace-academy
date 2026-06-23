@@ -1,6 +1,13 @@
 import { asc, desc, eq } from 'drizzle-orm'
 import { CheckCircle2, Plus } from 'lucide-react'
-import { Await, data, Link, redirect, useActionData, useLoaderData } from 'react-router'
+import {
+	Await,
+	data,
+	Link,
+	redirect,
+	useActionData,
+	useLoaderData,
+} from 'react-router'
 import { Suspense } from 'react'
 import { z } from 'zod'
 import CourseBuilderWorkspace from '~/components/course-builder/CourseBuilderWorkspace'
@@ -65,9 +72,15 @@ const courseDraftSchema = z.object({
 		.min(1, 'Description is required')
 		.max(255, 'Description must be 255 characters or fewer'),
 	instructor: z.string().trim().min(1, 'Instructor is required'),
-	thumbnail: z.string().trim().pipe(
-		z.union([z.literal(''), z.string().url('Thumbnail must be a valid URL')]),
-	),
+	thumbnail: z
+		.string()
+		.trim()
+		.pipe(
+			z.union([
+				z.literal(''),
+				z.string().url('Thumbnail must be a valid URL'),
+			]),
+		),
 	length: z.number().int().min(0, 'Length must be 0 or greater'),
 	categoryId: z.number().int().positive('Choose a category').nullable(),
 	modules: z.array(moduleDraftSchema),
@@ -158,7 +171,9 @@ async function getBuilderCourses() {
 		.orderBy(desc(courses.id))
 }
 
-async function getCourseCurriculum(courseId: number): Promise<CurriculumModule[]> {
+async function getCourseCurriculum(
+	courseId: number,
+): Promise<CurriculumModule[]> {
 	const rows = await db
 		.select({
 			moduleId: modules.id,
@@ -249,8 +264,9 @@ async function loadBuilderData(
 	const selectedCourse =
 		Number.isNaN(selectedCourseId) || selectedCourseId <= 0
 			? null
-			: builderCourses.find((course) => course.id === selectedCourseId) ??
-			null
+			: (builderCourses.find(
+					(course) => course.id === selectedCourseId,
+				) ?? null)
 
 	const curriculum = selectedCourse
 		? await getCourseCurriculum(selectedCourse.id)
@@ -262,7 +278,9 @@ async function loadBuilderData(
 		null
 
 	const selectedLesson =
-		selectedModule?.lessons.find((lesson) => lesson.id === selectedLessonId) ??
+		selectedModule?.lessons.find(
+			(lesson) => lesson.id === selectedLessonId,
+		) ??
 		selectedModule?.lessons[0] ??
 		null
 
@@ -283,23 +301,31 @@ export async function action({ request, context }: Route.ActionArgs) {
 	const intent = form.get('intent')
 
 	if (intent !== 'save-draft') {
-		return data<ActionResult>({ error: 'Unsupported action.' }, { status: 400 })
+		return data<ActionResult>(
+			{ error: 'Unsupported action.' },
+			{ status: 400 },
+		)
 	}
 
 	const draftJson = form.get('draftJson')
 	let parsedJson: unknown
 
 	try {
-		parsedJson = typeof draftJson === 'string' ? JSON.parse(draftJson) : null
+		parsedJson =
+			typeof draftJson === 'string' ? JSON.parse(draftJson) : null
 	} catch {
-		return data<ActionResult>({ error: 'Invalid draft payload.' }, { status: 400 })
+		return data<ActionResult>(
+			{ error: 'Invalid draft payload.' },
+			{ status: 400 },
+		)
 	}
 
 	const parsed = courseDraftSchema.safeParse(parsedJson)
 	if (!parsed.success) {
 		return data<ActionResult>(
 			{
-				error: parsed.error.issues[0]?.message ?? 'Invalid course draft.',
+				error:
+					parsed.error.issues[0]?.message ?? 'Invalid course draft.',
 			},
 			{ status: 400 },
 		)
@@ -343,7 +369,10 @@ export async function action({ request, context }: Route.ActionArgs) {
 			.returning({ id: courses.id })
 
 		if (!updatedCourse) {
-			return data<ActionResult>({ error: 'Course not found.' }, { status: 404 })
+			return data<ActionResult>(
+				{ error: 'Course not found.' },
+				{ status: 404 },
+			)
 		}
 	}
 
@@ -436,7 +465,10 @@ export async function action({ request, context }: Route.ActionArgs) {
 						lessonId,
 						questionText: qDraft.questionText,
 						type: qDraft.type,
-						correctAnswer: qDraft.type === 'flag' ? qDraft.correctAnswer : null,
+						correctAnswer:
+							qDraft.type === 'flag'
+								? qDraft.correctAnswer
+								: null,
 						orderIndex: 0,
 					})
 					.returning({ id: challengeQuestions.id })
@@ -456,13 +488,20 @@ export async function action({ request, context }: Route.ActionArgs) {
 	}
 
 	return redirect(
-		buildSelectionRedirect(draft, courseId, moduleIdByClientId, lessonIdByClientId),
+		buildSelectionRedirect(
+			draft,
+			courseId,
+			moduleIdByClientId,
+			lessonIdByClientId,
+		),
 	)
 }
 
 export default function CourseBuilder() {
 	const { saved, dataPromise } = useLoaderData<typeof loader>()
-	const actionData = useActionData<typeof action>() as ActionResult | undefined
+	const actionData = useActionData<typeof action>() as
+		| ActionResult
+		| undefined
 	const savedMessage = getSavedMessage(saved)
 
 	return (
@@ -473,7 +512,8 @@ export default function CourseBuilder() {
 						Course Builder
 					</h1>
 					<p className="mt-2 max-w-2xl text-sm text-slate-400">
-						Make changes locally, then save the whole course in one shot.
+						Make changes locally, then save the whole course in one
+						shot.
 					</p>
 				</div>
 				<Link

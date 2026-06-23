@@ -23,7 +23,9 @@ function createClientId(prefix: string) {
 	return `${prefix}-${Math.random().toString(36).slice(2, 10)}`
 }
 
-function toLessonDraft(lesson: CurriculumModule['lessons'][number]): LessonDraft {
+function toLessonDraft(
+	lesson: CurriculumModule['lessons'][number],
+): LessonDraft {
 	return {
 		clientId: `lesson-${lesson.id}`,
 		id: lesson.id,
@@ -50,7 +52,9 @@ function buildInitialDraft(
 ): CourseDraft {
 	const modules = curriculum.map(toModuleDraft)
 	const initialSelectedModule =
-		modules.find((module) => module.id === selectedModuleId) ?? modules[0] ?? null
+		modules.find((module) => module.id === selectedModuleId) ??
+		modules[0] ??
+		null
 
 	return {
 		id: selectedCourse?.id ?? null,
@@ -130,7 +134,9 @@ export default function CourseBuilderWorkspace({
 		updateDraft((current) => ({
 			...current,
 			modules: current.modules.map((module) =>
-				module.clientId === moduleClientId ? { ...module, title } : module,
+				module.clientId === moduleClientId
+					? { ...module, title }
+					: module,
 			),
 		}))
 	}
@@ -243,7 +249,11 @@ export default function CourseBuilderWorkspace({
 	return (
 		<Form method="post" className="space-y-6">
 			<input type="hidden" name="intent" value="save-draft" />
-			<input type="hidden" name="draftJson" value={JSON.stringify(draft)} />
+			<input
+				type="hidden"
+				name="draftJson"
+				value={JSON.stringify(draft)}
+			/>
 
 			<div className="grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)]">
 				{/* Left panel — tree sidebar */}
@@ -272,7 +282,9 @@ export default function CourseBuilderWorkspace({
 						<CourseTreeView
 							modules={draft.modules}
 							courseId={selectedCourse?.id ?? null}
-							selectedModuleClientId={draft.selectedModuleClientId}
+							selectedModuleClientId={
+								draft.selectedModuleClientId
+							}
 							onSelectModule={handleSelectModule}
 							onAddModule={handleAddModule}
 							onAddLesson={handleAddLesson}
@@ -285,7 +297,9 @@ export default function CourseBuilderWorkspace({
 
 					{/* Stats */}
 					<div className="border-t border-slate-800 pt-2 text-[11px] text-slate-500">
-						{draft.modules.length} module{draft.modules.length !== 1 ? 's' : ''}, {totalLessons} lesson{totalLessons !== 1 ? 's' : ''}
+						{draft.modules.length} module
+						{draft.modules.length !== 1 ? 's' : ''}, {totalLessons}{' '}
+						lesson{totalLessons !== 1 ? 's' : ''}
 					</div>
 
 					{/* Save */}
@@ -317,7 +331,8 @@ export default function CourseBuilderWorkspace({
 								Select a Course
 							</p>
 							<p className="mt-1 text-xs text-slate-500">
-								Choose an existing course from the dropdown or start a new one.
+								Choose an existing course from the dropdown or
+								start a new one.
 							</p>
 						</div>
 					)}

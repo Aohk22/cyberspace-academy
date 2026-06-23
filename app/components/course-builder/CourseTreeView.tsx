@@ -19,7 +19,11 @@ type CourseTreeViewProps = {
 	onAddModule: () => void
 	onAddLesson: (moduleClientId: string) => void
 	onUpdateModuleTitle: (moduleClientId: string, title: string) => void
-	onUpdateLessonTitle: (moduleClientId: string, lessonClientId: string, title: string) => void
+	onUpdateLessonTitle: (
+		moduleClientId: string,
+		lessonClientId: string,
+		title: string,
+	) => void
 	onDeleteModule: (moduleClientId: string) => void
 	onDeleteLesson: (moduleClientId: string, lessonClientId: string) => void
 }
@@ -71,7 +75,8 @@ export default function CourseTreeView({
 			<div className="mt-2 space-y-0.5">
 				{modules.length === 0 ? (
 					<div className="px-1 py-4 text-xs text-slate-600 text-center">
-						No modules yet. Add one to start structuring this course.
+						No modules yet. Add one to start structuring this
+						course.
 					</div>
 				) : (
 					modules.map((module) => {
@@ -115,8 +120,12 @@ export default function CourseTreeView({
 									<input
 										type="text"
 										value={module.title}
-										onFocus={() => onSelectModule(module.clientId)}
-										onClick={() => onSelectModule(module.clientId)}
+										onFocus={() =>
+											onSelectModule(module.clientId)
+										}
+										onClick={() =>
+											onSelectModule(module.clientId)
+										}
 										onChange={(e) =>
 											onUpdateModuleTitle(
 												module.clientId,
@@ -162,7 +171,8 @@ export default function CourseTreeView({
 									<div className="ml-3 border-l border-slate-800 pl-2 space-y-0.5">
 										{module.lessons.map((lesson) => {
 											const lessonUrl =
-												courseId != null && lesson.id != null
+												courseId != null &&
+												lesson.id != null
 													? `/course-builder/${courseId}/lessons/${lesson.id}`
 													: null
 

@@ -1,10 +1,5 @@
 import { sql } from 'drizzle-orm'
-import {
-	CheckCircle2,
-	Loader2,
-	Plus,
-	Trash2,
-} from 'lucide-react'
+import { CheckCircle2, Loader2, Plus, Trash2 } from 'lucide-react'
 import {
 	data,
 	Form,

@@ -75,9 +75,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 	const intent = form.get('intent')
 
 	if (intent === 'delete-user') {
-		await db.execute(
-			sql`DELETE FROM users WHERE id = ${params.userId}`,
-		)
+		await db.execute(sql`DELETE FROM users WHERE id = ${params.userId}`)
 		throw redirect('/admin/users')
 	}
 
@@ -236,7 +234,11 @@ export default function AdminUserEdit() {
 							}
 						}}
 					>
-						<input type="hidden" name="intent" value="delete-user" />
+						<input
+							type="hidden"
+							name="intent"
+							value="delete-user"
+						/>
 						<button
 							type="submit"
 							className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-bold text-red-300 transition-colors hover:bg-red-500/20"

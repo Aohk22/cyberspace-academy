@@ -1,11 +1,5 @@
 import { sql } from 'drizzle-orm'
-import {
-	CheckCircle2,
-	Loader2,
-	Plus,
-	Trash2,
-	X,
-} from 'lucide-react'
+import { CheckCircle2, Loader2, Plus, Trash2, X } from 'lucide-react'
 import {
 	data,
 	Form,
@@ -72,9 +66,14 @@ export async function action({ request, context }: Route.ActionArgs) {
 			return data({ error: 'Name is required.' }, { status: 400 })
 		}
 		try {
-			await db.execute(sql`INSERT INTO categories (name) VALUES (${name})`)
+			await db.execute(
+				sql`INSERT INTO categories (name) VALUES (${name})`,
+			)
 		} catch {
-			return data({ error: 'A category with this name already exists.' }, { status: 409 })
+			return data(
+				{ error: 'A category with this name already exists.' },
+				{ status: 409 },
+			)
 		}
 		return data({ success: true, error: null })
 	}
@@ -86,9 +85,14 @@ export async function action({ request, context }: Route.ActionArgs) {
 			return data({ error: 'Name is required.' }, { status: 400 })
 		}
 		try {
-			await db.execute(sql`UPDATE categories SET name = ${name} WHERE id = ${id}`)
+			await db.execute(
+				sql`UPDATE categories SET name = ${name} WHERE id = ${id}`,
+			)
 		} catch {
-			return data({ error: 'A category with this name already exists.' }, { status: 409 })
+			return data(
+				{ error: 'A category with this name already exists.' },
+				{ status: 409 },
+			)
 		}
 		return data({ success: true, error: null })
 	}
@@ -183,7 +187,8 @@ export default function AdminCategories() {
 											<button
 												type="submit"
 												disabled={
-													deleteFetcher.state === 'submitting'
+													deleteFetcher.state ===
+													'submitting'
 												}
 												onClick={(e) => {
 													if (cat.courseCount > 0) {

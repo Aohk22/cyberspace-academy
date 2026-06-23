@@ -22,9 +22,7 @@ export default function ChallengeSection({
 					<div className="w-8 h-8 rounded-xl bg-amber-400/10 flex items-center justify-center">
 						<Flag className="w-4 h-4 text-amber-400" />
 					</div>
-					<h2 className="text-lg font-bold text-white">
-						Challenge
-					</h2>
+					<h2 className="text-lg font-bold text-white">Challenge</h2>
 				</div>
 				<span className="text-sm text-slate-400">
 					{correctCount}/{totalCount} correct
@@ -68,7 +66,9 @@ function QuestionCard({
 	const hasSubmitted = submission != null
 
 	const error =
-		fetcher.data && typeof fetcher.data === 'object' && 'error' in fetcher.data
+		fetcher.data &&
+		typeof fetcher.data === 'object' &&
+		'error' in fetcher.data
 			? (fetcher.data as { error: string }).error
 			: null
 
@@ -125,9 +125,7 @@ function QuestionCard({
 					</p>
 				)}
 
-				{error && (
-					<p className="mt-2 text-xs text-red-400">{error}</p>
-				)}
+				{error && <p className="mt-2 text-xs text-red-400">{error}</p>}
 			</div>
 		</div>
 	)

@@ -1,11 +1,5 @@
 import { sql } from 'drizzle-orm'
-import {
-	ArrowDown,
-	ArrowUp,
-	Loader2,
-	Plus,
-	Trash2,
-} from 'lucide-react'
+import { ArrowDown, ArrowUp, Loader2, Plus, Trash2 } from 'lucide-react'
 import {
 	data,
 	Form,
@@ -88,7 +82,9 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 	return {
 		path: pathSchema.parse(pathResult.rows[0]),
 		courses: z.array(courseInPathSchema).parse(coursesResult.rows),
-		availableCourses: z.array(availableCourseSchema).parse(availableResult.rows),
+		availableCourses: z
+			.array(availableCourseSchema)
+			.parse(availableResult.rows),
 	}
 }
 
@@ -134,8 +130,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 		const direction = form.get('direction') as string
 		const currentPos = Number(form.get('position'))
 
-		const swapPos =
-			direction === 'up' ? currentPos - 1 : currentPos + 1
+		const swapPos = direction === 'up' ? currentPos - 1 : currentPos + 1
 		if (swapPos < 1) {
 			return data({ error: 'Already at the top.' }, { status: 400 })
 		}
@@ -146,7 +141,8 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 		if (swapResult.rows.length === 0) {
 			return data({ error: 'Already at the bottom.' }, { status: 400 })
 		}
-		const swapCourseId = (swapResult.rows[0] as { course_id: number }).course_id
+		const swapCourseId = (swapResult.rows[0] as { course_id: number })
+			.course_id
 
 		await db.execute(
 			sql`UPDATE path_courses SET position = ${swapPos} WHERE path_id = ${pathId} AND course_id = ${courseId}`,
@@ -175,14 +171,18 @@ export default function AdminPathDetail() {
 	return (
 		<div className="space-y-4 max-w-2xl">
 			<div className="rounded-lg border border-slate-800 bg-slate-900 p-4">
-				<h2 className="text-sm font-semibold text-white">{path.title}</h2>
+				<h2 className="text-sm font-semibold text-white">
+					{path.title}
+				</h2>
 				{path.description ? (
 					<p className="mt-1 text-xs text-slate-400">
 						{path.description}
 					</p>
 				) : null}
 				<div className="mt-3 flex items-center gap-3 text-xs text-slate-500">
-					<span>{courses.length} course{courses.length !== 1 ? 's' : ''}</span>
+					<span>
+						{courses.length} course{courses.length !== 1 ? 's' : ''}
+					</span>
 					<span>
 						{formatDuration(
 							courses.reduce((sum, c) => sum + c.length, 0),
@@ -200,7 +200,9 @@ export default function AdminPathDetail() {
 								<th className="px-3 py-2">#</th>
 								<th className="px-3 py-2">Course</th>
 								<th className="px-3 py-2">Duration</th>
-								<th className="px-3 py-2 text-right">Actions</th>
+								<th className="px-3 py-2 text-right">
+									Actions
+								</th>
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-slate-800">
@@ -217,7 +219,10 @@ export default function AdminPathDetail() {
 									</td>
 									<td className="px-3 py-2">
 										<div className="flex items-center justify-end gap-1">
-											<Form method="POST" className="inline">
+											<Form
+												method="POST"
+												className="inline"
+											>
 												<input
 													type="hidden"
 													name="intent"
@@ -237,7 +242,10 @@ export default function AdminPathDetail() {
 													type="submit"
 													name="direction"
 													value="up"
-													disabled={index === 0 || isSubmitting}
+													disabled={
+														index === 0 ||
+														isSubmitting
+													}
 													className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200 disabled:opacity-30"
 												>
 													<ArrowUp className="h-3.5 w-3.5" />
@@ -247,7 +255,9 @@ export default function AdminPathDetail() {
 													name="direction"
 													value="down"
 													disabled={
-														index === courses.length - 1 ||
+														index ===
+															courses.length -
+																1 ||
 														isSubmitting
 													}
 													className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200 disabled:opacity-30"
@@ -307,10 +317,7 @@ export default function AdminPathDetail() {
 			)}
 
 			{availableCourses.length > 0 ? (
-				<Form
-					method="POST"
-					className="flex items-center gap-2"
-				>
+				<Form method="POST" className="flex items-center gap-2">
 					<input type="hidden" name="intent" value="add-course" />
 					<select
 						name="courseId"

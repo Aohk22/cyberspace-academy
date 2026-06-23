@@ -1,10 +1,5 @@
 import { sql } from 'drizzle-orm'
-import {
-	BookMarked,
-	CheckCircle2,
-	GraduationCap,
-	Users,
-} from 'lucide-react'
+import { BookMarked, CheckCircle2, GraduationCap, Users } from 'lucide-react'
 import { Link, redirect, useLoaderData, useSearchParams } from 'react-router'
 import { z } from 'zod'
 import { db } from '~/.server/database/connection'
@@ -71,10 +66,14 @@ function MetricCard({
 }) {
 	return (
 		<div className="rounded-lg border border-slate-800 bg-slate-900 p-2">
-			<div className={`flex h-6 w-6 items-center justify-center rounded-md ${tone}`}>
+			<div
+				className={`flex h-6 w-6 items-center justify-center rounded-md ${tone}`}
+			>
 				<Icon className="h-3.5 w-3.5" />
 			</div>
-			<p className="mt-1.5 text-[11px] font-medium text-slate-400">{label}</p>
+			<p className="mt-1.5 text-[11px] font-medium text-slate-400">
+				{label}
+			</p>
 			<p className="mt-0.5 text-base font-bold text-white">{value}</p>
 			<p className="mt-0.5 text-[10px] text-slate-500">{meta}</p>
 		</div>
@@ -144,7 +143,9 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 				sql`SELECT name FROM users WHERE id = ${selectedUserId}`,
 			),
 		])
-		userCompletions = z.array(userCompletionSchema).parse(completionResult.rows)
+		userCompletions = z
+			.array(userCompletionSchema)
+			.parse(completionResult.rows)
 		if (nameResult.rows.length > 0) {
 			selectedUserName = (nameResult.rows[0] as { name: string }).name
 		}
@@ -162,8 +163,15 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 }
 
 export default function AdminDashboard() {
-	const { metrics, recentUsers, allUsers, userCompletions, selectedUserId, selectedUserName, created } =
-		useLoaderData<typeof loader>()
+	const {
+		metrics,
+		recentUsers,
+		allUsers,
+		userCompletions,
+		selectedUserId,
+		selectedUserName,
+		created,
+	} = useLoaderData<typeof loader>()
 	const [searchParams, setSearchParams] = useSearchParams()
 
 	return (
@@ -232,7 +240,10 @@ export default function AdminDashboard() {
 					{selectedUserId ? (
 						<>
 							<p className="mb-3 text-xs text-slate-400">
-								Completion for <span className="font-medium text-slate-200">{selectedUserName}</span>
+								Completion for{' '}
+								<span className="font-medium text-slate-200">
+									{selectedUserName}
+								</span>
 							</p>
 							{userCompletions.length > 0 ? (
 								<div className="space-y-3">
@@ -243,7 +254,9 @@ export default function AdminDashboard() {
 													{course.title}
 												</p>
 												<span className="shrink-0 font-bold text-white">
-													{formatPercent(course.completionRate)}
+													{formatPercent(
+														course.completionRate,
+													)}
 												</span>
 											</div>
 											<div className="h-1.5 overflow-hidden rounded-full bg-slate-800">
@@ -255,7 +268,9 @@ export default function AdminDashboard() {
 												/>
 											</div>
 											<p className="mt-0.5 text-[10px] text-slate-500">
-												{course.completedLessons}/{course.totalLessons} lessons complete
+												{course.completedLessons}/
+												{course.totalLessons} lessons
+												complete
 											</p>
 										</div>
 									))}

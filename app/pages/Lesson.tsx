@@ -71,7 +71,8 @@ export async function action({ context, params, request }: Route.ActionArgs) {
 }
 
 export default function Lesson() {
-	const { dataPromise, challengeQuestionsPromise } = useLoaderData<typeof loader>()
+	const { dataPromise, challengeQuestionsPromise } =
+		useLoaderData<typeof loader>()
 
 	return (
 		<Suspense fallback={<LessonSkeleton />}>
@@ -89,7 +90,11 @@ export default function Lesson() {
 					return (
 						<LessonContent
 							lessonData={lessonData}
-							challengeQuestionsPromise={challengeQuestionsPromise as Promise<ChallengeQuestionWithOptions[]>}
+							challengeQuestionsPromise={
+								challengeQuestionsPromise as Promise<
+									ChallengeQuestionWithOptions[]
+								>
+							}
 						/>
 					)
 				}}
@@ -182,11 +187,13 @@ function LessonContent({
 
 				<MarkdownContent content={currentLesson.contentMd} />
 
-				<Suspense fallback={
-					<div className="mt-10 border-t border-slate-800 pt-8">
-						<div className="h-11 w-40 bg-slate-800 rounded-xl animate-pulse" />
-					</div>
-				}>
+				<Suspense
+					fallback={
+						<div className="mt-10 border-t border-slate-800 pt-8">
+							<div className="h-11 w-40 bg-slate-800 rounded-xl animate-pulse" />
+						</div>
+					}
+				>
 					<Await resolve={challengeQuestionsPromise}>
 						{(challengeQuestions) => {
 							const hasChallenges = challengeQuestions.length > 0

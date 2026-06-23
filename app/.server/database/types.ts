@@ -35,7 +35,8 @@ export const lessonSchema = createSelectSchema(lessons)
 export const categorySchema = createSelectSchema(categories)
 export const challengeQuestionSchema = createSelectSchema(challengeQuestions)
 export const challengeOptionSchema = createSelectSchema(challengeOptions)
-export const challengeSubmissionSchema = createSelectSchema(challengeSubmissions)
+export const challengeSubmissionSchema =
+	createSelectSchema(challengeSubmissions)
 export const learningPathSchema = createSelectSchema(learningPaths)
 export const pathCourseSchema = createSelectSchema(pathCourses)
 

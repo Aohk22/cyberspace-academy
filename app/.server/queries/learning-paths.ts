@@ -16,7 +16,9 @@ const pathCourseRowSchema = z.object({
 	thumbnail: z.string().nullable(),
 	length: z.coerce.number(),
 	lessonsCount: z.coerce.number(),
-	enrolled: z.union([z.boolean(), z.string()]).transform((v) => v === true || v === 'true'),
+	enrolled: z
+		.union([z.boolean(), z.string()])
+		.transform((v) => v === true || v === 'true'),
 })
 
 export async function getLearningPaths(): Promise<LearningPathWithCount[]> {
@@ -74,9 +76,10 @@ export async function getLearningPathDetail(
 			(SELECT COUNT(*)::int FROM lessons l
 			 INNER JOIN modules m ON l.module_id = m.id
 			 WHERE m.course_id = c.id) AS "lessonsCount"
-			${userId != null
-				? sql`,EXISTS(SELECT 1 FROM users_to_courses utc WHERE utc.course_id = c.id AND utc.user_id = ${userId}) AS "enrolled"`
-				: sql`,false AS "enrolled"`
+			${
+				userId != null
+					? sql`,EXISTS(SELECT 1 FROM users_to_courses utc WHERE utc.course_id = c.id AND utc.user_id = ${userId}) AS "enrolled"`
+					: sql`,false AS "enrolled"`
 			}
 		FROM path_courses pc
 		INNER JOIN courses c ON pc.course_id = c.id

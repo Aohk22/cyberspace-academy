@@ -42,19 +42,13 @@ export default [
 
 				route('admin/users/new', './pages/AdminCreateUser.tsx'),
 
-				route(
-					'admin/users/:userId/edit',
-					'./pages/AdminUserEdit.tsx',
-				),
+				route('admin/users/:userId/edit', './pages/AdminUserEdit.tsx'),
 
 				route('admin/categories', './pages/AdminCategories.tsx'),
 
 				route('admin/paths', './pages/AdminPaths.tsx'),
 
-				route(
-					'admin/paths/:pathId',
-					'./pages/AdminPathDetail.tsx',
-				),
+				route('admin/paths/:pathId', './pages/AdminPathDetail.tsx'),
 
 				route('course-builder', './pages/CourseBuilder.tsx'),
 

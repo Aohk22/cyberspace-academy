@@ -68,8 +68,8 @@ export default function UnderConstruction({
 								Sharper progress stories
 							</p>
 							<p className="mt-2 text-sm leading-6 text-slate-400">
-								Badge history, streaks, and milestone tracking are
-								being prepared.
+								Badge history, streaks, and milestone tracking
+								are being prepared.
 							</p>
 						</div>
 						<div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">

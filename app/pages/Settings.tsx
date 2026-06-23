@@ -82,12 +82,19 @@ export default function Settings() {
 					<div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-700">
 						<User className="w-8 h-8 text-slate-600" />
 					</div>
-					<h3 className="font-bold text-white text-sm">{user.name}</h3>
+					<h3 className="font-bold text-white text-sm">
+						{user.name}
+					</h3>
 				</div>
 
 				<div className="grid sm:grid-cols-2 gap-4">
 					<div className="space-y-1.5">
-						<label className="text-xs font-bold text-slate-500 uppercase tracking-widest" htmlFor="name">Full Name</label>
+						<label
+							className="text-xs font-bold text-slate-500 uppercase tracking-widest"
+							htmlFor="name"
+						>
+							Full Name
+						</label>
 						<input
 							id="name"
 							name="name"
@@ -97,7 +104,12 @@ export default function Settings() {
 						/>
 					</div>
 					<div className="space-y-1.5">
-						<label className="text-xs font-bold text-slate-500 uppercase tracking-widest" htmlFor="email">Email Address</label>
+						<label
+							className="text-xs font-bold text-slate-500 uppercase tracking-widest"
+							htmlFor="email"
+						>
+							Email Address
+						</label>
 						<input
 							id="email"
 							name="email"
@@ -109,10 +121,16 @@ export default function Settings() {
 				</div>
 
 				<div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
-					<button type="reset" className="px-4 py-2 text-sm font-bold text-slate-400 hover:text-slate-200 transition-colors">
+					<button
+						type="reset"
+						className="px-4 py-2 text-sm font-bold text-slate-400 hover:text-slate-200 transition-colors"
+					>
 						Cancel
 					</button>
-					<button type="submit" className="px-6 py-2 bg-slate-100 text-slate-950 rounded-lg text-sm font-bold hover:bg-white transition-all">
+					<button
+						type="submit"
+						className="px-6 py-2 bg-slate-100 text-slate-950 rounded-lg text-sm font-bold hover:bg-white transition-all"
+					>
 						Save Changes
 					</button>
 				</div>

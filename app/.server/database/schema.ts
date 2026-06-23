@@ -111,20 +111,22 @@ export const challengeOptions = pgTable('challenge_options', {
 	orderIndex: integer('order_index').notNull().default(0),
 })
 
-export const challengeSubmissions = pgTable('challenge_submissions', {
-	id: integer().primaryKey().generatedAlwaysAsIdentity(),
-	userId: integer('user_id')
-		.notNull()
-		.references(() => users.id),
-	questionId: integer('question_id')
-		.notNull()
-		.references(() => challengeQuestions.id, { onDelete: 'cascade' }),
-	answerText: text('answer_text').notNull(),
-	isCorrect: boolean('is_correct').notNull(),
-	createdAt: timestamp('created_at').defaultNow().notNull(),
-}, (t) => [
-	unique().on(t.userId, t.questionId),
-])
+export const challengeSubmissions = pgTable(
+	'challenge_submissions',
+	{
+		id: integer().primaryKey().generatedAlwaysAsIdentity(),
+		userId: integer('user_id')
+			.notNull()
+			.references(() => users.id),
+		questionId: integer('question_id')
+			.notNull()
+			.references(() => challengeQuestions.id, { onDelete: 'cascade' }),
+		answerText: text('answer_text').notNull(),
+		isCorrect: boolean('is_correct').notNull(),
+		createdAt: timestamp('created_at').defaultNow().notNull(),
+	},
+	(t) => [unique().on(t.userId, t.questionId)],
+)
 
 export const learningPaths = pgTable('learning_paths', {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),

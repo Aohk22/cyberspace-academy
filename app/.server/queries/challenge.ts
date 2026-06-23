@@ -59,7 +59,10 @@ export async function getChallengeData(
 		optionsByQuestion.set(opt.questionId, list)
 	}
 
-	const submissionsByQuestion = new Map<number, typeof submissions[number]>()
+	const submissionsByQuestion = new Map<
+		number,
+		(typeof submissions)[number]
+	>()
 	for (const sub of submissions) {
 		submissionsByQuestion.set(sub.questionId, sub)
 	}
@@ -132,10 +135,7 @@ export async function submitAnswer(
 	return { isCorrect }
 }
 
-export async function markLessonComplete(
-	lessonId: number,
-	userId: number,
-) {
+export async function markLessonComplete(lessonId: number, userId: number) {
 	await db
 		.insert(usersToLessons)
 		.values({
@@ -162,7 +162,7 @@ export async function checkAndMarkIfAllCorrect(
 
 	const questionIds = questions.map((q) => q.id)
 
-		const incorrectCount = await db
+	const incorrectCount = await db
 		.select({ count: sql<number>`count(*)::int` })
 		.from(challengeSubmissions)
 		.where(
@@ -186,7 +186,8 @@ export async function checkAndMarkIfAllCorrect(
 		)
 		.then((rows) => rows[0]?.count ?? 0)
 
-	const allCorrect = incorrectCount === 0 && answeredCount === questions.length
+	const allCorrect =
+		incorrectCount === 0 && answeredCount === questions.length
 
 	if (allCorrect) {
 		await markLessonComplete(lessonId, userId)

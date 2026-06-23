@@ -1,6 +1,6 @@
-import { BookOpen, GraduationCap, Clock, Star } from "lucide-react";
-import type { DashboardData } from "~/.server/queries/dashboard";
-import { formatCourseLength } from "~/utils/format-course-length";
+import { BookOpen, GraduationCap, Clock, Star } from 'lucide-react'
+import type { DashboardData } from '~/.server/queries/dashboard'
+import { formatCourseLength } from '~/utils/format-course-length'
 
 export default function StatsGrid({ courses }: { courses: DashboardData[] }) {
 	const completed = courses.filter((c) => c.completed === true)

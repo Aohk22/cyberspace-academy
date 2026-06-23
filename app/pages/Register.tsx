@@ -6,10 +6,7 @@ import {
 	ArrowRight,
 	Loader2,
 } from 'lucide-react'
-import {
-	GithubIcon,
-	ChromeIcon,
-} from '~/components/icons/icons'
+import { GithubIcon, ChromeIcon } from '~/components/icons/icons'
 import { motion } from 'motion/react'
 import { Form, Link, redirect, useNavigation } from 'react-router'
 import { getSession } from '~/.server/auth/sessions'
@@ -184,9 +181,10 @@ export default function Register({ actionData }: Route.ComponentProps) {
 								w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold 
 								hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 
 								active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed
-								${error
-									? 'bg-red-500 hover:bg-red-600 shadow-red-900/30'
-									: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-900/30'
+								${
+									error
+										? 'bg-red-500 hover:bg-red-600 shadow-red-900/30'
+										: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-900/30'
 								}
 							`}
 						>

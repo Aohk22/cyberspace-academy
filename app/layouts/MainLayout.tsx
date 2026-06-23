@@ -49,9 +49,7 @@ export default function MainLayout() {
 	const [sidebarWidth, setSidebarWidth] = useState(256)
 	const [adminOpen, setAdminOpen] = useState(() => {
 		const path = location.pathname
-		return (
-			path.startsWith('/admin') || path.startsWith('/course-builder')
-		)
+		return path.startsWith('/admin') || path.startsWith('/course-builder')
 	})
 	const [theme, setTheme] = useState<'light' | 'dark'>(() => {
 		if (typeof document !== 'undefined') {
@@ -77,8 +75,7 @@ export default function MainLayout() {
 			return null
 		})
 		.find((user) => user !== null)
-	const navItems =
-		currentUser?.role === 'staff' ? baseNavItems : baseNavItems
+	const navItems = currentUser?.role === 'staff' ? baseNavItems : baseNavItems
 
 	const isAdminActive =
 		location.pathname.startsWith('/admin') ||
@@ -185,9 +182,10 @@ export default function MainLayout() {
 								key={item.href}
 								to={item.href}
 								className={
-									`flex items-center px-6 py-3 text-sm font-medium transition-colors relative ${isSidebarCollapsed
-										? 'justify-center'
-										: 'gap-3'
+									`flex items-center px-6 py-3 text-sm font-medium transition-colors relative ${
+										isSidebarCollapsed
+											? 'justify-center'
+											: 'gap-3'
 									} ` +
 									(isActive
 										? 'bg-emerald-500/10 text-emerald-400 border-r-2 border-emerald-500'
@@ -209,10 +207,11 @@ export default function MainLayout() {
 							{isSidebarCollapsed ? (
 								<Link
 									to="/admin"
-									className={`flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors relative ${isAdminActive
+									className={`flex items-center justify-center px-6 py-3 text-sm font-medium transition-colors relative ${
+										isAdminActive
 											? 'bg-emerald-500/10 text-emerald-400 border-r-2 border-emerald-500'
 											: 'text-slate-400 hover:bg-slate-800 hover:text-white'
-										}`}
+									}`}
 									title="Admin Panel"
 								>
 									<ShieldCheck className="w-5 h-5" />
@@ -220,13 +219,12 @@ export default function MainLayout() {
 							) : (
 								<>
 									<button
-										onClick={() =>
-											setAdminOpen(!adminOpen)
-										}
-										className={`flex items-center w-full gap-3 px-6 py-3 text-sm font-medium transition-colors relative ${isAdminActive
+										onClick={() => setAdminOpen(!adminOpen)}
+										className={`flex items-center w-full gap-3 px-6 py-3 text-sm font-medium transition-colors relative ${
+											isAdminActive
 												? 'bg-emerald-500/10 text-emerald-400 border-r-2 border-emerald-500'
 												: 'text-slate-400 hover:bg-slate-800 hover:text-white'
-											}`}
+										}`}
 									>
 										<ShieldCheck className="w-5 h-5 shrink-0" />
 										<span className="flex-1 text-left">
@@ -244,18 +242,19 @@ export default function MainLayout() {
 												const isSubActive =
 													sub.href === '/admin'
 														? location.pathname ===
-														'/admin'
+															'/admin'
 														: location.pathname.startsWith(
-															sub.href,
-														)
+																sub.href,
+															)
 												return (
 													<Link
 														key={sub.href}
 														to={sub.href}
-														className={`flex items-center gap-3 pl-4 pr-6 py-2 text-xs font-medium transition-colors ${isSubActive
+														className={`flex items-center gap-3 pl-4 pr-6 py-2 text-xs font-medium transition-colors ${
+															isSubActive
 																? 'text-emerald-400'
 																: 'text-slate-400 hover:text-white'
-															}`}
+														}`}
 													>
 														<sub.icon className="w-4 h-4 shrink-0" />
 														{sub.label}

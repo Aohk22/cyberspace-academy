@@ -132,7 +132,9 @@ export default function CoursePreviewCard({
 									disabled={isSubmittingEnrollment}
 									className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
 								>
-									{isSubmittingEnrollment ? 'Enrolling...' : 'Enroll Now'}
+									{isSubmittingEnrollment
+										? 'Enrolling...'
+										: 'Enroll Now'}
 								</button>
 							</Form>
 						)}

@@ -38,7 +38,11 @@ function formatExpiry(value: string) {
 	return digits
 }
 
-export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalProps) {
+export default function CheckoutModal({
+	isOpen,
+	onClose,
+	plan,
+}: CheckoutModalProps) {
 	const [step, setStep] = useState<Step>('details')
 	const [cardNumber, setCardNumber] = useState('')
 	const [cardName, setCardName] = useState('')
@@ -83,7 +87,11 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 						initial={{ opacity: 0, scale: 0.95, y: 24 }}
 						animate={{ opacity: 1, scale: 1, y: 0 }}
 						exit={{ opacity: 0, scale: 0.95, y: 24 }}
-						transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+						transition={{
+							type: 'spring',
+							damping: 28,
+							stiffness: 320,
+						}}
 						className="relative w-full max-w-md bg-slate-900 rounded-[1.75rem] border border-slate-800 shadow-2xl overflow-hidden"
 					>
 						{/* Close button */}
@@ -118,8 +126,13 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 											</h2>
 										</div>
 										<p className="text-slate-400 text-sm ml-11">
-											<span className="text-white font-bold text-xl">${plan.price}</span>
-											<span className="text-slate-500"> /month</span>
+											<span className="text-white font-bold text-xl">
+												${plan.price}
+											</span>
+											<span className="text-slate-500">
+												{' '}
+												/month
+											</span>
 										</p>
 									</div>
 
@@ -127,46 +140,79 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 									<div className="px-8 pt-6">
 										<div className="relative h-[130px] perspective-1000 mb-6">
 											<motion.div
-												animate={{ rotateY: isCardFlipped ? 180 : 0 }}
-												transition={{ duration: 0.5, type: 'spring', damping: 20 }}
-												style={{ transformStyle: 'preserve-3d' }}
+												animate={{
+													rotateY: isCardFlipped
+														? 180
+														: 0,
+												}}
+												transition={{
+													duration: 0.5,
+													type: 'spring',
+													damping: 20,
+												}}
+												style={{
+													transformStyle:
+														'preserve-3d',
+												}}
 												className="w-full h-full relative"
 											>
 												{/* Card front */}
 												<div
-													style={{ backfaceVisibility: 'hidden' }}
+													style={{
+														backfaceVisibility:
+															'hidden',
+													}}
 													className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 rounded-2xl p-5 shadow-xl shadow-emerald-900/30"
 												>
 													<div className="flex justify-between items-start">
 														<div className="w-10 h-7 bg-amber-400/90 rounded-md" />
 														<div className="flex gap-1">
-															{[...Array(3)].map((_, i) => (
-																<div key={i} className="w-2 h-2 rounded-full bg-white/30" />
-															))}
+															{[...Array(3)].map(
+																(_, i) => (
+																	<div
+																		key={i}
+																		className="w-2 h-2 rounded-full bg-white/30"
+																	/>
+																),
+															)}
 														</div>
 													</div>
 													<div className="mt-4">
 														<p className="text-white font-mono text-base tracking-[0.2em] font-medium">
-															{cardNumber || '•••• •••• •••• ••••'}
+															{cardNumber ||
+																'•••• •••• •••• ••••'}
 														</p>
 													</div>
 													<div className="flex items-end justify-between mt-3">
 														<div>
-															<p className="text-[9px] text-white/50 uppercase tracking-widest">Card holder</p>
+															<p className="text-[9px] text-white/50 uppercase tracking-widest">
+																Card holder
+															</p>
 															<p className="text-white text-xs font-medium mt-0.5 truncate max-w-[120px]">
-																{cardName || 'Your Name'}
+																{cardName ||
+																	'Your Name'}
 															</p>
 														</div>
 														<div className="text-right">
-															<p className="text-[9px] text-white/50 uppercase tracking-widest">Expires</p>
-															<p className="text-white text-xs font-medium mt-0.5">{expiry || 'MM/YY'}</p>
+															<p className="text-[9px] text-white/50 uppercase tracking-widest">
+																Expires
+															</p>
+															<p className="text-white text-xs font-medium mt-0.5">
+																{expiry ||
+																	'MM/YY'}
+															</p>
 														</div>
 													</div>
 												</div>
 
 												{/* Card back */}
 												<div
-													style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+													style={{
+														backfaceVisibility:
+															'hidden',
+														transform:
+															'rotateY(180deg)',
+													}}
 													className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl shadow-xl overflow-hidden"
 												>
 													<div className="h-10 bg-slate-900/80 mt-5" />
@@ -176,14 +222,19 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 																{cvv || '•••'}
 															</p>
 														</div>
-														<p className="text-[9px] text-slate-500 mt-1.5 text-right uppercase tracking-widest">CVV</p>
+														<p className="text-[9px] text-slate-500 mt-1.5 text-right uppercase tracking-widest">
+															CVV
+														</p>
 													</div>
 												</div>
 											</motion.div>
 										</div>
 
 										{/* Form */}
-										<form onSubmit={handleSubmit} className="space-y-4 pb-8">
+										<form
+											onSubmit={handleSubmit}
+											className="space-y-4 pb-8"
+										>
 											<div className="space-y-1.5">
 												<label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
 													Cardholder Name
@@ -192,9 +243,17 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 													type="text"
 													placeholder="Alex Johnson"
 													value={cardName}
-													onChange={(e) => setCardName(e.target.value)}
-													onFocus={() => setFocusedField('name')}
-													onBlur={() => setFocusedField(null)}
+													onChange={(e) =>
+														setCardName(
+															e.target.value,
+														)
+													}
+													onFocus={() =>
+														setFocusedField('name')
+													}
+													onBlur={() =>
+														setFocusedField(null)
+													}
 													required
 													className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-2xl text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all"
 												/>
@@ -211,9 +270,24 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 														inputMode="numeric"
 														placeholder="1234 5678 9012 3456"
 														value={cardNumber}
-														onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
-														onFocus={() => setFocusedField('number')}
-														onBlur={() => setFocusedField(null)}
+														onChange={(e) =>
+															setCardNumber(
+																formatCardNumber(
+																	e.target
+																		.value,
+																),
+															)
+														}
+														onFocus={() =>
+															setFocusedField(
+																'number',
+															)
+														}
+														onBlur={() =>
+															setFocusedField(
+																null,
+															)
+														}
 														required
 														className="w-full pl-11 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-2xl text-sm text-white font-mono placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all"
 													/>
@@ -230,9 +304,24 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 														inputMode="numeric"
 														placeholder="MM/YY"
 														value={expiry}
-														onChange={(e) => setExpiry(formatExpiry(e.target.value))}
-														onFocus={() => setFocusedField('expiry')}
-														onBlur={() => setFocusedField(null)}
+														onChange={(e) =>
+															setExpiry(
+																formatExpiry(
+																	e.target
+																		.value,
+																),
+															)
+														}
+														onFocus={() =>
+															setFocusedField(
+																'expiry',
+															)
+														}
+														onBlur={() =>
+															setFocusedField(
+																null,
+															)
+														}
 														required
 														className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-2xl text-sm text-white font-mono placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all"
 													/>
@@ -247,9 +336,29 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 														placeholder="•••"
 														maxLength={4}
 														value={cvv}
-														onChange={(e) => setCvv(e.target.value.replace(/\D/g, '').slice(0, 4))}
-														onFocus={() => setFocusedField('cvv')}
-														onBlur={() => setFocusedField(null)}
+														onChange={(e) =>
+															setCvv(
+																e.target.value
+																	.replace(
+																		/\D/g,
+																		'',
+																	)
+																	.slice(
+																		0,
+																		4,
+																	),
+															)
+														}
+														onFocus={() =>
+															setFocusedField(
+																'cvv',
+															)
+														}
+														onBlur={() =>
+															setFocusedField(
+																null,
+															)
+														}
 														required
 														className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-2xl text-sm text-white font-mono placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none transition-all"
 													/>
@@ -285,12 +394,20 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 										<div className="w-16 h-16 rounded-full border-4 border-slate-700" />
 										<motion.div
 											animate={{ rotate: 360 }}
-											transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+											transition={{
+												duration: 1,
+												repeat: Infinity,
+												ease: 'linear',
+											}}
 											className="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-emerald-500"
 										/>
 									</div>
-									<p className="text-white font-bold text-lg">Processing payment…</p>
-									<p className="text-slate-400 text-sm mt-1">Please don't close this window</p>
+									<p className="text-white font-bold text-lg">
+										Processing payment…
+									</p>
+									<p className="text-slate-400 text-sm mt-1">
+										Please don't close this window
+									</p>
 								</motion.div>
 							)}
 
@@ -305,7 +422,12 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 									<motion.div
 										initial={{ scale: 0 }}
 										animate={{ scale: 1 }}
-										transition={{ type: 'spring', damping: 14, stiffness: 260, delay: 0.1 }}
+										transition={{
+											type: 'spring',
+											damping: 14,
+											stiffness: 260,
+											delay: 0.1,
+										}}
 										className="w-20 h-20 bg-emerald-500/15 rounded-full flex items-center justify-center mb-6"
 									>
 										<CheckCircle2 className="w-10 h-10 text-emerald-400" />
@@ -320,12 +442,16 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 											You're on {plan.name}!
 										</h3>
 										<p className="text-slate-400 text-sm mb-8">
-											Welcome to the next level. Your features are active now.
+											Welcome to the next level. Your
+											features are active now.
 										</p>
 
 										<div className="bg-slate-800/60 rounded-2xl p-4 mb-8 text-left space-y-2">
 											{plan.features.map((f) => (
-												<div key={f} className="flex items-center gap-2 text-sm text-slate-300">
+												<div
+													key={f}
+													className="flex items-center gap-2 text-sm text-slate-300"
+												>
 													<CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
 													{f}
 												</div>
@@ -348,4 +474,3 @@ export default function CheckoutModal({ isOpen, onClose, plan }: CheckoutModalPr
 		</AnimatePresence>
 	)
 }
-

@@ -24,7 +24,9 @@ export default function Paths() {
 			<Suspense fallback={<PathsSkeleton />}>
 				<Await resolve={paths}>
 					{(resolvedPaths) => (
-						<PathsInner paths={resolvedPaths as LearningPathWithCount[]} />
+						<PathsInner
+							paths={resolvedPaths as LearningPathWithCount[]}
+						/>
 					)}
 				</Await>
 			</Suspense>

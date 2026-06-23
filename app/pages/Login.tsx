@@ -1,22 +1,8 @@
 import z from 'zod'
 import { motion } from 'motion/react'
-import {
-	GraduationCap,
-	Mail,
-	Lock,
-	ArrowRight,
-	Loader2,
-} from 'lucide-react'
-import {
-	ChromeIcon,
-	GithubIcon
-} from '~/components/icons/icons'
-import {
-	Form,
-	Link,
-	redirect,
-	useNavigation,
-} from 'react-router'
+import { GraduationCap, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react'
+import { ChromeIcon, GithubIcon } from '~/components/icons/icons'
+import { Form, Link, redirect, useNavigation } from 'react-router'
 import { getSession, commitSession } from '~/.server/auth/sessions'
 import { validateCredentials } from '~/.server/auth/login'
 import type { Route } from './+types/Login'
@@ -44,10 +30,13 @@ export async function action({ request }: Route.ActionArgs) {
 		return { error: 'Error parsing login form data.' }
 	}
 
-	const user = await validateCredentials(result.data.username, result.data.password)
+	const user = await validateCredentials(
+		result.data.username,
+		result.data.password,
+	)
 
 	if (!user) {
-		return { error: 'User doesn\'t exist.' }
+		return { error: "User doesn't exist." }
 	} else {
 		const rememberMe = result.data.remember === 'on'
 		session.set('userId', String(user.id))
@@ -163,15 +152,17 @@ export default function Login({ actionData }: Route.ComponentProps) {
 								w-full py-4 text-sm rounded-2xl font-semibold transition-all shadow-lg 
 								transition-all duration-200 flex items-center justify-center gap-2 
 								disabled:opacity-70 cursor-pointer 
-								${error
-									? 'bg-red-500 hover:bg-red-600 shadow-red-900/30'
-									: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-900/30'
+								${
+									error
+										? 'bg-red-500 hover:bg-red-600 shadow-red-900/30'
+										: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-900/30'
 								}
 							`}
 						>
 							{isLoading ? (
 								<>
-									Signing in <Loader2 className="w-5 h-5 animate-spin" />
+									Signing in{' '}
+									<Loader2 className="w-5 h-5 animate-spin" />
 								</>
 							) : error ? (
 								<>

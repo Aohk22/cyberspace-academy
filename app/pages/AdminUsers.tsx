@@ -1,12 +1,5 @@
 import { sql } from 'drizzle-orm'
-import {
-	Loader2,
-	Plus,
-	Search,
-	Trash2,
-	UserPen,
-	X,
-} from 'lucide-react'
+import { Loader2, Plus, Search, Trash2, UserPen, X } from 'lucide-react'
 import {
 	data,
 	Form,
@@ -139,7 +132,7 @@ export default function AdminUsers() {
 				>
 					Search
 				</button>
-				{(search || roleFilter) ? (
+				{search || roleFilter ? (
 					<Link
 						to="/admin/users"
 						className="flex items-center gap-1 rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-400 hover:text-slate-200"

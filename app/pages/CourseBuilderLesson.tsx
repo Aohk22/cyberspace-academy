@@ -67,8 +67,18 @@ function createBlankQuestion(): QuestionState {
 		type: 'multiple_choice',
 		correctAnswer: '',
 		options: [
-			{ key: nextOptionKey(), id: null, optionText: '', isCorrect: false },
-			{ key: nextOptionKey(), id: null, optionText: '', isCorrect: false },
+			{
+				key: nextOptionKey(),
+				id: null,
+				optionText: '',
+				isCorrect: false,
+			},
+			{
+				key: nextOptionKey(),
+				id: null,
+				optionText: '',
+				isCorrect: false,
+			},
 		],
 	}
 }
@@ -160,7 +170,9 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 			? await db
 					.select()
 					.from(challengeOptionsTable)
-					.where(inArray(challengeOptionsTable.questionId, questionIds))
+					.where(
+						inArray(challengeOptionsTable.questionId, questionIds),
+					)
 					.orderBy(asc(challengeOptionsTable.orderIndex))
 			: []
 
@@ -192,14 +204,20 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 	const lessonId = Number(params.lessonId)
 
 	if (Number.isNaN(courseId) || Number.isNaN(lessonId)) {
-		return data<ActionResult>({ error: 'Invalid parameters.' }, { status: 400 })
+		return data<ActionResult>(
+			{ error: 'Invalid parameters.' },
+			{ status: 400 },
+		)
 	}
 
 	const form = await request.formData()
 	const intent = form.get('intent')
 
 	if (intent !== 'save-lesson') {
-		return data<ActionResult>({ error: 'Unsupported action.' }, { status: 400 })
+		return data<ActionResult>(
+			{ error: 'Unsupported action.' },
+			{ status: 400 },
+		)
 	}
 
 	const title = form.get('title')
@@ -209,7 +227,10 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 	const challengeJson = form.get('challengeJson')
 
 	if (typeof title !== 'string' || title.trim().length === 0) {
-		return data<ActionResult>({ error: 'Title is required.' }, { status: 400 })
+		return data<ActionResult>(
+			{ error: 'Title is required.' },
+			{ status: 400 },
+		)
 	}
 
 	const lessonLength = Number(length)
@@ -285,9 +306,16 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 }
 
 export default function CourseBuilderLesson() {
-	const { course, lesson, module: currentModule, allCourseModules, challengeQuestions } =
-		useLoaderData<typeof loader>()
-	const actionData = useActionData<typeof action>() as ActionResult | undefined
+	const {
+		course,
+		lesson,
+		module: currentModule,
+		allCourseModules,
+		challengeQuestions,
+	} = useLoaderData<typeof loader>()
+	const actionData = useActionData<typeof action>() as
+		| ActionResult
+		| undefined
 	const navigation = useNavigation()
 	const isSaving = navigation.state === 'submitting'
 
@@ -298,9 +326,9 @@ export default function CourseBuilderLesson() {
 	const [questions, setQuestions] = useState<QuestionState[]>(() =>
 		challengeQuestions.map(buildQuestionFromLoaded),
 	)
-	const [activeTab, setActiveTab] = useState<'write' | 'preview' | 'challenge'>(
-		'write',
-	)
+	const [activeTab, setActiveTab] = useState<
+		'write' | 'preview' | 'challenge'
+	>('write')
 
 	function addQuestion() {
 		setQuestions((prev) => [...prev, createBlankQuestion()])
@@ -310,11 +338,7 @@ export default function CourseBuilderLesson() {
 		setQuestions((prev) => prev.filter((q) => q.key !== key))
 	}
 
-	function updateQuestion(
-		key: string,
-		field: string,
-		value: any,
-	) {
+	function updateQuestion(key: string, field: string, value: any) {
 		setQuestions((prev) =>
 			prev.map((q) => (q.key === key ? { ...q, [field]: value } : q)),
 		)
@@ -347,7 +371,9 @@ export default function CourseBuilderLesson() {
 				q.key === questionKey
 					? {
 							...q,
-							options: q.options.filter((o) => o.key !== optionKey),
+							options: q.options.filter(
+								(o) => o.key !== optionKey,
+							),
 						}
 					: q,
 			),
@@ -366,7 +392,9 @@ export default function CourseBuilderLesson() {
 					? {
 							...q,
 							options: q.options.map((o) =>
-								o.key === optionKey ? { ...o, [field]: value } : o,
+								o.key === optionKey
+									? { ...o, [field]: value }
+									: o,
 							),
 						}
 					: q,
@@ -444,7 +472,11 @@ export default function CourseBuilderLesson() {
 			{/* Editor form */}
 			<Form method="post" className="space-y-6">
 				<input type="hidden" name="intent" value="save-lesson" />
-				<input type="hidden" name="challengeJson" value={challengeJson} />
+				<input
+					type="hidden"
+					name="challengeJson"
+					value={challengeJson}
+				/>
 
 				<div className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
 					<div className="flex items-center justify-between gap-4">
@@ -516,7 +548,9 @@ export default function CourseBuilderLesson() {
 										type="text"
 										name="title"
 										value={title}
-										onChange={(e) => setTitle(e.target.value)}
+										onChange={(e) =>
+											setTitle(e.target.value)
+										}
 										className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 									/>
 								</label>
@@ -566,7 +600,9 @@ export default function CourseBuilderLesson() {
 								<textarea
 									name="contentMd"
 									value={contentMd}
-									onChange={(e) => setContentMd(e.target.value)}
+									onChange={(e) =>
+										setContentMd(e.target.value)
+									}
 									rows={18}
 									className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-4 font-mono text-sm leading-6 text-slate-100 outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 									placeholder="# Lesson title&#10;&#10;Start writing markdown here..."
@@ -624,7 +660,9 @@ export default function CourseBuilderLesson() {
 										</span>
 										<button
 											type="button"
-											onClick={() => removeQuestion(q.key)}
+											onClick={() =>
+												removeQuestion(q.key)
+											}
 											className="text-red-400 transition-colors hover:text-red-300"
 										>
 											<Trash2 className="h-4 w-4" />
@@ -766,4 +804,3 @@ export default function CourseBuilderLesson() {
 		</div>
 	)
 }
-

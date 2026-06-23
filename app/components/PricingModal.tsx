@@ -105,8 +105,8 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
 											Unlock Your Full Potential
 										</h2>
 										<p className="text-emerald-100 text-sm">
-											Join 50,000+ students already learning
-											with Pro features.
+											Join 50,000+ students already
+											learning with Pro features.
 										</p>
 									</div>
 
@@ -149,10 +149,11 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
 										{plans.map((plan) => (
 											<div
 												key={plan.name}
-												className={`relative p-5 rounded-3xl border-2 transition-all flex flex-col ${plan.isPopular
-													? 'bg-slate-800 border-emerald-500 shadow-xl shadow-emerald-900/20'
-													: 'bg-slate-800 border-slate-700'
-													}`}
+												className={`relative p-5 rounded-3xl border-2 transition-all flex flex-col ${
+													plan.isPopular
+														? 'bg-slate-800 border-emerald-500 shadow-xl shadow-emerald-900/20'
+														: 'bg-slate-800 border-slate-700'
+												}`}
 											>
 												{plan.isPopular && (
 													<div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
@@ -196,10 +197,11 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
 												</ul>
 
 												<button
-													className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all ${plan.name === 'Free'
-														? 'bg-slate-700 text-slate-400 cursor-default'
-														: 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-900/20'
-														}`}
+													className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all ${
+														plan.name === 'Free'
+															? 'bg-slate-700 text-slate-400 cursor-default'
+															: 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-900/20'
+													}`}
 												>
 													{plan.buttonText}
 												</button>

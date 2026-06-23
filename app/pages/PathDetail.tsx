@@ -5,12 +5,17 @@ import { Suspense } from 'react'
 import type { Route } from './+types/PathDetail'
 import { getLearningPathDetail } from '~/.server/queries/learning-paths'
 import type { LearningPathDetail } from '~/.server/database/types'
-import { formatCourseLength, formatLessonLength } from '~/utils/format-course-length'
+import {
+	formatCourseLength,
+	formatLessonLength,
+} from '~/utils/format-course-length'
 import { getSession } from '~/.server/auth/sessions'
 
 export async function loader({ request, params }: Route.LoaderArgs) {
 	const session = await getSession(request.headers.get('Cookie'))
-	const userId = session.has('userId') ? parseInt(session.get('userId')!) : undefined
+	const userId = session.has('userId')
+		? parseInt(session.get('userId')!)
+		: undefined
 
 	const pathId = parseInt(params.pathId)
 	if (Number.isNaN(pathId)) throw new Error('Invalid path parameter')

@@ -257,7 +257,9 @@ function CourseDetailInner({
 														</span>
 														<span className="w-0.5 h-0.5 bg-slate-700 rounded-full"></span>
 														<span className="text-[10px] text-slate-500">
-															{formatLessonLength(lesson.length)}
+															{formatLessonLength(
+																lesson.length,
+															)}
 														</span>
 													</div>
 												</div>
@@ -316,11 +318,14 @@ function CourseDetailInner({
 													<div className="min-w-0 text-slate-300">
 														<p className="truncate">
 															Lesson{' '}
-															{lessonIndex + 1}: {lesson.title}
+															{lessonIndex + 1}:{' '}
+															{lesson.title}
 														</p>
 													</div>
 													<p className="shrink-0 text-xs text-slate-500">
-														{formatLessonLength(lesson.length)}
+														{formatLessonLength(
+															lesson.length,
+														)}
 													</p>
 												</div>
 											),
