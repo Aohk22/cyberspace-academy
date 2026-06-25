@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { asc, eq, inArray } from 'drizzle-orm'
 import { ArrowLeft, ChevronRight, Flag, Plus, Save, Trash2 } from 'lucide-react'
 import {
@@ -10,7 +10,7 @@ import {
 	useLoaderData,
 	useNavigation,
 } from 'react-router'
-import MarkdownContent from '~/components/MarkdownContent'
+const MarkdownContent = lazy(() => import('~/components/MarkdownContent'))
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
 import type { Route } from './+types/CourseBuilderLesson'
@@ -464,9 +464,7 @@ export default function CourseBuilderLesson() {
 
 			{/* Error */}
 			{actionData?.error ? (
-				<div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
-					{actionData.error}
-				</div>
+				<div className="text-sm text-rose-400">{actionData.error}</div>
 			) : null}
 
 			{/* Editor form */}
@@ -478,20 +476,17 @@ export default function CourseBuilderLesson() {
 					value={challengeJson}
 				/>
 
-				<div className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
+				<div>
 					<div className="flex items-center justify-between gap-4">
 						<div>
 							<h2 className="text-lg font-bold text-white">
 								Lesson Editor
 							</h2>
-							<p className="mt-1 text-xs text-slate-400">
-								Changes are saved individually for this lesson.
-							</p>
 						</div>
 						<button
 							type="submit"
 							disabled={isSaving}
-							className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
+							className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
 						>
 							<Save className="h-4 w-4" />
 							{isSaving ? 'Saving...' : 'Save Lesson'}
@@ -499,13 +494,13 @@ export default function CourseBuilderLesson() {
 					</div>
 
 					{/* Tabs */}
-					<div className="mt-5 flex items-center gap-2 border-b border-slate-800">
+					<div className="mt-4 flex items-center gap-1 border-b border-slate-800">
 						<button
 							type="button"
 							onClick={() => setActiveTab('write')}
-							className={`rounded-t-xl px-4 py-2 text-sm font-medium transition-colors ${
+							className={`rounded-t-lg px-3 py-1.5 text-xs font-medium transition-colors ${
 								activeTab === 'write'
-									? 'border border-slate-800 border-b-slate-900 bg-slate-950 text-white'
+									? 'border border-slate-800 border-b-slate-950 bg-slate-950 text-white'
 									: 'text-slate-400 hover:text-slate-200'
 							}`}
 						>
@@ -514,9 +509,9 @@ export default function CourseBuilderLesson() {
 						<button
 							type="button"
 							onClick={() => setActiveTab('preview')}
-							className={`rounded-t-xl px-4 py-2 text-sm font-medium transition-colors ${
+							className={`rounded-t-lg px-3 py-1.5 text-xs font-medium transition-colors ${
 								activeTab === 'preview'
-									? 'border border-slate-800 border-b-slate-900 bg-slate-950 text-white'
+									? 'border border-slate-800 border-b-slate-950 bg-slate-950 text-white'
 									: 'text-slate-400 hover:text-slate-200'
 							}`}
 						>
@@ -525,23 +520,23 @@ export default function CourseBuilderLesson() {
 						<button
 							type="button"
 							onClick={() => setActiveTab('challenge')}
-							className={`rounded-t-xl flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors ${
+							className={`rounded-t-lg flex items-center gap-1 px-3 py-1.5 text-xs font-medium transition-colors ${
 								activeTab === 'challenge'
-									? 'border border-slate-800 border-b-slate-900 bg-slate-950 text-white'
+									? 'border border-slate-800 border-b-slate-950 bg-slate-950 text-white'
 									: 'text-slate-400 hover:text-slate-200'
 							}`}
 						>
-							<Flag className="h-3.5 w-3.5" />
+							<Flag className="h-3 w-3" />
 							Challenge
 						</button>
 					</div>
 
 					{/* Write tab */}
 					{activeTab === 'write' && (
-						<div className="mt-4 space-y-4">
-							<div className="grid gap-4 md:grid-cols-[1.2fr_0.7fr_1fr]">
-								<label className="space-y-2">
-									<span className="text-sm font-medium text-slate-300">
+						<div className="mt-4 space-y-3">
+							<div className="grid gap-3 md:grid-cols-[1.2fr_0.7fr_1fr]">
+								<label className="space-y-1">
+									<span className="text-xs font-medium text-slate-400">
 										Lesson title
 									</span>
 									<input
@@ -551,13 +546,13 @@ export default function CourseBuilderLesson() {
 										onChange={(e) =>
 											setTitle(e.target.value)
 										}
-										className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 									/>
 								</label>
 
-								<label className="space-y-2">
-									<span className="text-sm font-medium text-slate-300">
-										Length (seconds)
+								<label className="space-y-1">
+									<span className="text-xs font-medium text-slate-400">
+										Length (sec)
 									</span>
 									<input
 										type="number"
@@ -568,12 +563,12 @@ export default function CourseBuilderLesson() {
 										onChange={(e) =>
 											setLength(Number(e.target.value))
 										}
-										className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 									/>
 								</label>
 
-								<label className="space-y-2">
-									<span className="text-sm font-medium text-slate-300">
+								<label className="space-y-1">
+									<span className="text-xs font-medium text-slate-400">
 										Module
 									</span>
 									<select
@@ -582,7 +577,7 @@ export default function CourseBuilderLesson() {
 										onChange={(e) =>
 											setModuleId(Number(e.target.value))
 										}
-										className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 									>
 										{allCourseModules.map((m) => (
 											<option key={m.id} value={m.id}>
@@ -593,8 +588,8 @@ export default function CourseBuilderLesson() {
 								</label>
 							</div>
 
-							<label className="space-y-2">
-								<span className="text-sm font-medium text-slate-300">
+							<label className="space-y-1">
+								<span className="text-xs font-medium text-slate-400">
 									Markdown
 								</span>
 								<textarea
@@ -603,8 +598,8 @@ export default function CourseBuilderLesson() {
 									onChange={(e) =>
 										setContentMd(e.target.value)
 									}
-									rows={18}
-									className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-4 font-mono text-sm leading-6 text-slate-100 outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+									rows={16}
+									className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-3 font-mono text-sm leading-6 text-slate-100 outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 									placeholder="# Lesson title&#10;&#10;Start writing markdown here..."
 								/>
 							</label>
@@ -613,9 +608,15 @@ export default function CourseBuilderLesson() {
 
 					{/* Preview tab */}
 					{activeTab === 'preview' && (
-						<div className="mt-4 rounded-3xl border border-slate-800 bg-slate-950/50 p-5">
+						<div className="mt-4">
 							{contentMd.trim() ? (
-								<MarkdownContent content={contentMd} />
+								<Suspense
+									fallback={
+										<div className="h-48 bg-slate-800 rounded-xl animate-pulse" />
+									}
+								>
+									<MarkdownContent content={contentMd} />
+								</Suspense>
 							) : (
 								<p className="text-sm text-slate-400">
 									No markdown yet for this lesson.
@@ -626,16 +627,16 @@ export default function CourseBuilderLesson() {
 
 					{/* Challenge tab */}
 					{activeTab === 'challenge' && (
-						<div className="mt-4 space-y-6">
+						<div className="mt-4 space-y-4">
 							<div className="flex items-center justify-between">
-								<p className="text-sm text-slate-400">
+								<p className="text-xs text-slate-500">
 									{questions.length} question
 									{questions.length !== 1 ? 's' : ''}
 								</p>
 								<button
 									type="button"
 									onClick={addQuestion}
-									className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-emerald-700"
+									className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-emerald-700"
 								>
 									<Plus className="h-3 w-3" />
 									Add Question
@@ -643,16 +644,15 @@ export default function CourseBuilderLesson() {
 							</div>
 
 							{questions.length === 0 && (
-								<div className="rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-6 text-sm text-slate-400">
-									No challenge questions yet. Add one to test
-									learners.
+								<div className="rounded-lg border border-dashed border-slate-800 px-3 py-4 text-xs text-slate-500">
+									No challenge questions yet.
 								</div>
 							)}
 
 							{questions.map((q, qIndex) => (
 								<div
 									key={q.key}
-									className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/50 p-4"
+									className="border-b border-slate-800 pb-4 space-y-2"
 								>
 									<div className="flex items-center justify-between gap-4">
 										<span className="text-xs font-bold uppercase tracking-wider text-slate-500">
@@ -665,12 +665,12 @@ export default function CourseBuilderLesson() {
 											}
 											className="text-red-400 transition-colors hover:text-red-300"
 										>
-											<Trash2 className="h-4 w-4" />
+											<Trash2 className="h-3.5 w-3.5" />
 										</button>
 									</div>
 
-									<label className="space-y-1.5">
-										<span className="text-xs font-medium text-slate-400">
+									<label className="space-y-1">
+										<span className="text-xs text-slate-500">
 											Question text
 										</span>
 										<input
@@ -684,12 +684,12 @@ export default function CourseBuilderLesson() {
 												)
 											}
 											placeholder="What is the first step in..."
-											className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+											className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 										/>
 									</label>
 
-									<label className="space-y-1.5">
-										<span className="text-xs font-medium text-slate-400">
+									<label className="space-y-1">
+										<span className="text-xs text-slate-500">
 											Question type
 										</span>
 										<select
@@ -701,7 +701,7 @@ export default function CourseBuilderLesson() {
 													e.target.value,
 												)
 											}
-											className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+											className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 										>
 											<option value="multiple_choice">
 												Multiple Choice
@@ -711,8 +711,8 @@ export default function CourseBuilderLesson() {
 									</label>
 
 									{q.type === 'flag' && (
-										<label className="space-y-1.5">
-											<span className="text-xs font-medium text-slate-400">
+										<label className="space-y-1">
+											<span className="text-xs text-slate-500">
 												Correct answer
 											</span>
 											<input
@@ -726,15 +726,15 @@ export default function CourseBuilderLesson() {
 													)
 												}
 												placeholder="FLAG{...}"
-												className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 font-mono text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+												className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 font-mono text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 											/>
 										</label>
 									)}
 
 									{q.type === 'multiple_choice' && (
-										<div className="space-y-3">
+										<div className="space-y-2">
 											<div className="flex items-center justify-between">
-												<span className="text-xs font-medium text-slate-400">
+												<span className="text-xs text-slate-500">
 													Options
 												</span>
 												<button
@@ -742,16 +742,16 @@ export default function CourseBuilderLesson() {
 													onClick={() =>
 														addOption(q.key)
 													}
-													className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2 py-1 text-xs text-slate-300 transition-colors hover:bg-slate-700"
+													className="inline-flex items-center gap-1 rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300 transition-colors hover:bg-slate-700"
 												>
 													<Plus className="h-3 w-3" />
-													Add Option
+													Add
 												</button>
 											</div>
 											{q.options.map((opt, optIndex) => (
 												<div
 													key={opt.key}
-													className="flex items-center gap-3"
+													className="flex items-center gap-2"
 												>
 													<input
 														type="radio"
@@ -777,7 +777,7 @@ export default function CourseBuilderLesson() {
 															)
 														}
 														placeholder={`Option ${optIndex + 1}`}
-														className="flex-1 rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+														className="flex-1 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
 													/>
 													<button
 														type="button"
@@ -787,7 +787,7 @@ export default function CourseBuilderLesson() {
 																opt.key,
 															)
 														}
-														className="text-slate-500 transition-colors hover:text-red-400"
+														className="text-slate-600 transition-colors hover:text-red-400"
 													>
 														<Trash2 className="h-3.5 w-3.5" />
 													</button>

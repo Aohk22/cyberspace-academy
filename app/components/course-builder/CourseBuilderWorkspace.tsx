@@ -260,9 +260,7 @@ export default function CourseBuilderWorkspace({
 		importFileRef.current?.click()
 	}
 
-	function handleImportFileChange(
-		e: React.ChangeEvent<HTMLInputElement>,
-	) {
+	function handleImportFileChange(e: React.ChangeEvent<HTMLInputElement>) {
 		const file = e.target.files?.[0]
 		if (!file) return
 		const reader = new FileReader()
@@ -282,7 +280,12 @@ export default function CourseBuilderWorkspace({
 	function handleRemoveCourse() {
 		const courseId = selectedCourse?.id ?? draft.id
 		if (courseId == null) return
-		if (!window.confirm('Remove this course permanently? This cannot be undone.')) return
+		if (
+			!window.confirm(
+				'Remove this course permanently? This cannot be undone.',
+			)
+		)
+			return
 		submit(
 			{ intent: 'delete-course', courseId: String(courseId) },
 			{ method: 'post' },

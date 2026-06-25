@@ -36,9 +36,14 @@ export default function Paths() {
 
 function PathsInner({ paths }: { paths: LearningPathWithCount[] }) {
 	return paths.length > 0 ? (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+		<div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin">
 			{paths.map((path) => (
-				<PathCard key={path.id} path={path} />
+				<div
+					key={path.id}
+					className="min-w-[300px] max-w-[360px] flex-1 snap-start"
+				>
+					<PathCard path={path} />
+				</div>
 			))}
 		</div>
 	) : (
@@ -55,11 +60,11 @@ function PathsInner({ paths }: { paths: LearningPathWithCount[] }) {
 
 function PathsSkeleton() {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+		<div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-thin">
 			{[1, 2, 3].map((i) => (
 				<div
 					key={i}
-					className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden animate-pulse"
+					className="min-w-[300px] max-w-[360px] flex-1 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden animate-pulse"
 				>
 					<div className="aspect-[16/10] bg-slate-800" />
 					<div className="p-6 space-y-3">

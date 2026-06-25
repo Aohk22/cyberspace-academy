@@ -88,7 +88,12 @@ export async function getCourseExportData(
 	const lessonIds = lessonRows.map((l) => l.id)
 	let questionsByLesson = new Map<
 		number,
-		{ questionText: string; type: string; correctAnswer: string | null; options: { optionText: string; isCorrect: boolean }[] }[]
+		{
+			questionText: string
+			type: string
+			correctAnswer: string | null
+			options: { optionText: string; isCorrect: boolean }[]
+		}[]
 	>()
 
 	if (lessonIds.length > 0) {
@@ -136,7 +141,12 @@ export async function getCourseExportData(
 
 	const lessonsByModule = new Map<
 		number,
-		{ title: string; length: number; contentMd: string; challengeQuestions: any[] }[]
+		{
+			title: string
+			length: number
+			contentMd: string
+			challengeQuestions: any[]
+		}[]
 	>()
 	for (const lesson of lessonRows) {
 		const list = lessonsByModule.get(lesson.moduleId) ?? []

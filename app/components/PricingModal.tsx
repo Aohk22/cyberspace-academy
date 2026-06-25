@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Check, X, Zap, Shield, Star, Sparkles } from 'lucide-react'
-import CheckoutModal from './CheckoutModal'
+
+const CheckoutModal = lazy(() => import('./CheckoutModal'))
 
 interface PricingModalProps {
 	isOpen: boolean
@@ -223,11 +224,13 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
 				)}
 			</AnimatePresence>
 
-			<CheckoutModal
-				isOpen={checkoutPlan !== null}
-				onClose={() => setCheckoutPlan(null)}
-				plan={checkoutPlan}
-			/>
+			<Suspense fallback={null}>
+				<CheckoutModal
+					isOpen={checkoutPlan !== null}
+					onClose={() => setCheckoutPlan(null)}
+					plan={checkoutPlan}
+				/>
+			</Suspense>
 		</>
 	)
 }
