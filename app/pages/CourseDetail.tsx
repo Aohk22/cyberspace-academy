@@ -4,8 +4,10 @@ import {
 	useLoaderData,
 	useNavigation,
 	Await,
+	Form,
+	useFetcher,
 } from 'react-router'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import CoursePreviewCard from '~/components/CoursePreviewCard'
 import {
 	Play,
@@ -14,28 +16,32 @@ import {
 	User,
 	Star,
 	ChevronRight,
+	Send,
+	ThumbsUp,
 } from 'lucide-react'
 import { userContext } from '~/context'
 import type { Route } from './+types/CourseDetail'
 import { NoUserContextError } from '~/error'
 import { getCourseDetailData } from '~/.server/queries/course-detail'
-import type { CourseDetails } from '~/.server/queries/course-detail'
+import type { CourseDetailResult } from '~/.server/queries/course-detail'
 import { db } from '~/.server/database/connection'
-import { usersToCourses } from '~/.server/database/schema'
+import { usersToCourses, reviews } from '~/.server/database/schema'
 import { formatLessonLength } from '~/utils/format-course-length'
-import { getSession } from '~/.server/auth/sessions'
+import { z } from 'zod'
 
-export async function loader({ request, params }: Route.LoaderArgs) {
-	const session = await getSession(request.headers.get('Cookie'))
-	if (!session.has('userId')) return redirect('/login')
+export async function loader({ context, params }: Route.LoaderArgs) {
+	const user = context.get(userContext)
+	if (user === null) {
+		throw new NoUserContextError('User context resolved to null.')
+	}
 
 	const courseId = parseInt(params.courseId)
 	if (Number.isNaN(courseId)) throw new Error('Invalid path parameter')
 
-	const userId = parseInt(session.get('userId')!)
-	if (Number.isNaN(userId)) throw new Error(`Invalid userId ${userId}`)
-
-	return { dataPromise: getCourseDetailData(courseId, userId) }
+	return {
+		dataPromise: getCourseDetailData(courseId, user.id),
+		userId: user.id,
+	}
 }
 
 export async function action({ context, params, request }: Route.ActionArgs) {
@@ -50,19 +56,32 @@ export async function action({ context, params, request }: Route.ActionArgs) {
 		throw new Error('Invalid path parameter')
 	}
 
-	await db
-		.insert(usersToCourses)
-		.values({
-			userId,
-			courseId,
-		})
-		.onConflictDoNothing()
+	const formData = await request.formData()
+	const intent = formData.get('_action')
 
-	return redirect(new URL(request.url).pathname)
+	if (intent === 'enroll' || intent === null) {
+		await db
+			.insert(usersToCourses)
+			.values({ userId, courseId })
+			.onConflictDoNothing()
+
+		return redirect(new URL(request.url).pathname)
+	}
+
+	if (intent === 'review') {
+		const rating = z.coerce.number().parse(formData.get('rating'))
+		const content = z.string().parse(formData.get('content'))
+
+		await db.insert(reviews).values({ userId, courseId, rating, content })
+
+		return redirect(new URL(request.url).pathname)
+	}
+
+	return null
 }
 
 export default function CourseDetail() {
-	const { dataPromise } = useLoaderData<typeof loader>()
+	const { dataPromise, userId } = useLoaderData<typeof loader>()
 
 	return (
 		<div className="space-y-8">
@@ -84,7 +103,12 @@ export default function CourseDetail() {
 								</div>
 							)
 						}
-						return <CourseDetailInner data={data} />
+						return (
+							<CourseDetailInner
+								data={data}
+								currentUserId={userId}
+							/>
+						)
 					}}
 				</Await>
 			</Suspense>
@@ -94,10 +118,12 @@ export default function CourseDetail() {
 
 function CourseDetailInner({
 	data,
+	currentUserId,
 }: {
-	data: NonNullable<Awaited<ReturnType<typeof getCourseDetailData>>>
+	data: CourseDetailResult
+	currentUserId: number
 }) {
-	const { enrolled, course } = data
+	const { enrolled, course, averageRating, reviewCount, studentCount } = data
 	const navigation = useNavigation()
 	const modules = course.modules
 	const lessonsCount = modules.reduce(
@@ -116,6 +142,10 @@ function CourseDetailInner({
 	const continuePath = continueLesson
 		? `/courses/${course.id}/lessons/${continueLesson.id}`
 		: `/courses/${course.id}`
+
+	const [reviewRating, setReviewRating] = useState(5)
+	const [reviewContent, setReviewContent] = useState('')
+	const reviewFetcher = useFetcher()
 
 	return (
 		<div className="space-y-8">
@@ -166,7 +196,9 @@ function CourseDetailInner({
 							Rating
 						</p>
 						<p className="text-sm font-bold text-white">
-							4.9 (2.4k reviews)
+							{averageRating
+								? `${averageRating} (${reviewCount} reviews)`
+								: 'No reviews yet'}
 						</p>
 					</div>
 				</div>
@@ -179,7 +211,7 @@ function CourseDetailInner({
 							Students
 						</p>
 						<p className="text-sm font-bold text-white">
-							15,420 enrolled
+							{studentCount.toLocaleString()} enrolled
 						</p>
 					</div>
 				</div>
@@ -230,8 +262,8 @@ function CourseDetailInner({
 													className={
 														'w-8 h-8 rounded-full flex items-center justify-center transition-colors' +
 														(lesson.completed
-															? 'bg-emerald-500/10 text-emerald-500'
-															: 'bg-slate-800 text-slate-600 group-hover:bg-emerald-500/10 group-hover:text-emerald-400')
+															? ' bg-emerald-500/10 text-emerald-500'
+															: ' bg-slate-800 text-slate-600 group-hover:bg-emerald-500/10 group-hover:text-emerald-400')
 													}
 												>
 													{lesson.completed ? (
@@ -255,7 +287,7 @@ function CourseDetailInner({
 														<span className="text-[10px] font-bold uppercase text-slate-500">
 															Video
 														</span>
-														<span className="w-0.5 h-0.5 bg-slate-700 rounded-full"></span>
+														<span className="w-0.5 h-0.5 bg-slate-700 rounded-full" />
 														<span className="text-[10px] text-slate-500">
 															{formatLessonLength(
 																lesson.length,
@@ -275,65 +307,136 @@ function CourseDetailInner({
 							</div>
 						))}
 					</div>
+
+					{/* Review Form */}
+					<div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+						<h3 className="text-lg font-bold text-white">
+							Leave a Review
+						</h3>
+						<reviewFetcher.Form method="POST">
+							<input
+								type="hidden"
+								name="_action"
+								value="review"
+							/>
+							<div className="flex items-center gap-1 mb-3">
+								{[1, 2, 3, 4, 5].map((star) => (
+									<button
+										key={star}
+										type="button"
+										onClick={() => setReviewRating(star)}
+										className="transition-colors"
+									>
+										<Star
+											className={`w-5 h-5 ${
+												star <= reviewRating
+													? 'fill-amber-400 text-amber-400'
+													: 'text-slate-600'
+											}`}
+										/>
+									</button>
+								))}
+								<input
+									type="hidden"
+									name="rating"
+									value={reviewRating}
+								/>
+							</div>
+							<textarea
+								name="content"
+								required
+								rows={3}
+								placeholder="Share your thoughts about this course..."
+								value={reviewContent}
+								onChange={(e) =>
+									setReviewContent(e.target.value)
+								}
+								className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:bg-slate-700 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all resize-none"
+							/>
+							<div className="flex justify-end mt-3">
+								<button
+									type="submit"
+									disabled={
+										!reviewContent.trim() ||
+										reviewFetcher.state === 'submitting'
+									}
+									className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition-all disabled:opacity-50"
+								>
+									<Send className="w-4 h-4" />
+									Submit Review
+								</button>
+							</div>
+						</reviewFetcher.Form>
+					</div>
 				</div>
 			) : (
-				<div className="bg-slate-900 border border-slate-800 rounded-xl p-8 space-y-4">
-					<h2 className="text-2xl font-bold text-white">
-						Course Summary
-					</h2>
-					<p className="text-slate-400 leading-relaxed">
-						{course.description}
-					</p>
-					<div className="space-y-3 pt-2">
-						<div className="flex items-center gap-2 text-sm font-medium text-slate-300">
-							<BookOpen className="w-4 h-4 text-emerald-500" />
-							Modules in this course
-						</div>
-						<div className="space-y-3">
-							{modules.map((module, index) => (
-								<div
-									key={module.id}
-									className="rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-4"
-								>
-									<div className="flex items-start justify-between gap-4">
-										<div className="min-w-0">
-											<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-												Module {index + 1}
-											</p>
-											<p className="mt-2 text-sm text-slate-200">
-												{module.title}
+				<div className="space-y-6">
+					<div className="bg-slate-900 border border-slate-800 rounded-xl p-8 space-y-4">
+						<h2 className="text-2xl font-bold text-white">
+							Course Summary
+						</h2>
+						<p className="text-slate-400 leading-relaxed">
+							{course.description}
+						</p>
+						<div className="space-y-3 pt-2">
+							<div className="flex items-center gap-2 text-sm font-medium text-slate-300">
+								<BookOpen className="w-4 h-4 text-emerald-500" />
+								Modules in this course
+							</div>
+							<div className="space-y-3">
+								{modules.map((module, index) => (
+									<div
+										key={module.id}
+										className="rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-4"
+									>
+										<div className="flex items-start justify-between gap-4">
+											<div className="min-w-0">
+												<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+													Module {index + 1}
+												</p>
+												<p className="mt-2 text-sm text-slate-200">
+													{module.title}
+												</p>
+											</div>
+											<p className="shrink-0 text-xs text-slate-500">
+												{module.lessons.length} lessons
 											</p>
 										</div>
-										<p className="shrink-0 text-xs text-slate-500">
-											{module.lessons.length} lessons
-										</p>
-									</div>
-									<div className="mt-4 space-y-2 border-t border-slate-800 pt-4">
-										{module.lessons.map(
-											(lesson, lessonIndex) => (
-												<div
-													key={lesson.id}
-													className="flex items-center justify-between gap-4 text-sm"
-												>
-													<div className="min-w-0 text-slate-300">
-														<p className="truncate">
-															Lesson{' '}
-															{lessonIndex + 1}:{' '}
-															{lesson.title}
+										<div className="mt-4 space-y-2 border-t border-slate-800 pt-4">
+											{module.lessons.map(
+												(lesson, lessonIndex) => (
+													<div
+														key={lesson.id}
+														className="flex items-center justify-between gap-4 text-sm"
+													>
+														<div className="min-w-0 text-slate-300">
+															<p className="truncate">
+																Lesson{' '}
+																{lessonIndex +
+																	1}
+																: {lesson.title}
+															</p>
+														</div>
+														<p className="shrink-0 text-xs text-slate-500">
+															{formatLessonLength(
+																lesson.length,
+															)}
 														</p>
 													</div>
-													<p className="shrink-0 text-xs text-slate-500">
-														{formatLessonLength(
-															lesson.length,
-														)}
-													</p>
-												</div>
-											),
-										)}
+												),
+											)}
+										</div>
 									</div>
-								</div>
-							))}
+								))}
+							</div>
 						</div>
+					</div>
+
+					{/* Enroll to review */}
+					<div className="bg-slate-900 border border-slate-800 rounded-xl p-6 text-center">
+						<p className="text-sm text-slate-400">
+							Enroll in this course to leave a review.
+						</p>
 					</div>
 				</div>
 			)}

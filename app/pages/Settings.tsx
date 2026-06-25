@@ -1,6 +1,6 @@
-import React from 'react'
-import { User, Shield, LogOut } from 'lucide-react'
-import { Form, redirect, useLoaderData } from 'react-router'
+import React, { useState } from 'react'
+import { User, Shield, LogOut, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Form, redirect, useLoaderData, useFetcher } from 'react-router'
 import {
 	destroySession,
 	getSession,
@@ -31,8 +31,8 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-	const user = context.get(userContext)
-	if (user === null) {
+	const sessionUser = context.get(userContext)
+	if (sessionUser === null) {
 		throw new Error('User context resolved to null.')
 	}
 
@@ -55,7 +55,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 		const name = formData.get('name') as string
 		const email = formData.get('email') as string
 
-		await updateUser(user.id, { name, email })
+		await updateUser(sessionUser.id, { name, email })
 		session.set('userName', name)
 
 		return new Response(null, {
@@ -65,11 +65,28 @@ export async function action({ request, context }: Route.ActionArgs) {
 		})
 	}
 
+	if (intent === 'change-password') {
+		const { updatePassword } = await import('~/.server/database/utils')
+		const currentPassword = formData.get('currentPassword') as string
+		const newPassword = formData.get('newPassword') as string
+
+		const result = await updatePassword(
+			sessionUser.id,
+			currentPassword,
+			newPassword,
+		)
+		return { passwordResult: result }
+	}
+
 	return null
 }
 
 export default function Settings() {
 	const { user } = useLoaderData<typeof loader>()
+	const passwordFetcher = useFetcher<{
+		passwordResult?: { ok: boolean; error?: string }
+	}>()
+	const passwordResult = passwordFetcher.data?.passwordResult
 
 	return (
 		<div className="space-y-8">
@@ -140,44 +157,55 @@ export default function Settings() {
 				<h2 className="text-lg font-bold text-white">
 					Security Settings
 				</h2>
-				<div className="flex items-center justify-between py-3 border-b border-slate-800">
-					<div className="flex items-center gap-3">
-						<div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center">
-							<Shield className="w-4 h-4 text-emerald-400" />
-						</div>
-						<div>
-							<h4 className="font-bold text-white text-sm">
-								Two-Factor Authentication
-							</h4>
-							<p className="text-xs text-slate-500">
-								Add an extra layer of security.
-							</p>
-						</div>
-					</div>
-					<button className="text-sm font-bold text-emerald-400 hover:text-emerald-300">
-						Enable
-					</button>
-				</div>
 
 				<div className="space-y-3">
 					<h4 className="font-bold text-white text-sm">
 						Change Password
 					</h4>
-					<div className="space-y-3">
+					<passwordFetcher.Form method="POST" className="space-y-3">
+						<input
+							type="hidden"
+							name="_action"
+							value="change-password"
+						/>
 						<input
 							type="password"
+							name="currentPassword"
+							required
+							minLength={8}
 							placeholder="Current Password"
-							className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-sm text-white focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
+							className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
 						/>
 						<input
 							type="password"
-							placeholder="New Password"
-							className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-sm text-white focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
+							name="newPassword"
+							required
+							minLength={8}
+							placeholder="New Password (min 8 chars)"
+							className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
 						/>
-						<button className="w-full py-2 bg-slate-100 text-black rounded-lg text-sm font-bold hover:bg-white transition-all">
-							Update Password
+						<button
+							type="submit"
+							disabled={passwordFetcher.state === 'submitting'}
+							className="w-full py-2 bg-slate-100 text-black rounded-lg text-sm font-bold hover:bg-white transition-all disabled:opacity-50"
+						>
+							{passwordFetcher.state === 'submitting'
+								? 'Updating...'
+								: 'Update Password'}
 						</button>
-					</div>
+						{passwordResult?.ok && (
+							<div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-500/10 rounded-lg px-3 py-2">
+								<CheckCircle2 className="w-4 h-4" />
+								Password updated successfully.
+							</div>
+						)}
+						{passwordResult?.error && (
+							<div className="flex items-center gap-2 text-xs text-red-400 bg-red-500/10 rounded-lg px-3 py-2">
+								<AlertCircle className="w-4 h-4" />
+								{passwordResult.error}
+							</div>
+						)}
+					</passwordFetcher.Form>
 				</div>
 			</div>
 

@@ -15,6 +15,7 @@ export const users = pgTable('users', {
 	email: varchar({ length: 255 }).notNull().unique(),
 	password: text().notNull(),
 	role: varchar({ length: 20 }).notNull().default('learner'),
+
 })
 
 export const reviews = pgTable('reviews', {

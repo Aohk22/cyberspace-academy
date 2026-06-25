@@ -3,8 +3,8 @@ import { z } from 'zod'
 import { db } from '~/.server/database/connection'
 import {
 	courseSchema,
-	lessonSchema,
 	moduleSchema,
+	lessonSchema,
 } from '~/.server/database/types'
 
 const courseDetailsSchema = z.object({
@@ -41,10 +41,18 @@ const courseDetailsGroupedSchema = courseSchema.extend({
 
 export type CourseDetails = z.infer<typeof courseDetailsGroupedSchema>
 
+export type CourseDetailResult = {
+	enrolled: boolean
+	course: CourseDetails
+	averageRating: number | null
+	reviewCount: number
+	studentCount: number
+}
+
 export async function getCourseDetailData(
 	courseId: number,
 	userId: number,
-): Promise<{ enrolled: boolean; course: CourseDetails } | null> {
+): Promise<CourseDetailResult | null> {
 	const enrolled =
 		(
 			await db.execute(sql`
@@ -79,7 +87,7 @@ export async function getCourseDetailData(
 		${
 			enrolled
 				? sql`
-			INNER JOIN users_to_lessons utl 
+			LEFT JOIN users_to_lessons utl 
 			ON utl.lesson_id = l.id AND utl.user_id = ${userId}
 			`
 				: sql``
@@ -94,10 +102,8 @@ export async function getCourseDetailData(
 
 	const rows = z.array(courseDetailsSchema).parse(res.rows)
 
-	// Group flat rows into nested structure
 	const grouped = rows.reduce(
 		(acc, row) => {
-			// Accumulate the courses.
 			if (!acc[row.courseId]) {
 				acc[row.courseId] = {
 					id: row.courseId,
@@ -111,7 +117,6 @@ export async function getCourseDetailData(
 				}
 			}
 
-			// Accumulate the modules.
 			if (!acc[row.courseId].modules[row.moduleId]) {
 				acc[row.courseId].modules[row.moduleId] = {
 					id: row.moduleId,
@@ -121,15 +126,13 @@ export async function getCourseDetailData(
 				}
 			}
 
-			// Accumulate the lessons
 			acc[row.courseId].modules[row.moduleId].lessons.push({
 				id: row.lessonId,
 				title: row.lessonTitle,
 				length: row.lessonLength,
 				contentMd: row.lessonContentMd,
 				moduleId: row.moduleId,
-
-				completed: row.lessonCompleted, // This the extra parameter.
+				completed: row.lessonCompleted,
 			})
 
 			return acc
@@ -137,16 +140,43 @@ export async function getCourseDetailData(
 		{} as Record<string, any>,
 	)
 
-	// console.dir(grouped, { depth: null })
-
-	// Flatten modules from object to array
 	const flatten = Object.values(grouped).map((c: any) => ({
 		...c,
 		modules: Object.values(c.modules),
 	}))[0]
 
-	console.dir(flatten, { depth: null })
-
 	const course = z.parse(courseDetailsGroupedSchema, flatten)
-	return { enrolled, course }
+
+	const [reviewStats, studentCountResult] = await Promise.all([
+		db.execute(sql`
+			SELECT
+				ROUND(AVG(r.rating)::numeric, 1) AS "averageRating",
+				COUNT(*)::int AS "reviewCount"
+			FROM reviews r
+			WHERE r.course_id = ${courseId}
+		`),
+		db.execute(sql`
+			SELECT COUNT(*)::int AS "count"
+			FROM users_to_courses
+			WHERE course_id = ${courseId}
+		`),
+	])
+
+	const averageRating = (
+		reviewStats.rows[0] as { averageRating: string | null }
+	).averageRating
+	const reviewCount = Number(
+		(reviewStats.rows[0] as { reviewCount: number }).reviewCount,
+	)
+	const studentCount = Number(
+		(studentCountResult.rows[0] as { count: number }).count,
+	)
+
+	return {
+		enrolled,
+		course,
+		averageRating: averageRating ? Number(averageRating) : null,
+		reviewCount,
+		studentCount,
+	}
 }
