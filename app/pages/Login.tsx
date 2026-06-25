@@ -211,10 +211,10 @@ export default function Login({ actionData }: Route.ComponentProps) {
 						</div>
 
 						<div className="grid grid-cols-2 gap-4">
-							<button className="flex items-center justify-center gap-2 py-3 border border-slate-700 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 transition-colors">
+							<button type="button" className="flex items-center justify-center gap-2 py-3 border border-slate-700 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 transition-colors">
 								<ChromeIcon className="w-5 h-5" /> Google
 							</button>
-							<button className="flex items-center justify-center gap-2 py-3 border border-slate-700 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 transition-colors">
+							<button type="button" className="flex items-center justify-center gap-2 py-3 border border-slate-700 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 transition-colors">
 								<GithubIcon className="w-5 h-5" /> GitHub
 							</button>
 						</div>
