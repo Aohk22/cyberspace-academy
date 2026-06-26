@@ -17,6 +17,7 @@ import {
 	Map,
 	Users,
 	BookMarked,
+	Book,
 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useEffect, useState, lazy, Suspense } from 'react'
@@ -26,7 +27,8 @@ const PricingModal = lazy(() => import('~/components/PricingModal'))
 const AiTutor = lazy(() => import('~/components/AiTutor'))
 
 const learnerNavItems = [
-	{ label: 'Dashboard', href: '/', icon: LayoutDashboard },
+	{ label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+	{ label: 'Courses', href: '/courses', icon: Book },
 	{ label: 'Learning Paths', href: '/paths', icon: Map },
 	{ label: 'Achievements', href: '/achievements', icon: GraduationCap },
 	{ label: 'Settings', href: '/settings', icon: Settings },
@@ -35,9 +37,9 @@ const learnerNavItems = [
 const staffNavItems = [
 	{ label: 'Summary', href: '/admin', icon: LayoutDashboard },
 	{ label: 'Course Builder', href: '/course-builder', icon: SquarePen },
-	{ label: 'Users', href: '/admin/users', icon: Users },
-	{ label: 'Categories', href: '/admin/categories', icon: BookMarked },
-	{ label: 'Paths', href: '/admin/paths', icon: Map },
+	{ label: 'Users', href: '/users', icon: Users },
+	{ label: 'Categories', href: '/categories', icon: BookMarked },
+	{ label: 'Paths', href: '/paths-admin', icon: Map },
 	{ label: 'Settings', href: '/settings', icon: Settings },
 ]
 
@@ -134,10 +136,9 @@ export default function MainLayout() {
 								to={item.href}
 								onClick={() => setActiveLink(item.href)}
 								className={
-									`flex items-center px-6 py-3 text-sm font-medium transition-colors relative ${
-										isSidebarCollapsed
-											? 'justify-center'
-											: 'gap-3'
+									`flex items-center px-6 py-3 text-sm font-medium transition-colors relative ${isSidebarCollapsed
+										? 'justify-center'
+										: 'gap-3'
 									} ` +
 									(isActive
 										? 'bg-emerald-500/10 text-emerald-400 border-r-2 border-emerald-500'

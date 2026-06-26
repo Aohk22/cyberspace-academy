@@ -1,4 +1,4 @@
-import { Save, BookOpen, Download, Upload, Trash2 } from 'lucide-react'
+import { Save, BookOpen, Download, Upload, Trash2, ExternalLink } from 'lucide-react'
 import { Form, Link, useNavigate, useNavigation, useSubmit } from 'react-router'
 import { useRef, useState } from 'react'
 import type { Category } from '~/.server/database/types'
@@ -380,6 +380,19 @@ export default function CourseBuilderWorkspace({
 						onChange={handleImportFileChange}
 						className="hidden"
 					/>
+
+					{/* View on site */}
+					{selectedCourse != null ? (
+						<Link
+							to={`/courses/${selectedCourse.id}`}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-800"
+						>
+							<ExternalLink className="h-3.5 w-3.5" />
+							View as user
+						</Link>
+					) : null}
 
 					{/* Remove course */}
 					{selectedCourse != null ? (

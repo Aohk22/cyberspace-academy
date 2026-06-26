@@ -98,7 +98,7 @@ export default function AdminUsers() {
 					{total} total user{total !== 1 ? 's' : ''}
 				</p>
 				<Link
-					to="/admin/users/new"
+					to="/users/new"
 					className="inline-flex items-center justify-center gap-1.5 shrink-0 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 transition-colors hover:bg-slate-700"
 				>
 					<Plus className="h-3.5 w-3.5" />
@@ -164,11 +164,10 @@ export default function AdminUsers() {
 								</td>
 								<td className="px-3 py-2">
 									<span
-										className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-											u.role === 'staff'
+										className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${u.role === 'staff'
 												? 'bg-emerald-400/10 text-emerald-300'
 												: 'bg-slate-700 text-slate-300'
-										}`}
+											}`}
 									>
 										{u.role}
 									</span>
