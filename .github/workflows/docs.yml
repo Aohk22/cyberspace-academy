@@ -6,6 +6,9 @@ on:
       - "docs/**"
       - "mkdocs.yml"
 
+permissions:
+  contents: write
+
 jobs:
   build_mkdocs:
     runs-on: ubuntu-latest
