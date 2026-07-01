@@ -5,53 +5,53 @@ on:
     paths:
       - "docs/**"
       - "mkdocs.yml"
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
-  build:
+  build_mkdocs:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          python-version: "3.x"
+          fetch-depth: 0
+
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
 
       - name: Install dependencies
-        run: pip install mkdocs-material mkdocs-panzoom-plugin
+        run: pip install \
+          mkdocs-material \
+          mkdocs-material-extensions \
+          mkdocs-mermaid2-plugin \
+          mkdocs-panzoom-plugin
+
+      - name: Deploy to default branch gh-pages
+        run: mkdocs gh-deploy --config-file mkdocs.yml
+
+  deploy_mkdocs:
+    needs: build_mkdocs
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
-      - name: Build site
-        run: mkdocs build --site-dir ./_site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./_site
+          path: "."
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to Pages
+      - name: Deploy to Github Pages
         id: deployment
         uses: actions/deploy-pages@v4

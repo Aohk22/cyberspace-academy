@@ -12,3 +12,4 @@ drizzle/
 todo/
 
 site/
+.venv/
