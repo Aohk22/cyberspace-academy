@@ -89,7 +89,7 @@ export default function AdminUsers() {
 	const { users, total, search, roleFilter } = useLoaderData<typeof loader>()
 	const fetcher = useFetcher()
 	const [searchParams, setSearchParams] = useSearchParams()
-	const isDeleting = fetcher.state === 'submitting'
+	const isDeleting = fetcher.state !== 'idle'
 
 	return (
 		<div className="space-y-4">
@@ -134,7 +134,7 @@ export default function AdminUsers() {
 				</button>
 				{search || roleFilter ? (
 					<Link
-						to="/admin/users"
+						to="/users"
 						className="flex items-center gap-1 rounded-lg border border-foreground-active px-3 py-1.5 text-xs text-foreground-text hover:text-foreground-text-secondary"
 					>
 						<X className="h-3 w-3" />
@@ -175,7 +175,7 @@ export default function AdminUsers() {
 								<td className="px-3 py-2">
 									<div className="flex items-center justify-end gap-1">
 										<Link
-											to={`/admin/users/${u.id}/edit`}
+											to={`/users/${u.id}/edit`}
 											className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-foreground-elevated hover:text-foreground-text-secondary"
 										>
 											<UserPen className="h-3.5 w-3.5" />

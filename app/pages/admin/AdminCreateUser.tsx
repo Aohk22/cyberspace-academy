@@ -72,7 +72,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	const rowsChanged = await register(name, email, password, role)
 
 	if (rowsChanged === 1) {
-		throw redirect('/admin?created=user')
+		throw redirect('/users')
 	}
 
 	return data(

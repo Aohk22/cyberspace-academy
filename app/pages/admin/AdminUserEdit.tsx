@@ -56,7 +56,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 		sql`SELECT id, name, email, role FROM users WHERE id = ${params.userId}`,
 	)
 	if (result.rows.length === 0) {
-		throw redirect('/admin/users')
+		throw redirect('/users')
 	}
 
 	return { user: userSchema.parse(result.rows[0]) }
@@ -76,7 +76,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 
 	if (intent === 'delete-user') {
 		await db.execute(sql`DELETE FROM users WHERE id = ${params.userId}`)
-		throw redirect('/admin/users')
+		throw redirect('/users')
 	}
 
 	if (intent === 'update-user') {
@@ -136,6 +136,34 @@ export default function AdminUserEdit() {
 					<span>User updated successfully.</span>
 				</div>
 			) : null}
+
+			<div className="flex items-center justify-between gap-3 mb-4">
+				<Form
+					method="POST"
+					onSubmit={(e) => {
+						if (
+							!window.confirm(
+								`Delete user "${user.name}"? This cannot be undone.`,
+							)
+						) {
+							e.preventDefault()
+						}
+					}}
+				>
+					<input
+						type="hidden"
+						name="intent"
+						value="delete-user"
+					/>
+					<button
+						type="submit"
+						className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-error/30 bg-error/10 px-4 py-2 text-xs font-bold text-error transition-colors hover:bg-error/20"
+					>
+						<Trash2 className="h-3.5 w-3.5" />
+						Delete
+					</button>
+				</Form>
+			</div>
 
 			<Form method="POST" className="space-y-4">
 				<div className="rounded-lg border border-foreground-elevated bg-foreground p-4 space-y-3">
@@ -221,32 +249,7 @@ export default function AdminUserEdit() {
 					</div>
 				</div>
 
-				<div className="flex items-center justify-between gap-3">
-					<Form
-						method="POST"
-						onSubmit={(e) => {
-							if (
-								!window.confirm(
-									`Delete user "${user.name}"? This cannot be undone.`,
-								)
-							) {
-								e.preventDefault()
-							}
-						}}
-					>
-						<input
-							type="hidden"
-							name="intent"
-							value="delete-user"
-						/>
-						<button
-							type="submit"
-							className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-error/30 bg-error/10 px-4 py-2 text-xs font-bold text-error transition-colors hover:bg-error/20"
-						>
-							<Trash2 className="h-3.5 w-3.5" />
-							Delete
-						</button>
-					</Form>
+				<div className="flex items-center justify-end gap-3">
 					<input type="hidden" name="intent" value="update-user" />
 					<button
 						type="submit"
