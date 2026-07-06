@@ -120,17 +120,17 @@ export default function LessonEditorPanel({
 			challengeQuestions.map((q) =>
 				q.clientId === questionClientId
 					? {
-							...q,
-							options: [
-								...q.options,
-								{
-									clientId: nextOptionClientId(),
-									id: null,
-									optionText: '',
-									isCorrect: false,
-								},
-							],
-						}
+						...q,
+						options: [
+							...q.options,
+							{
+								clientId: nextOptionClientId(),
+								id: null,
+								optionText: '',
+								isCorrect: false,
+							},
+						],
+					}
 					: q,
 			),
 		)
@@ -141,11 +141,11 @@ export default function LessonEditorPanel({
 			challengeQuestions.map((q) =>
 				q.clientId === questionClientId
 					? {
-							...q,
-							options: q.options.filter(
-								(o) => o.clientId !== optionClientId,
-							),
-						}
+						...q,
+						options: q.options.filter(
+							(o) => o.clientId !== optionClientId,
+						),
+					}
 					: q,
 			),
 		)
@@ -161,26 +161,26 @@ export default function LessonEditorPanel({
 			challengeQuestions.map((q) =>
 				q.clientId === questionClientId
 					? {
-							...q,
-							options: q.options.map((o) =>
-								o.clientId === optionClientId
-									? { ...o, [field]: value }
-									: o,
-							),
-						}
+						...q,
+						options: q.options.map((o) =>
+							o.clientId === optionClientId
+								? { ...o, [field]: value }
+								: o,
+						),
+					}
 					: q,
 			),
 		)
 	}
 
 	return (
-		<div className="rounded-3xl border border-slate-800 bg-slate-900 p-5">
+		<div className="rounded-3xl border border-foreground-elevated bg-foreground p-5">
 			<div className="flex items-center justify-between gap-4">
 				<div>
-					<h2 className="text-base font-bold text-white">
+					<h2 className="text-base font-bold text-foreground-text">
 						Lesson Editor
 					</h2>
-					<p className="mt-1 text-xs text-slate-400">
+					<p className="mt-1 text-xs text-foreground-text-secondary">
 						Write markdown freely. Nothing is submitted until you
 						save the draft.
 					</p>
@@ -188,7 +188,7 @@ export default function LessonEditorPanel({
 				{courseId != null && selectedLesson?.id != null ? (
 					<a
 						href={`/courses/${courseId}/lessons/${selectedLesson.id}`}
-						className="rounded-xl border border-slate-800 px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800"
+						className="rounded-xl border border-foreground-elevated px-3 py-2 text-sm font-medium text-foreground-text-secondary  hover:bg-foreground-elevated"
 					>
 						Open Lesson
 					</a>
@@ -197,37 +197,34 @@ export default function LessonEditorPanel({
 
 			{selectedModule && selectedLesson ? (
 				<>
-					<div className="mt-5 flex items-center gap-2 border-b border-slate-800">
+					<div className="mt-5 flex items-center gap-2 border-b border-foreground-elevated">
 						<button
 							type="button"
 							onClick={() => setActiveTab('write')}
-							className={`rounded-t-xl px-4 py-2 text-sm font-medium transition-colors ${
-								activeTab === 'write'
-									? 'bg-slate-950 text-white border border-slate-800 border-b-slate-950'
-									: 'text-slate-400 hover:text-slate-200'
-							}`}
+							className={`rounded-t-xl px-4 py-2 text-sm font-medium  ${activeTab === 'write'
+								? 'bg-foreground text-foreground-text border border-foreground-elevated border-b-foreground'
+								: 'text-foreground-text-secondary hover:text-foreground-text'
+								}`}
 						>
 							Write
 						</button>
 						<button
 							type="button"
 							onClick={() => setActiveTab('preview')}
-							className={`rounded-t-xl px-4 py-2 text-sm font-medium transition-colors ${
-								activeTab === 'preview'
-									? 'bg-slate-950 text-white border border-slate-800 border-b-slate-950'
-									: 'text-slate-400 hover:text-slate-200'
-							}`}
+							className={`rounded-t-xl px-4 py-2 text-sm font-medium  ${activeTab === 'preview'
+								? 'bg-foreground text-foreground-text border border-foreground-elevated border-b-foreground'
+								: 'text-foreground-text-secondary hover:text-foreground-text'
+								}`}
 						>
 							Preview
 						</button>
 						<button
 							type="button"
 							onClick={() => setActiveTab('challenge')}
-							className={`rounded-t-xl px-4 py-2 text-sm font-medium transition-colors flex items-center gap-1.5 ${
-								activeTab === 'challenge'
-									? 'bg-slate-950 text-white border border-slate-800 border-b-slate-950'
-									: 'text-slate-400 hover:text-slate-200'
-							}`}
+							className={`rounded-t-xl px-4 py-2 text-sm font-medium  flex items-center gap-1.5 ${activeTab === 'challenge'
+								? 'bg-foreground text-foreground-text border border-foreground-elevated border-b-foreground'
+								: 'text-foreground-text-secondary hover:text-foreground-text'
+								}`}
 						>
 							<Flag className="w-3.5 h-3.5" />
 							Challenge
@@ -238,7 +235,7 @@ export default function LessonEditorPanel({
 						<div className="mt-4 space-y-4">
 							<div className="grid gap-4 md:grid-cols-[1.2fr_0.7fr]">
 								<label className="space-y-2">
-									<span className="text-sm font-medium text-slate-300">
+									<span className="text-sm font-medium text-foreground-text-secondary">
 										Lesson title
 									</span>
 									<input
@@ -252,12 +249,12 @@ export default function LessonEditorPanel({
 												event.target.value,
 											)
 										}
-										className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-2xl border border-foreground-elevated bg-foreground px-4 py-2.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 									/>
 								</label>
 
 								<label className="space-y-2">
-									<span className="text-sm font-medium text-slate-300">
+									<span className="text-sm font-medium text-foreground-text-secondary">
 										Length (seconds)
 									</span>
 									<input
@@ -272,13 +269,13 @@ export default function LessonEditorPanel({
 												Number(event.target.value),
 											)
 										}
-										className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-2xl border border-foreground-elevated bg-foreground px-4 py-2.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 									/>
 								</label>
 							</div>
 
 							<label className="space-y-2">
-								<span className="text-sm font-medium text-slate-300">
+								<span className="text-sm font-medium text-foreground-text-secondary">
 									Module
 								</span>
 								<select
@@ -286,7 +283,7 @@ export default function LessonEditorPanel({
 									onChange={(event) =>
 										onSelectModule(event.target.value)
 									}
-									className="w-full rounded-2xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+									className="w-full rounded-2xl border border-foreground-elevated bg-foreground px-4 py-2.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 								>
 									{modules.map((module) => (
 										<option
@@ -300,7 +297,7 @@ export default function LessonEditorPanel({
 							</label>
 
 							<label className="space-y-2">
-								<span className="text-sm font-medium text-slate-300">
+								<span className="text-sm font-medium text-foreground-text-secondary">
 									Markdown
 								</span>
 								<textarea
@@ -314,7 +311,7 @@ export default function LessonEditorPanel({
 										)
 									}
 									rows={18}
-									className="w-full rounded-3xl border border-slate-800 bg-slate-950 px-4 py-4 font-mono text-sm leading-6 text-slate-100 outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+									className="w-full rounded-3xl border border-foreground-elevated bg-foreground px-4 py-4 font-mono text-sm leading-6 text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 									placeholder="# Lesson title&#10;&#10;Start writing markdown here..."
 								/>
 							</label>
@@ -322,13 +319,13 @@ export default function LessonEditorPanel({
 					)}
 
 					{activeTab === 'preview' && (
-						<div className="mt-4 rounded-3xl border border-slate-800 bg-slate-950/50 p-5">
+						<div className="mt-4 rounded-3xl border border-foreground-elevated bg-foreground/50 p-5">
 							{selectedLesson.contentMd.trim() ? (
 								<MarkdownContent
 									content={selectedLesson.contentMd}
 								/>
 							) : (
-								<p className="text-sm text-slate-400">
+								<p className="text-sm text-foreground-text-secondary">
 									No markdown yet for this lesson.
 								</p>
 							)}
@@ -338,14 +335,14 @@ export default function LessonEditorPanel({
 					{activeTab === 'challenge' && (
 						<div className="mt-4 space-y-6">
 							<div className="flex items-center justify-between">
-								<p className="text-sm text-slate-400">
+								<p className="text-sm text-foreground-text-secondary">
 									{challengeQuestions.length} question
 									{challengeQuestions.length !== 1 ? 's' : ''}
 								</p>
 								<button
 									type="button"
 									onClick={addQuestion}
-									className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700 transition-colors"
+									className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-1.5 text-xs font-medium text-foreground-text hover:bg-primary/90 "
 								>
 									<Plus className="w-3 h-3" />
 									Add Question
@@ -353,7 +350,7 @@ export default function LessonEditorPanel({
 							</div>
 
 							{challengeQuestions.length === 0 && (
-								<div className="rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-6 text-sm text-slate-400">
+								<div className="rounded-2xl border border-dashed border-foreground-elevated bg-foreground/40 px-4 py-6 text-sm text-foreground-text-secondary">
 									No challenge questions yet. Add one to test
 									learners.
 								</div>
@@ -362,10 +359,10 @@ export default function LessonEditorPanel({
 							{challengeQuestions.map((q, qIndex) => (
 								<div
 									key={q.clientId}
-									className="rounded-2xl border border-slate-800 bg-slate-950/50 p-4 space-y-4"
+									className="rounded-2xl border border-foreground-elevated bg-foreground/50 p-4 space-y-4"
 								>
 									<div className="flex items-center justify-between gap-4">
-										<span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+										<span className="text-xs font-bold text-foreground-text-muted uppercase tracking-wider">
 											Question {qIndex + 1}
 										</span>
 										<button
@@ -373,14 +370,14 @@ export default function LessonEditorPanel({
 											onClick={() =>
 												removeQuestion(q.clientId)
 											}
-											className="text-red-400 hover:text-red-300 transition-colors"
+											className="text-error hover:text-error "
 										>
 											<Trash2 className="w-4 h-4" />
 										</button>
 									</div>
 
 									<label className="space-y-1.5">
-										<span className="text-xs font-medium text-slate-400">
+										<span className="text-xs font-medium text-foreground-text-secondary">
 											Question text
 										</span>
 										<input
@@ -394,12 +391,12 @@ export default function LessonEditorPanel({
 												)
 											}
 											placeholder="What is the first step in..."
-											className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+											className="w-full rounded-xl border border-foreground-elevated bg-foreground px-4 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 										/>
 									</label>
 
 									<label className="space-y-1.5">
-										<span className="text-xs font-medium text-slate-400">
+										<span className="text-xs font-medium text-foreground-text-secondary">
 											Question type
 										</span>
 										<select
@@ -411,7 +408,7 @@ export default function LessonEditorPanel({
 													e.target.value,
 												)
 											}
-											className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+											className="w-full rounded-xl border border-foreground-elevated bg-foreground px-4 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 										>
 											<option value="multiple_choice">
 												Multiple Choice
@@ -422,7 +419,7 @@ export default function LessonEditorPanel({
 
 									{q.type === 'flag' && (
 										<label className="space-y-1.5">
-											<span className="text-xs font-medium text-slate-400">
+											<span className="text-xs font-medium text-foreground-text-secondary">
 												Correct answer
 											</span>
 											<input
@@ -436,7 +433,7 @@ export default function LessonEditorPanel({
 													)
 												}
 												placeholder="FLAG{...}"
-												className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-2 text-sm text-white font-mono outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+												className="w-full rounded-xl border border-foreground-elevated bg-foreground px-4 py-2 text-sm text-foreground-text font-mono outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 											/>
 										</label>
 									)}
@@ -444,7 +441,7 @@ export default function LessonEditorPanel({
 									{q.type === 'multiple_choice' && (
 										<div className="space-y-3">
 											<div className="flex items-center justify-between">
-												<span className="text-xs font-medium text-slate-400">
+												<span className="text-xs font-medium text-foreground-text-secondary">
 													Options
 												</span>
 												<button
@@ -452,7 +449,7 @@ export default function LessonEditorPanel({
 													onClick={() =>
 														addOption(q.clientId)
 													}
-													className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2 py-1 text-xs text-slate-300 hover:bg-slate-700 transition-colors"
+													className="inline-flex items-center gap-1 rounded-lg bg-foreground-elevated px-2 py-1 text-xs text-foreground-text-secondary hover:bg-foreground-active "
 												>
 													<Plus className="w-3 h-3" />
 													Add Option
@@ -474,19 +471,19 @@ export default function LessonEditorPanel({
 																q.options.map(
 																	(o) =>
 																		o.clientId ===
-																		opt.clientId
+																			opt.clientId
 																			? {
-																					...o,
-																					isCorrect: true,
-																				}
+																				...o,
+																				isCorrect: true,
+																			}
 																			: {
-																					...o,
-																					isCorrect: false,
-																				},
+																				...o,
+																				isCorrect: false,
+																			},
 																),
 															)
 														}
-														className="accent-emerald-500 shrink-0"
+														className="accent-primary shrink-0"
 													/>
 													<input
 														type="text"
@@ -500,7 +497,7 @@ export default function LessonEditorPanel({
 															)
 														}
 														placeholder={`Option ${optIndex + 1}`}
-														className="flex-1 rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+														className="flex-1 rounded-xl border border-foreground-elevated bg-foreground px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 													/>
 													<button
 														type="button"
@@ -510,7 +507,7 @@ export default function LessonEditorPanel({
 																opt.clientId,
 															)
 														}
-														className="text-slate-500 hover:text-red-400 transition-colors"
+														className="text-foreground-text-muted hover:text-error "
 													>
 														<Trash2 className="w-3.5 h-3.5" />
 													</button>
@@ -524,7 +521,7 @@ export default function LessonEditorPanel({
 					)}
 				</>
 			) : (
-				<div className="mt-5 rounded-2xl border border-dashed border-slate-800 bg-slate-950/40 px-4 py-6 text-sm text-slate-400">
+				<div className="mt-5 rounded-2xl border border-dashed border-foreground-elevated bg-foreground/40 px-4 py-6 text-sm text-foreground-text-secondary">
 					Select a lesson to edit its markdown.
 				</div>
 			)}

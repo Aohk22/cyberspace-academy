@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { useState, lazy, Suspense } from 'react'
 import { userContext } from '~/context'
+import { useTheme } from '~/theme-context'
 import type { Route } from './+types/MainLayout'
 import { NoUserContextError } from '~/error'
 
@@ -28,8 +29,6 @@ const PricingModal = lazy(() => import('~/components/PricingModal'))
 const AiTutor = lazy(() => import('~/components/AiTutor'))
 
 type NavItem = { label: string; href: string; icon: React.ComponentType<{ className?: string }> }
-
-type Theme = 'light' | 'dark'
 
 const userNavItems: NavItem[] = [
 	{ label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -63,11 +62,8 @@ export default function MainLayout() {
 	const [activeLink, setActiveLink] = useState(location.pathname)
 	const [isPricingOpen, setIsPricingOpen] = useState(false)
 	const [aiOpen, setAiOpen] = useState(false)
-	const [theme, setTheme] = useState<Theme>('light')
-
-	function toggleTheme() {
-		setTheme((currTheme) => (currTheme === 'light' ? 'dark' : 'light'))
-	}
+	const { theme, toggleTheme } = useTheme()
+	const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
 	function NavItem({ nav }: { nav: NavItem }) {
 		return (
@@ -77,8 +73,8 @@ export default function MainLayout() {
 				onClick={() => setActiveLink(nav.href)}
 				className={
 					`
-					flex items-center 
-					pl-4 pr-4 pt-2 pb-2 gap-2
+					flex items-center
+					${sidebarCollapsed ? 'justify-center px-0 py-2' : 'pl-4 pr-4 pt-2 pb-2 gap-2'}
 					text-sm
 					hover:text-foreground-text-hl
 					hover:bg-foreground-text-hl-bg
@@ -92,10 +88,10 @@ export default function MainLayout() {
 					}
 					`
 				}
-				title={nav.label}
+				title={sidebarCollapsed ? nav.label : undefined}
 			>
 				<nav.icon className="" />
-				{nav.label}
+				{!sidebarCollapsed && nav.label}
 			</Link>
 		)
 	}
@@ -140,16 +136,22 @@ export default function MainLayout() {
 			max-w-full
 			overflow-hidden
 		">
-			<aside className='
-				flex-col border-r
+			<aside className={`
+				relative flex-col border-r
 				h-full
 				bg-foreground
 				text-foreground-text
-			'>
+				transition-all duration-150
+				${sidebarCollapsed ? 'min-w-16 max-w-16' : 'min-w-52 max-w-52'}
+			`}>
 				<div className="p-4">
 					<div className="flex items-center justify-center">
 						<Link to="/" className="flex items-center justify-center">
-							<h1 className='font-bold'>CyberSpace<br />Academy</h1>
+							{sidebarCollapsed ? (
+								<h1 className='font-bold text-xs'>CS</h1>
+							) : (
+								<h1 className='font-bold'>CyberSpace<br />Academy</h1>
+							)}
 						</Link>
 					</div>
 				</div>
@@ -174,6 +176,19 @@ export default function MainLayout() {
 					)}
 
 				</nav>
+
+				<button
+					type="button"
+					onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+					className="
+						absolute right-0 top-0
+						w-3 cursor-col-resize
+						h-full
+						hover:bg-foreground-text-hl-bg
+						flex items-center justify-center
+					"
+					title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+				/>
 			</aside>
 
 			<main className="
@@ -191,9 +206,9 @@ export default function MainLayout() {
 						aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
 					>
 						{theme === 'dark' ? (
-							<Sun className="w-4 h-4" />
+							<Sun className="w-4 h-4 text-foreground-text" />
 						) : (
-							<Moon className="w-4 h-4" />
+							<Moon className="w-4 h-4 text-foreground-text" />
 						)}
 					</button>
 				</header>
@@ -214,9 +229,12 @@ export default function MainLayout() {
 				left-6 bottom-6
 				p-2
 				bg-primary
+				text-white
 				border
+				border-black
 				rounded-2xl
 				ring-0
+				ring-black
 				z-999
 			'>
 				<MessageCircle />

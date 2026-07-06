@@ -94,12 +94,12 @@ export default function AdminUsers() {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between gap-4">
-				<p className="text-xs text-slate-500">
+				<p className="text-xs text-foreground-text-muted">
 					{total} total user{total !== 1 ? 's' : ''}
 				</p>
 				<Link
 					to="/users/new"
-					className="inline-flex items-center justify-center gap-1.5 shrink-0 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-200 transition-colors hover:bg-slate-700"
+					className="inline-flex items-center justify-center gap-1.5 shrink-0 rounded-lg border border-foreground-active bg-foreground-elevated px-3 py-2 text-xs font-semibold text-background-text  hover:bg-foreground-active"
 				>
 					<Plus className="h-3.5 w-3.5" />
 					New User
@@ -108,19 +108,19 @@ export default function AdminUsers() {
 
 			<Form method="GET" className="flex items-center gap-2">
 				<div className="relative flex-1">
-					<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+					<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-text-muted" />
 					<input
 						type="text"
 						name="search"
 						defaultValue={search}
 						placeholder="Search by name or email..."
-						className="w-full rounded-lg border border-slate-700 bg-slate-800 py-1.5 pl-9 pr-3 text-xs text-white placeholder-slate-500 outline-none transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+						className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 pl-9 pr-3 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
 					/>
 				</div>
 				<select
 					name="role"
 					defaultValue={roleFilter}
-					className="rounded-lg border border-slate-700 bg-slate-800 py-1.5 px-3 text-xs text-white outline-none transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+					className="rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
 				>
 					<option value="">All roles</option>
 					<option value="learner">Learner</option>
@@ -128,14 +128,14 @@ export default function AdminUsers() {
 				</select>
 				<button
 					type="submit"
-					className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-700"
+					className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-foreground-text  hover:bg-primary"
 				>
 					Search
 				</button>
 				{search || roleFilter ? (
 					<Link
 						to="/admin/users"
-						className="flex items-center gap-1 rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-400 hover:text-slate-200"
+						className="flex items-center gap-1 rounded-lg border border-foreground-active px-3 py-1.5 text-xs text-foreground-text hover:text-foreground-text-secondary"
 					>
 						<X className="h-3 w-3" />
 						Clear
@@ -143,9 +143,9 @@ export default function AdminUsers() {
 				) : null}
 			</Form>
 
-			<div className="overflow-hidden rounded-lg border border-slate-800">
+			<div className="overflow-hidden rounded-lg border border-foreground-elevated">
 				<table className="w-full text-left text-xs">
-					<thead className="bg-slate-800/50 text-[10px] uppercase tracking-widest text-slate-500">
+					<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
 						<tr>
 							<th className="px-3 py-2">Name</th>
 							<th className="px-3 py-2">Email</th>
@@ -153,20 +153,20 @@ export default function AdminUsers() {
 							<th className="px-3 py-2 text-right">Actions</th>
 						</tr>
 					</thead>
-					<tbody className="divide-y divide-slate-800">
+					<tbody className="divide-y divide-foreground-elevated">
 						{users.map((u) => (
 							<tr key={u.id}>
-								<td className="px-3 py-2 font-medium text-white">
+								<td className="px-3 py-2 font-medium text-foreground-text">
 									{u.name}
 								</td>
-								<td className="px-3 py-2 text-slate-400">
+								<td className="px-3 py-2 text-foreground-text">
 									{u.email}
 								</td>
 								<td className="px-3 py-2">
 									<span
 										className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${u.role === 'staff'
-												? 'bg-emerald-400/10 text-emerald-300'
-												: 'bg-slate-700 text-slate-300'
+											? 'bg-primary/10 text-primary'
+											: 'bg-foreground-active text-foreground-text-secondary'
 											}`}
 									>
 										{u.role}
@@ -176,7 +176,7 @@ export default function AdminUsers() {
 									<div className="flex items-center justify-end gap-1">
 										<Link
 											to={`/admin/users/${u.id}/edit`}
-											className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200"
+											className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-foreground-elevated hover:text-foreground-text-secondary"
 										>
 											<UserPen className="h-3.5 w-3.5" />
 										</Link>
@@ -206,7 +206,7 @@ export default function AdminUsers() {
 											<button
 												type="submit"
 												disabled={isDeleting}
-												className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+												className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-error/10 hover:text-error disabled:opacity-50"
 											>
 												{isDeleting ? (
 													<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -223,7 +223,7 @@ export default function AdminUsers() {
 							<tr>
 								<td
 									colSpan={4}
-									className="px-3 py-6 text-center text-slate-500"
+									className="px-3 py-6 text-center text-foreground-text-muted"
 								>
 									No users found.
 								</td>

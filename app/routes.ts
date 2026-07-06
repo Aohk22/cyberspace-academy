@@ -16,10 +16,9 @@ export default [
 		layout('./layouts/MainLayout.tsx', [
 			index('./pages/IndexRedirect.tsx'),
 			route('toggle-view', './routes/ToggleView.ts'),
+
 			layout('./layouts/SectionLayout.tsx', [
-
-
-				// User navigation
+				// User navigation.
 				route('dashboard', './pages/Dashboard.tsx'),
 
 				route('challenges', './pages/Challenges.tsx'),
@@ -30,38 +29,38 @@ export default [
 					'./pages/Lesson.tsx',
 				),
 
-			route('learning-path', './pages/LearningPath.tsx'),
-			route('learning-path/:pathId', './pages/LearningPathDetail.tsx'),
+				route('learning-path', './pages/LearningPath.tsx'),
+				route('learning-path/:pathId', './pages/LearningPathDetail.tsx'),
 
-
-				// Admin navigation (role-gated)
-				layout('./routes/admin-protected.tsx', [
-					route('admin', './pages/AdminDashboard.tsx'),
-
-					route('course-builder', './pages/CourseBuilder.tsx'),
-					route(
-						'course-builder/:courseId/lessons/:lessonId',
-						'./pages/CourseBuilderLesson.tsx',
-					),
-					route('course-builder/:courseId/export', './routes/CourseExport.ts'),
-
-					route('users', './pages/AdminUsers.tsx'),
-					route('users/new', './pages/AdminCreateUser.tsx'),
-					route('users/:userId/edit', './pages/AdminUserEdit.tsx'),
-
-					route('categories', './pages/AdminCategories.tsx'),
-
-					route('paths-admin', './pages/AdminPaths.tsx', [
-						route(':pathId', './pages/AdminPathDetail.tsx'),
-					]),
-				]),
-
-
-				// General
 				layout('./layouts/UnderConstructionLayout.tsx', [
 					route('achievements', './pages/Achievements.tsx'),
 				]),
 
+
+				// Admin navigation.
+layout('./routes/admin-protected.tsx', [
+		route('admin', './pages/admin/AdminDashboard.tsx'),
+
+		route('course-builder', './pages/CourseBuilder.tsx'),
+		route(
+			'course-builder/:courseId/lessons/:lessonId',
+			'./pages/CourseBuilderLesson.tsx',
+		),
+		route('course-builder/:courseId/export', './routes/CourseExport.ts'),
+
+		route('users', './pages/admin/AdminUsers.tsx'),
+		route('users/new', './pages/admin/AdminCreateUser.tsx'),
+		route('users/:userId/edit', './pages/admin/AdminUserEdit.tsx'),
+
+		route('categories', './pages/admin/AdminCategories.tsx'),
+
+		route('paths-admin', './pages/admin/AdminPaths.tsx', [
+			route(':pathId', './pages/admin/AdminPathDetail.tsx'),
+		]),
+	]),
+
+
+				// General
 				route('settings', './pages/Settings.tsx'),
 			]),
 		]),

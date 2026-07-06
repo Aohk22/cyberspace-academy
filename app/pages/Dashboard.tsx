@@ -14,7 +14,12 @@ import StatCard from '~/components/StatCard'
 import ContinueLearningFallback from '~/components/fallbacks/ContinueLearningFallback'
 import RecommendedCourseFallback from '~/components/fallbacks/RecommendedCourseFallback'
 
-export const handle = {}
+export const handle = {
+	section: {
+		title: 'User Home',
+		subtitle: 'Keep track of your learning.'
+	}
+}
 
 export async function loader({ context }: Route.LoaderArgs) {
 	const user = context.get(userContext)
@@ -49,26 +54,27 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
 					label="Courses in Progress"
 					value={stats.then((s) => s.inProgress)}
 					icon={BookOpen}
-					color="text-blue-400"
 				/>
 
 				<StatCard
 					label="Completed Courses"
 					value={stats.then((s) => s.completed)}
 					icon={GraduationCap}
-					color="text-emerald-400"
 				/>
 
 				<StatCard
 					label="Total learning hours"
 					value={stats.then((s) => s.totalHours)}
 					icon={Clock}
-					color="text-amber-400"
 				/>
 			</section>
 
 			<section>
-				<h2 className="text-lg font-semibold text-white mb-4">
+				<h2 className="
+					text-lg font-semibold
+					text-background-text
+					mb-4
+				">
 					Continue Learning
 				</h2>
 				<React.Suspense fallback={<ContinueLearningFallback />}>
@@ -79,8 +85,10 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
 			</section>
 
 			<section>
-				<h2 className="text-lg font-semibold text-white mb-4">
-					Recommended for you
+				<h2 className="
+					text-lg font-semibold text-background-text mb-4
+				">
+					All enrolled courses
 				</h2>
 				<React.Suspense fallback={<RecommendedCourseFallback />}>
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -168,12 +168,12 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 	const allOptions: ChallengeOption[] =
 		questionIds.length > 0
 			? await db
-					.select()
-					.from(challengeOptionsTable)
-					.where(
-						inArray(challengeOptionsTable.questionId, questionIds),
-					)
-					.orderBy(asc(challengeOptionsTable.orderIndex))
+				.select()
+				.from(challengeOptionsTable)
+				.where(
+					inArray(challengeOptionsTable.questionId, questionIds),
+				)
+				.orderBy(asc(challengeOptionsTable.orderIndex))
 			: []
 
 	const optionsByQuestion = new Map<number, ChallengeOption[]>()
@@ -349,17 +349,17 @@ export default function CourseBuilderLesson() {
 			prev.map((q) =>
 				q.key === questionKey
 					? {
-							...q,
-							options: [
-								...q.options,
-								{
-									key: nextOptionKey(),
-									id: null,
-									optionText: '',
-									isCorrect: false,
-								},
-							],
-						}
+						...q,
+						options: [
+							...q.options,
+							{
+								key: nextOptionKey(),
+								id: null,
+								optionText: '',
+								isCorrect: false,
+							},
+						],
+					}
 					: q,
 			),
 		)
@@ -370,11 +370,11 @@ export default function CourseBuilderLesson() {
 			prev.map((q) =>
 				q.key === questionKey
 					? {
-							...q,
-							options: q.options.filter(
-								(o) => o.key !== optionKey,
-							),
-						}
+						...q,
+						options: q.options.filter(
+							(o) => o.key !== optionKey,
+						),
+					}
 					: q,
 			),
 		)
@@ -390,13 +390,13 @@ export default function CourseBuilderLesson() {
 			prev.map((q) =>
 				q.key === questionKey
 					? {
-							...q,
-							options: q.options.map((o) =>
-								o.key === optionKey
-									? { ...o, [field]: value }
-									: o,
-							),
-						}
+						...q,
+						options: q.options.map((o) =>
+							o.key === optionKey
+								? { ...o, [field]: value }
+								: o,
+						),
+					}
 					: q,
 			),
 		)
@@ -407,12 +407,12 @@ export default function CourseBuilderLesson() {
 			prev.map((q) =>
 				q.key === questionKey
 					? {
-							...q,
-							options: q.options.map((o) => ({
-								...o,
-								isCorrect: o.key === correctOptionKey,
-							})),
-						}
+						...q,
+						options: q.options.map((o) => ({
+							...o,
+							isCorrect: o.key === correctOptionKey,
+						})),
+					}
 					: q,
 			),
 		)
@@ -433,22 +433,22 @@ export default function CourseBuilderLesson() {
 	return (
 		<div className="space-y-6">
 			{/* Breadcrumbs */}
-			<nav className="flex items-center gap-2 text-sm text-slate-400">
+			<nav className="flex items-center gap-2 text-sm text-foreground-text">
 				<Link
 					to="/course-builder"
-					className="transition-colors hover:text-white"
+					className=" hover:text-foreground-text"
 				>
 					Course Builder
 				</Link>
 				<ChevronRight className="h-3.5 w-3.5 shrink-0" />
 				<Link
 					to={`/course-builder?courseId=${course.id}`}
-					className="transition-colors hover:text-white"
+					className=" hover:text-foreground-text"
 				>
 					{course.title}
 				</Link>
 				<ChevronRight className="h-3.5 w-3.5 shrink-0" />
-				<span className="font-medium text-white">
+				<span className="font-medium text-foreground-text">
 					{lesson.title || 'Untitled lesson'}
 				</span>
 			</nav>
@@ -456,7 +456,7 @@ export default function CourseBuilderLesson() {
 			{/* Back to builder */}
 			<Link
 				to={`/course-builder?courseId=${course.id}`}
-				className="inline-flex items-center gap-1.5 text-xs text-slate-400 transition-colors hover:text-white"
+				className="inline-flex items-center gap-1.5 text-xs text-foreground-text  hover:text-foreground-text"
 			>
 				<ArrowLeft className="h-3.5 w-3.5" />
 				Back to builder
@@ -464,7 +464,7 @@ export default function CourseBuilderLesson() {
 
 			{/* Error */}
 			{actionData?.error ? (
-				<div className="text-sm text-rose-400">{actionData.error}</div>
+				<div className="text-sm text-error">{actionData.error}</div>
 			) : null}
 
 			{/* Editor form */}
@@ -479,14 +479,14 @@ export default function CourseBuilderLesson() {
 				<div>
 					<div className="flex items-center justify-between gap-4">
 						<div>
-							<h2 className="text-lg font-bold text-white">
+							<h2 className="text-lg font-bold text-foreground-text">
 								Lesson Editor
 							</h2>
 						</div>
 						<button
 							type="submit"
 							disabled={isSaving}
-							className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
+							className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-foreground-text-hl  hover:bg-primary disabled:cursor-not-allowed disabled:opacity-70"
 						>
 							<Save className="h-4 w-4" />
 							{isSaving ? 'Saving...' : 'Save Lesson'}
@@ -494,37 +494,34 @@ export default function CourseBuilderLesson() {
 					</div>
 
 					{/* Tabs */}
-					<div className="mt-4 flex items-center gap-1 border-b border-slate-800">
+					<div className="mt-4 flex items-center gap-1 border-b border-foreground-elevated">
 						<button
 							type="button"
 							onClick={() => setActiveTab('write')}
-							className={`rounded-t-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-								activeTab === 'write'
-									? 'border border-slate-800 border-b-slate-950 bg-slate-950 text-white'
-									: 'text-slate-400 hover:text-slate-200'
-							}`}
+							className={`rounded-t-lg px-3 py-1.5 text-xs font-medium  ${activeTab === 'write'
+								? 'border border-foreground-elevated border-b-background bg-background text-foreground-text'
+								: 'text-foreground-text hover:text-foreground-text-secondary'
+								}`}
 						>
 							Write
 						</button>
 						<button
 							type="button"
 							onClick={() => setActiveTab('preview')}
-							className={`rounded-t-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-								activeTab === 'preview'
-									? 'border border-slate-800 border-b-slate-950 bg-slate-950 text-white'
-									: 'text-slate-400 hover:text-slate-200'
-							}`}
+							className={`rounded-t-lg px-3 py-1.5 text-xs font-medium  ${activeTab === 'preview'
+								? 'border border-foreground-elevated border-b-background bg-background text-foreground-text'
+								: 'text-foreground-text hover:text-foreground-text-secondary'
+								}`}
 						>
 							Preview
 						</button>
 						<button
 							type="button"
 							onClick={() => setActiveTab('challenge')}
-							className={`rounded-t-lg flex items-center gap-1 px-3 py-1.5 text-xs font-medium transition-colors ${
-								activeTab === 'challenge'
-									? 'border border-slate-800 border-b-slate-950 bg-slate-950 text-white'
-									: 'text-slate-400 hover:text-slate-200'
-							}`}
+							className={`rounded-t-lg flex items-center gap-1 px-3 py-1.5 text-xs font-medium  ${activeTab === 'challenge'
+								? 'border border-foreground-elevated border-b-background bg-background text-foreground-text'
+								: 'text-foreground-text hover:text-foreground-text-secondary'
+								}`}
 						>
 							<Flag className="h-3 w-3" />
 							Challenge
@@ -536,7 +533,7 @@ export default function CourseBuilderLesson() {
 						<div className="mt-4 space-y-3">
 							<div className="grid gap-3 md:grid-cols-[1.2fr_0.7fr_1fr]">
 								<label className="space-y-1">
-									<span className="text-xs font-medium text-slate-400">
+									<span className="text-xs font-medium text-foreground-text">
 										Lesson title
 									</span>
 									<input
@@ -546,12 +543,12 @@ export default function CourseBuilderLesson() {
 										onChange={(e) =>
 											setTitle(e.target.value)
 										}
-										className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-lg border border-foreground-elevated bg-background px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 									/>
 								</label>
 
 								<label className="space-y-1">
-									<span className="text-xs font-medium text-slate-400">
+									<span className="text-xs font-medium text-foreground-text">
 										Length (sec)
 									</span>
 									<input
@@ -563,12 +560,12 @@ export default function CourseBuilderLesson() {
 										onChange={(e) =>
 											setLength(Number(e.target.value))
 										}
-										className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-lg border border-foreground-elevated bg-background px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 									/>
 								</label>
 
 								<label className="space-y-1">
-									<span className="text-xs font-medium text-slate-400">
+									<span className="text-xs font-medium text-foreground-text">
 										Module
 									</span>
 									<select
@@ -577,7 +574,7 @@ export default function CourseBuilderLesson() {
 										onChange={(e) =>
 											setModuleId(Number(e.target.value))
 										}
-										className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+										className="w-full rounded-lg border border-foreground-elevated bg-background px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 									>
 										{allCourseModules.map((m) => (
 											<option key={m.id} value={m.id}>
@@ -589,7 +586,7 @@ export default function CourseBuilderLesson() {
 							</div>
 
 							<label className="space-y-1">
-								<span className="text-xs font-medium text-slate-400">
+								<span className="text-xs font-medium text-foreground-text">
 									Markdown
 								</span>
 								<textarea
@@ -599,7 +596,7 @@ export default function CourseBuilderLesson() {
 										setContentMd(e.target.value)
 									}
 									rows={16}
-									className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-3 font-mono text-sm leading-6 text-slate-100 outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+									className="w-full rounded-lg border border-foreground-elevated bg-background px-3 py-3 font-mono text-sm leading-6 text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 									placeholder="# Lesson title&#10;&#10;Start writing markdown here..."
 								/>
 							</label>
@@ -612,13 +609,13 @@ export default function CourseBuilderLesson() {
 							{contentMd.trim() ? (
 								<Suspense
 									fallback={
-										<div className="h-48 bg-slate-800 rounded-xl animate-pulse" />
+										<div className="h-48 bg-foreground-elevated rounded-xl animate-pulse" />
 									}
 								>
 									<MarkdownContent content={contentMd} />
 								</Suspense>
 							) : (
-								<p className="text-sm text-slate-400">
+								<p className="text-sm text-foreground-text">
 									No markdown yet for this lesson.
 								</p>
 							)}
@@ -629,14 +626,14 @@ export default function CourseBuilderLesson() {
 					{activeTab === 'challenge' && (
 						<div className="mt-4 space-y-4">
 							<div className="flex items-center justify-between">
-								<p className="text-xs text-slate-500">
+								<p className="text-xs text-foreground-text-muted">
 									{questions.length} question
 									{questions.length !== 1 ? 's' : ''}
 								</p>
 								<button
 									type="button"
 									onClick={addQuestion}
-									className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-emerald-700"
+									className="inline-flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1 text-xs font-medium text-foreground-text-hl  hover:bg-primary"
 								>
 									<Plus className="h-3 w-3" />
 									Add Question
@@ -644,7 +641,7 @@ export default function CourseBuilderLesson() {
 							</div>
 
 							{questions.length === 0 && (
-								<div className="rounded-lg border border-dashed border-slate-800 px-3 py-4 text-xs text-slate-500">
+								<div className="rounded-lg border border-dashed border-foreground-elevated px-3 py-4 text-xs text-foreground-text-muted">
 									No challenge questions yet.
 								</div>
 							)}
@@ -652,10 +649,10 @@ export default function CourseBuilderLesson() {
 							{questions.map((q, qIndex) => (
 								<div
 									key={q.key}
-									className="border-b border-slate-800 pb-4 space-y-2"
+									className="border-b border-foreground-elevated pb-4 space-y-2"
 								>
 									<div className="flex items-center justify-between gap-4">
-										<span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+										<span className="text-xs font-bold uppercase tracking-wider text-foreground-text-muted">
 											Question {qIndex + 1}
 										</span>
 										<button
@@ -663,14 +660,14 @@ export default function CourseBuilderLesson() {
 											onClick={() =>
 												removeQuestion(q.key)
 											}
-											className="text-red-400 transition-colors hover:text-red-300"
+											className="text-error  hover:text-error"
 										>
 											<Trash2 className="h-3.5 w-3.5" />
 										</button>
 									</div>
 
 									<label className="space-y-1">
-										<span className="text-xs text-slate-500">
+										<span className="text-xs text-foreground-text-muted">
 											Question text
 										</span>
 										<input
@@ -684,12 +681,12 @@ export default function CourseBuilderLesson() {
 												)
 											}
 											placeholder="What is the first step in..."
-											className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+											className="w-full rounded-lg border border-foreground-elevated bg-background px-3 py-1.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 										/>
 									</label>
 
 									<label className="space-y-1">
-										<span className="text-xs text-slate-500">
+										<span className="text-xs text-foreground-text-muted">
 											Question type
 										</span>
 										<select
@@ -701,7 +698,7 @@ export default function CourseBuilderLesson() {
 													e.target.value,
 												)
 											}
-											className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+											className="w-full rounded-lg border border-foreground-elevated bg-background px-3 py-1.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 										>
 											<option value="multiple_choice">
 												Multiple Choice
@@ -712,7 +709,7 @@ export default function CourseBuilderLesson() {
 
 									{q.type === 'flag' && (
 										<label className="space-y-1">
-											<span className="text-xs text-slate-500">
+											<span className="text-xs text-foreground-text-muted">
 												Correct answer
 											</span>
 											<input
@@ -726,7 +723,7 @@ export default function CourseBuilderLesson() {
 													)
 												}
 												placeholder="FLAG{...}"
-												className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 font-mono text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+												className="w-full rounded-lg border border-foreground-elevated bg-background px-3 py-1.5 font-mono text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 											/>
 										</label>
 									)}
@@ -734,7 +731,7 @@ export default function CourseBuilderLesson() {
 									{q.type === 'multiple_choice' && (
 										<div className="space-y-2">
 											<div className="flex items-center justify-between">
-												<span className="text-xs text-slate-500">
+												<span className="text-xs text-foreground-text-muted">
 													Options
 												</span>
 												<button
@@ -742,7 +739,7 @@ export default function CourseBuilderLesson() {
 													onClick={() =>
 														addOption(q.key)
 													}
-													className="inline-flex items-center gap-1 rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300 transition-colors hover:bg-slate-700"
+													className="inline-flex items-center gap-1 rounded bg-foreground-elevated px-2 py-0.5 text-xs text-foreground-text-secondary  hover:bg-foreground-active"
 												>
 													<Plus className="h-3 w-3" />
 													Add
@@ -763,7 +760,7 @@ export default function CourseBuilderLesson() {
 																opt.key,
 															)
 														}
-														className="shrink-0 accent-emerald-500"
+														className="shrink-0 accent-primary"
 													/>
 													<input
 														type="text"
@@ -777,7 +774,7 @@ export default function CourseBuilderLesson() {
 															)
 														}
 														placeholder={`Option ${optIndex + 1}`}
-														className="flex-1 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10"
+														className="flex-1 rounded-lg border border-foreground-elevated bg-background px-2.5 py-1.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10"
 													/>
 													<button
 														type="button"
@@ -787,7 +784,7 @@ export default function CourseBuilderLesson() {
 																opt.key,
 															)
 														}
-														className="text-slate-600 transition-colors hover:text-red-400"
+														className="text-foreground-text-muted  hover:text-error"
 													>
 														<Trash2 className="h-3.5 w-3.5" />
 													</button>

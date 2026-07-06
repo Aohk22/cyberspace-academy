@@ -119,12 +119,12 @@ export default function AdminCategories() {
 	return (
 		<div className="space-y-4 max-w-lg">
 			{actionData?.error ? (
-				<div className="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs text-rose-200">
+				<div className="rounded-lg border border-rose/30 bg-rose/10 px-3 py-2 text-xs text-rose">
 					{actionData.error}
 				</div>
 			) : null}
 			{actionData?.success ? (
-				<div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-200">
+				<div className="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs text-primary">
 					<CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
 					<span>Category saved.</span>
 				</div>
@@ -137,12 +137,12 @@ export default function AdminCategories() {
 					name="name"
 					required
 					placeholder="New category name"
-					className="flex-1 rounded-lg border border-slate-700 bg-slate-800 py-1.5 px-3 text-xs text-white placeholder-slate-500 outline-none transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+					className="flex-1 rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text placeholder-foreground-text-muted outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
 				/>
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
+					className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-foreground-text transition-colors hover:bg-primary disabled:opacity-60"
 				>
 					{isSubmitting ? (
 						<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -153,22 +153,22 @@ export default function AdminCategories() {
 				</button>
 			</Form>
 
-			<div className="overflow-hidden rounded-lg border border-slate-800">
+			<div className="overflow-hidden rounded-lg border border-foreground-elevated">
 				<table className="w-full text-left text-xs">
-					<thead className="bg-slate-800/50 text-[10px] uppercase tracking-widest text-slate-500">
+					<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
 						<tr>
 							<th className="px-3 py-2">Name</th>
 							<th className="px-3 py-2">Courses</th>
 							<th className="px-3 py-2 text-right">Actions</th>
 						</tr>
 					</thead>
-					<tbody className="divide-y divide-slate-800">
+					<tbody className="divide-y divide-foreground-elevated">
 						{categories.map((cat) => (
 							<tr key={cat.id}>
-								<td className="px-3 py-2 font-medium text-white">
+								<td className="px-3 py-2 font-medium text-foreground-text">
 									{cat.name}
 								</td>
-								<td className="px-3 py-2 text-slate-500">
+								<td className="px-3 py-2 text-foreground-text-muted">
 									{cat.courseCount}
 								</td>
 								<td className="px-3 py-2">
@@ -201,7 +201,7 @@ export default function AdminCategories() {
 														}
 													}
 												}}
-												className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+												className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-error/10 hover:text-error disabled:opacity-50"
 											>
 												<Trash2 className="h-3.5 w-3.5" />
 											</button>
@@ -214,7 +214,7 @@ export default function AdminCategories() {
 							<tr>
 								<td
 									colSpan={3}
-									className="px-3 py-6 text-center text-slate-500"
+									className="px-3 py-6 text-center text-foreground-text-muted"
 								>
 									No categories yet.
 								</td>

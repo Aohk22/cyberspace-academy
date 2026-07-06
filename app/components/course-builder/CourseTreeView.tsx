@@ -59,13 +59,13 @@ export default function CourseTreeView({
 	return (
 		<div className="select-none">
 			<div className="flex items-center justify-between gap-2">
-				<p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+				<p className="text-[11px] font-semibold uppercase tracking-widest text-foreground-text-muted">
 					Curriculum
 				</p>
 				<button
 					type="button"
 					onClick={onAddModule}
-					className="inline-flex items-center gap-1 rounded-md border border-slate-700 px-1.5 py-0.5 text-[10px] font-medium text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
+					className="inline-flex items-center gap-1 rounded-md border border-foreground-active px-1.5 py-0.5 text-[10px] font-medium text-foreground-text-secondary  hover:bg-foreground-elevated hover:text-foreground-text"
 				>
 					<Plus className="h-3 w-3" />
 					Add Module
@@ -74,7 +74,7 @@ export default function CourseTreeView({
 
 			<div className="mt-2 space-y-0.5">
 				{modules.length === 0 ? (
-					<div className="px-1 py-4 text-xs text-slate-600 text-center">
+					<div className="px-1 py-4 text-xs text-foreground-text-muted text-center">
 						No modules yet. Add one to start structuring this
 						course.
 					</div>
@@ -88,11 +88,10 @@ export default function CourseTreeView({
 							<div key={module.clientId}>
 								{/* Module row */}
 								<div
-									className={`group flex items-center gap-1 rounded-md px-1.5 py-1 text-sm transition-colors ${
-										isModuleSelected
-											? 'bg-emerald-500/10 text-emerald-300'
-											: 'text-slate-300 hover:bg-slate-800'
-									}`}
+									className={`group flex items-center gap-1 rounded-md px-1.5 py-1 text-sm  ${isModuleSelected
+										? 'bg-primary/10 text-primary'
+										: 'text-foreground-text-secondary hover:bg-foreground-elevated'
+										}`}
 								>
 									<button
 										type="button"
@@ -106,16 +105,16 @@ export default function CourseTreeView({
 									>
 										{module.lessons.length > 0 ? (
 											isExpanded ? (
-												<ChevronDown className="h-3.5 w-3.5 text-slate-500" />
+												<ChevronDown className="h-3.5 w-3.5 text-foreground-text-muted" />
 											) : (
-												<ChevronRight className="h-3.5 w-3.5 text-slate-500" />
+												<ChevronRight className="h-3.5 w-3.5 text-foreground-text-muted" />
 											)
 										) : (
 											<span className="inline-block w-4" />
 										)}
 									</button>
 
-									<Folder className="h-4 w-4 shrink-0 text-sky-400" />
+									<Folder className="h-4 w-4 shrink-0 text-info" />
 
 									<input
 										type="text"
@@ -132,11 +131,11 @@ export default function CourseTreeView({
 												e.target.value,
 											)
 										}
-										className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-1 py-0.5 text-sm font-medium text-white outline-none transition-colors group-hover:border-slate-700 cursor-text placeholder:text-slate-600"
+										className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-1 py-0.5 text-sm font-medium text-foreground-text outline-none  group-hover:border-foreground-active cursor-text placeholder:text-foreground-text-muted"
 										placeholder="Module title"
 									/>
 
-									<span className="hidden shrink-0 text-[11px] text-slate-600 group-hover:hidden">
+									<span className="hidden shrink-0 text-[11px] text-foreground-text-muted group-hover:hidden">
 										{module.lessons.length}
 									</span>
 
@@ -147,7 +146,7 @@ export default function CourseTreeView({
 												e.stopPropagation()
 												onAddLesson(module.clientId)
 											}}
-											className="rounded-md p-1 text-slate-500 hover:bg-slate-700 hover:text-slate-200 transition-colors"
+											className="rounded-md p-1 text-foreground-text-muted hover:bg-foreground-active hover:text-foreground-text "
 											title="Add lesson"
 										>
 											<Plus className="h-3.5 w-3.5" />
@@ -158,7 +157,7 @@ export default function CourseTreeView({
 												e.stopPropagation()
 												onDeleteModule(module.clientId)
 											}}
-											className="rounded-md p-1 text-slate-500 hover:bg-red-500/20 hover:text-red-400 transition-colors"
+											className="rounded-md p-1 text-foreground-text-muted hover:bg-error/20 hover:text-error "
 											title="Delete module"
 										>
 											<Trash2 className="h-3.5 w-3.5" />
@@ -168,20 +167,20 @@ export default function CourseTreeView({
 
 								{/* Lessons */}
 								{isExpanded && module.lessons.length > 0 && (
-									<div className="ml-3 border-l border-slate-800 pl-2 space-y-0.5">
+									<div className="ml-3 border-l border-foreground-elevated pl-2 space-y-0.5">
 										{module.lessons.map((lesson) => {
 											const lessonUrl =
 												courseId != null &&
-												lesson.id != null
+													lesson.id != null
 													? `/course-builder/${courseId}/lessons/${lesson.id}`
 													: null
 
 											return (
 												<div
 													key={lesson.clientId}
-													className="group flex items-center gap-1 rounded-md px-1.5 py-1 text-sm text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200"
+													className="group flex items-center gap-1 rounded-md px-1.5 py-1 text-sm text-foreground-text-muted  hover:bg-foreground-elevated hover:text-foreground-text"
 												>
-													<FileText className="h-4 w-4 shrink-0 text-slate-500" />
+													<FileText className="h-4 w-4 shrink-0 text-foreground-text-muted" />
 
 													<input
 														type="text"
@@ -193,14 +192,14 @@ export default function CourseTreeView({
 																e.target.value,
 															)
 														}
-														className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-1 py-0.5 text-sm text-white outline-none transition-colors group-hover:border-slate-700 cursor-text placeholder:text-slate-600"
+														className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-1 py-0.5 text-sm text-foreground-text outline-none  group-hover:border-foreground-active cursor-text placeholder:text-foreground-text-muted"
 														placeholder="Untitled lesson"
 													/>
 
 													{lessonUrl ? (
 														<Link
 															to={lessonUrl}
-															className="rounded-md p-1 text-slate-600 opacity-0 group-hover:opacity-100 hover:bg-slate-700 hover:text-slate-200 transition-all"
+															className="rounded-md p-1 text-foreground-text-muted opacity-0 group-hover:opacity-100 hover:bg-foreground-active hover:text-foreground-text transition-all"
 															title="Open lesson"
 															onClick={(e) =>
 																e.stopPropagation()
@@ -219,7 +218,7 @@ export default function CourseTreeView({
 																lesson.clientId,
 															)
 														}}
-														className="rounded-md p-1 text-slate-600 opacity-0 group-hover:opacity-100 hover:bg-red-500/20 hover:text-red-400 transition-all"
+														className="rounded-md p-1 text-foreground-text-muted opacity-0 group-hover:opacity-100 hover:bg-error/20 hover:text-error transition-all"
 														title="Delete lesson"
 													>
 														<Trash2 className="h-3.5 w-3.5" />

@@ -20,6 +20,8 @@ import {
 import { getSession, commitSession } from '~/.server/auth/sessions'
 import { validateCredentials } from '~/.server/auth/login'
 import type { Route } from './+types/Login'
+import { useState } from 'react'
+import { usePrefersDark } from '~/hooks/my-hooks'
 
 export async function loader({ request }: Route.LoaderArgs) {
 	const session = await getSession(request.headers.get('Cookie'))
@@ -72,32 +74,35 @@ export default function Login({ actionData }: Route.ComponentProps) {
 	const isLoading = navigation.state === 'submitting'
 	const [searchParams] = useSearchParams()
 	const resetSuccess = searchParams.get('reset') === 'success'
+	const prefersDark = usePrefersDark()
 
 	return (
-		<div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 text-slate-200">
-			<motion.div
-				initial={{ opacity: 0, y: 20 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.5, ease: 'easeOut' }}
+		<div data-theme={prefersDark ? 'dark' : 'light'} className="
+			flex items-center justify-center p-6 
+			min-h-screen 
+			bg-background text-background-text
+			overflow-scroll
+		">
+			<div
 				className="max-w-md w-full"
 			>
-				{/* Logo Area */}
+				{/* Header */}
 				<div className="flex flex-col items-center mb-10">
-					<div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-emerald-900/20">
-						<GraduationCap className="text-white w-8 h-8" />
-					</div>
-					<h1 className="text-3xl font-bold text-white tracking-tight">
+					<h1 className="text-background-text text-3xl font-bold tracking-tight">
 						CyberSpace Academy
 					</h1>
-					<p className="text-slate-400 mt-2 font-medium">
+					<p className="text-background-text mt-2 font-medium">
 						Empowering your future, one lesson at a time.
 					</p>
 				</div>
 
 				{/* Login Card */}
-				<div className="bg-slate-900 rounded-xl shadow-2xl shadow-black/50 border border-slate-800 p-8 md:p-12">
+				<div className="
+					bg-foreground rounded-xl shadow-2xl shadow-black/50 border border-foreground-text p-8 md:p-12
+				">
+					{/* TODO: Check styling for password reset */}
 					{resetSuccess && (
-						<div className="mb-6 flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-4 py-3 text-xs text-emerald-400">
+						<div className="mb-6 flex items-center gap-2 bg-primary border rounded-xl px-4 py-3 text-xs text-primary">
 							<CheckCircle2 className="w-4 h-4 shrink-0" />
 							Password reset successful. Sign in with your new
 							password.
@@ -105,51 +110,70 @@ export default function Login({ actionData }: Route.ComponentProps) {
 					)}
 
 					<div className="mb-8">
-						<h2 className="text-2xl font-bold text-white">
+						<h2 className="text-foreground-text text-2xl font-bold">
 							Welcome Back
 						</h2>
-						<p className="text-slate-400 text-sm mt-1">
+						<p className="text-foreground-text  text-sm mt-1">
 							Please enter your details to sign in.
 						</p>
 					</div>
 
 					<Form method="POST" className="space-y-6">
 						<div className="space-y-2">
-							<label className="text-sm font-bold text-slate-300 ml-1">
+							<label className="text-foreground-text text-sm font-bold ml-1">
 								Email Address
 							</label>
 							<div className="relative group">
-								<Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors" />
+								<Mail className="
+									absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 
+									text-foreground-text group-focus-within:text-primary transition-colors
+								" />
 								<input
 									type="email"
 									name="email"
 									required
 									placeholder="name@company.com"
-									className="w-full pl-12 pr-4 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-sm text-white focus:bg-slate-700 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
-								/>
+									className="
+										w-full pl-12 pr-4 py-4 
+										bg-foreground border border-foreground-text 
+										rounded-2xl text-sm 
+										focus:bg-background focus:ring-2 
+										focus:ring-primary focus:border-primary 
+										outline-none transition-all
+								" />
 							</div>
 						</div>
 
 						<div className="space-y-2">
 							<div className="flex justify-between items-center ml-1">
-								<label className="text-sm font-bold text-slate-300">
+								<label className="text-foreground-text text-sm font-bold">
 									Password
 								</label>
 								<Link
 									to="/forgot-password"
-									className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+									className="text-xs font-bold text-primary"
 								>
 									Forgot Password?
 								</Link>
 							</div>
 							<div className="relative group">
-								<Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors" />
+								<Lock className="
+									absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 
+									text-foreground-text group-focus-within:text-primary transition-colors
+								" />
 								<input
 									type="password"
 									name="password"
 									required
 									placeholder="••••••••"
-									className="w-full pl-12 pr-4 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-sm text-white focus:bg-slate-700 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
+									className="
+										w-full pl-12 pr-4 py-4 
+										bg-foreground border border-foreground-text 
+										rounded-2xl text-sm 
+										focus:bg-background focus:ring-2 
+										focus:ring-primary focus:border-primary 
+										outline-none transition-all
+									"
 								/>
 							</div>
 						</div>
@@ -159,11 +183,13 @@ export default function Login({ actionData }: Route.ComponentProps) {
 								type="checkbox"
 								name="remember"
 								id="remember"
-								className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-emerald-600 focus:ring-emerald-500"
-							/>
+								className="
+									w-4 h-4 rounded border-foreground-text bg-background 
+									text-primary focus:ring-primary
+								" />
 							<label
 								htmlFor="remember"
-								className="text-sm text-slate-400 font-medium cursor-pointer"
+								className="text-sm text-foreground-text font-medium cursor-pointer"
 							>
 								Remember for 30 days
 							</label>
@@ -174,12 +200,11 @@ export default function Login({ actionData }: Route.ComponentProps) {
 							disabled={isLoading}
 							className={`
 								w-full py-4 text-sm rounded-2xl font-semibold transition-all shadow-lg 
-								transition-all duration-200 flex items-center justify-center gap-2 
+								flex items-center justify-center gap-2 
 								disabled:opacity-70 cursor-pointer 
-								${
-									error
-										? 'bg-red-500 hover:bg-red-600 shadow-red-900/30'
-										: 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-900/30'
+								${error
+									? 'bg-error hover:bg-error shadow-error/30'
+									: 'bg-primary hover:bg-primary shadow-primary/30'
 								}
 							`}
 						>
@@ -203,34 +228,42 @@ export default function Login({ actionData }: Route.ComponentProps) {
 					<div className="mt-8">
 						<div className="relative flex items-center justify-center mb-8">
 							<div className="absolute inset-0 flex items-center">
-								<div className="w-full border-t border-slate-800"></div>
+								<div className="w-full border-t border-foreground-text"></div>
 							</div>
-							<span className="relative px-4 bg-slate-900 text-xs font-bold text-slate-500 uppercase tracking-widest">
+							<span className="relative px-4 bg-background text-xs font-bold text-background-text uppercase tracking-widest">
 								Or continue with
 							</span>
 						</div>
 
 						<div className="grid grid-cols-2 gap-4">
-							<button type="button" className="flex items-center justify-center gap-2 py-3 border border-slate-700 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 transition-colors">
+							<button type="button" className="
+								flex items-center justify-center gap-2 py-3 border
+								border-foreground-text rounded-xl text-sm font-bold text-foreground-text
+								hover:bg-foreground transition-colors
+							">
 								<ChromeIcon className="w-5 h-5" /> Google
 							</button>
-							<button type="button" className="flex items-center justify-center gap-2 py-3 border border-slate-700 rounded-xl text-sm font-bold text-slate-300 hover:bg-slate-800 transition-colors">
+							<button type="button" className="
+								flex items-center justify-center gap-2 py-3 border 
+								border-foreground-text rounded-xl text-sm font-bold text-foreground-text
+								hover:bg-foreground transition-colors
+							">
 								<GithubIcon className="w-5 h-5" /> GitHub
 							</button>
 						</div>
 					</div>
 				</div>
 
-				<p className="mt-8 text-center text-slate-500 font-medium">
+				<p className="mt-8 text-center text-foreground-text font-medium">
 					Don't have an account?{' '}
 					<Link
 						to="/register"
-						className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors"
+						className="text-foreground-text font-bold hover:text-primary transition-colors"
 					>
 						Sign up for free
 					</Link>
 				</p>
-			</motion.div>
+			</div>
 		</div>
 	)
 }

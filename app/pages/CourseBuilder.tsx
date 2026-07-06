@@ -746,6 +746,13 @@ export async function action({ request, context }: Route.ActionArgs) {
 	)
 }
 
+export const handle = {
+	section: {
+		title: 'Course Builder',
+		subtitle: '',
+	},
+}
+
 export default function CourseBuilder() {
 	const { saved, dataPromise } = useLoaderData<typeof loader>()
 	const actionData = useActionData<typeof action>() as
@@ -755,34 +762,15 @@ export default function CourseBuilder() {
 
 	return (
 		<div className="space-y-8">
-			<div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-				<div>
-					<h1 className="mt-2 text-3xl font-bold text-white">
-						Course Builder
-					</h1>
-					<p className="mt-2 max-w-2xl text-sm text-slate-400">
-						Make changes locally, then save the whole course in one
-						shot.
-					</p>
-				</div>
-				<Link
-					to="/course-builder"
-					className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-200 transition-colors hover:bg-slate-800"
-				>
-					<Plus className="h-4 w-4" />
-					New Course
-				</Link>
-			</div>
-
 			{savedMessage ? (
-				<div className="flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+				<div className="flex items-center gap-3 rounded-2xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary">
 					<CheckCircle2 className="h-4 w-4" />
 					<span>{savedMessage}</span>
 				</div>
 			) : null}
 
 			{actionData?.error ? (
-				<div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+				<div className="rounded-2xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error">
 					{actionData.error}
 				</div>
 			) : null}
@@ -818,8 +806,8 @@ export default function CourseBuilder() {
 function CourseBuilderSkeleton() {
 	return (
 		<div className="space-y-8 animate-pulse">
-			<div className="h-96 bg-slate-800 rounded-xl" />
-			<div className="h-64 bg-slate-800 rounded-xl" />
+			<div className="h-96 bg-foreground-elevated rounded-xl" />
+			<div className="h-64 bg-foreground-elevated rounded-xl" />
 		</div>
 	)
 }

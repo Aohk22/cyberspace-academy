@@ -14,7 +14,7 @@ function renderInline(text: string): ReactNode[] {
 					key={index}
 					src={src}
 					alt={alt}
-					className="my-4 w-full rounded-2xl border border-slate-800 object-cover"
+					className="my-4 w-full rounded-2xl border border-foreground-elevated object-cover"
 					referrerPolicy="no-referrer"
 				/>
 			)
@@ -24,7 +24,7 @@ function renderInline(text: string): ReactNode[] {
 			return (
 				<code
 					key={index}
-					className="rounded-md bg-slate-800 px-1.5 py-0.5 text-[0.9em] text-slate-100"
+					className="rounded-md bg-foreground-elevated px-1.5 py-0.5 text-[0.9em] text-foreground-text"
 				>
 					{part.slice(1, -1)}
 				</code>
@@ -63,11 +63,11 @@ export default function MarkdownContent({ content }: { content: string }) {
 							<img
 								src={src}
 								alt={alt}
-								className="w-full rounded-3xl border border-slate-800 object-cover"
+								className="w-full rounded-3xl border border-foreground-elevated object-cover"
 								referrerPolicy="no-referrer"
 							/>
 							{alt ? (
-								<figcaption className="text-sm text-slate-400">
+								<figcaption className="text-sm text-foreground-text-secondary">
 									{alt}
 								</figcaption>
 							) : null}
@@ -80,7 +80,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<pre
 							key={index}
-							className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-200"
+							className="overflow-x-auto rounded-xl border border-foreground-elevated bg-foreground/60 p-4 text-sm text-foreground-text"
 						>
 							<code>{code}</code>
 						</pre>
@@ -91,7 +91,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<h1
 							key={index}
-							className="text-3xl font-bold text-white"
+							className="text-3xl font-bold text-foreground-text"
 						>
 							{firstLine.slice(2)}
 						</h1>
@@ -102,7 +102,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<h2
 							key={index}
-							className="text-2xl font-bold text-white"
+							className="text-2xl font-bold text-foreground-text"
 						>
 							{firstLine.slice(3)}
 						</h2>
@@ -113,7 +113,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<h3
 							key={index}
-							className="text-xl font-bold text-white"
+							className="text-xl font-bold text-foreground-text"
 						>
 							{firstLine.slice(4)}
 						</h3>
@@ -124,7 +124,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<ul
 							key={index}
-							className="list-disc space-y-2 pl-6 text-slate-300"
+							className="list-disc space-y-2 pl-6 text-foreground-text"
 						>
 							{lines.map((line, lineIndex) => (
 								<li key={lineIndex}>
@@ -139,7 +139,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<ol
 							key={index}
-							className="list-decimal space-y-2 pl-6 text-slate-300"
+							className="list-decimal space-y-2 pl-6 text-foreground-text"
 						>
 							{lines.map((line, lineIndex) => (
 								<li key={lineIndex}>
@@ -154,7 +154,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<blockquote
 							key={index}
-							className="border-l-4 border-emerald-500/50 pl-4 italic text-slate-300"
+							className="border-l-4 border-primary/50 pl-4 italic text-foreground-text"
 						>
 							{renderInline(
 								lines
@@ -166,7 +166,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 				}
 
 				return (
-					<p key={index} className="leading-7 text-slate-300">
+					<p key={index} className="leading-7 text-foreground-text">
 						{renderInline(lines.join(' '))}
 					</p>
 				)

@@ -1,0 +1,93 @@
+@import 'tailwindcss';
+
+* {
+	font-family: var(--font-mono);
+}
+
+@custom-variant light (&:where([data-theme=light], [data-theme=light] *));
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme inline {
+	--color-background: var(--background);
+	--color-background-text: var(--background-text);
+
+	--color-foreground: var(--foreground);
+	--color-foreground-elevated: var(--foreground-elevated);
+	--color-foreground-active: var(--foreground-active);
+	--color-foreground-text: var(--foreground-text);
+	--color-foreground-text-secondary: var(--foreground-text-secondary);
+	--color-foreground-text-hl: var(--foreground-text-hl);
+	--color-foreground-text-hl-bg: var(--foreground-text-hl-bg);
+	--color-foreground-text-muted: var(--foreground-text-muted);
+
+	--color-primary: var(--primary);
+	--color-accent: var(--accent);
+	--color-error: var(--error);
+
+	--color-star: var(--star);
+	--color-info: var(--info);
+	--color-rose: var(--rose);
+	--color-purple: var(--purple);
+	--color-cyan: var(--cyan);
+	--color-indigo: var(--indigo);
+	--color-orange: var(--orange);
+	--color-yellow: var(--yellow);
+}
+
+@layer base {
+	/* Uses Tailwind utility classes for colors. */
+	:root {
+		--a: var(--color-stone-50);
+		--background: var(--color-neutral-100);
+		--background-text: var(--color-neutral-950);
+
+		--foreground: var(--color-neutral-50);
+		--foreground-elevated: var(--color-neutral-200);
+		--foreground-active: var(--color-neutral-300);
+		--foreground-text: var(--color-neutral-700);
+		--foreground-text-secondary: var(--color-neutral-600);
+		--foreground-text-hl: var(--color-neutral-50);
+		--foreground-text-hl-bg: var(--color-neutral-500);
+		--foreground-text-muted: var(--color-neutral-500);
+
+		--primary: var(--color-emerald-600);
+		--accent:  #009966;
+		--error: #EF4444;
+
+		--star: var(--color-amber-400);
+		--info: var(--color-blue-400);
+		--rose: var(--color-rose-400);
+		--purple: var(--color-purple-400);
+		--cyan: var(--color-cyan-400);
+		--indigo: var(--color-indigo-400);
+		--orange: var(--color-orange-400);
+		--yellow: var(--color-yellow-400);
+	}
+
+	/* AI generated. */
+	[data-theme='dark'] {
+		--background: #020618;
+		--foreground: #0F172B;
+		--foreground-elevated: #1E293B;
+		--foreground-active: #334155;
+		--primary: #009966;
+		--accent: #009966;
+		--background-text: #E2E8F0;
+		--foreground-text: #94A3B8;
+		--foreground-text-secondary: #CBD5E1;
+		--foreground-text-hl: #F8FAFC;
+		--foreground-text-hl-bg: #475569;
+		--foreground-text-muted: #64748B;
+		--error: #EF4444;
+
+		--star: #FBBF24;
+		--info: #60A5FA;
+		--rose: #FB7185;
+		--purple: #C084FC;
+		--cyan: #22D3EE;
+		--indigo: #818CF8;
+		--orange: #FB923C;
+		--yellow: #FBBF24;
+	}
+}

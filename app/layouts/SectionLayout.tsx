@@ -3,9 +3,9 @@ import { Outlet, useMatches } from 'react-router'
 type SectionValue =
 	| string
 	| ((match: {
-			data?: unknown
-			params?: Record<string, string | undefined>
-	  }) => string)
+		data?: unknown
+		params?: Record<string, string | undefined>
+	}) => string)
 
 type SectionHandle = {
 	title: SectionValue
@@ -35,9 +35,9 @@ export default function SectionLayout() {
 	})
 	const section =
 		activeMatch &&
-		activeMatch.handle &&
-		typeof activeMatch.handle === 'object' &&
-		'section' in activeMatch.handle
+			activeMatch.handle &&
+			typeof activeMatch.handle === 'object' &&
+			'section' in activeMatch.handle
 			? (activeMatch.handle.section as SectionHandle)
 			: null
 	const title =
@@ -56,9 +56,9 @@ export default function SectionLayout() {
 		>
 			{title ? (
 				<header className="mb-6">
-					<h1 className="text-2xl font-bold text-white">{title}</h1>
+					<h1 className="text-2xl font-bold">{title}</h1>
 					{subtitle ? (
-						<p className="text-sm text-slate-400">{subtitle}</p>
+						<p className="text-sm">{subtitle}</p>
 					) : null}
 				</header>
 			) : null}

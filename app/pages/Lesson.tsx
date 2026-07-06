@@ -88,8 +88,8 @@ export default function Lesson() {
 				{(lessonData) => {
 					if (lessonData == null) {
 						return (
-							<div className="rounded-xl border border-dashed border-slate-800 bg-slate-900/50 px-6 py-12 text-center">
-								<h2 className="text-lg font-bold text-white">
+							<div className="rounded-xl border border-dashed border-foreground-elevated bg-foreground/50 px-6 py-12 text-center">
+								<h2 className="text-lg font-bold text-foreground-text">
 									Lesson not found
 								</h2>
 							</div>
@@ -130,45 +130,45 @@ function LessonContent({
 	} = lessonData
 
 	return (
-		<div className="flex flex-col text-slate-200">
+		<div className="flex flex-col text-background-text">
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-4">
 					<Link
 						to={`/courses/${course.id}`}
-						className="p-2 hover:bg-slate-800 rounded-full transition-colors text-slate-400 hover:text-white"
+						className="p-2 hover:bg-foreground-elevated rounded-full  text-foreground-text hover:text-foreground-text"
 					>
 						<ChevronLeft className="w-6 h-6" />
 					</Link>
 					<div>
-						<h1 className="text-xl font-bold text-white">
+						<h1 className="text-xl font-bold text-foreground-text">
 							{currentLesson.lessonIndex + 1}.{' '}
 							{currentLesson.title}
 						</h1>
-						<p className="text-sm text-slate-400">{course.title}</p>
+						<p className="text-sm text-foreground-text">{course.title}</p>
 					</div>
 				</div>
 				<div className="flex items-center gap-2">
 					{previousLessonId ? (
 						<Link
 							to={`/courses/${course.id}/lessons/${previousLessonId}`}
-							className="px-4 py-2 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors"
+							className="px-4 py-2 border border-foreground-elevated rounded-xl text-sm font-medium text-foreground-text-secondary hover:bg-foreground-elevated "
 						>
 							Previous
 						</Link>
 					) : (
-						<span className="px-4 py-2 border border-slate-800 rounded-xl text-sm font-medium text-slate-500">
+						<span className="px-4 py-2 border border-foreground-elevated rounded-xl text-sm font-medium text-foreground-text-muted">
 							Previous
 						</span>
 					)}
 					{nextLessonId ? (
 						<Link
 							to={`/courses/${course.id}/lessons/${nextLessonId}`}
-							className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors"
+							className="px-4 py-2 bg-primary text-foreground-text rounded-xl text-sm font-medium hover:bg-primary "
 						>
 							Next Lesson
 						</Link>
 					) : (
-						<span className="px-4 py-2 bg-slate-800 text-slate-400 rounded-xl text-sm font-medium">
+						<span className="px-4 py-2 bg-foreground-elevated text-foreground-text rounded-xl text-sm font-medium">
 							Completed
 						</span>
 					)}
@@ -176,27 +176,27 @@ function LessonContent({
 			</div>
 
 			<div>
-				<div className="mb-8 flex items-center justify-between gap-4 border-b border-slate-800 pb-4">
+				<div className="mb-8 flex items-center justify-between gap-4 border-b border-foreground-elevated pb-4">
 					<div>
-						<p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-400">
+						<p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
 							{currentLesson.moduleTitle}
 						</p>
-						<h2 className="mt-2 text-2xl font-bold text-white">
+						<h2 className="mt-2 text-2xl font-bold text-foreground-text">
 							{currentLesson.title}
 						</h2>
-						<p className="mt-2 text-sm text-slate-400">
+						<p className="mt-2 text-sm text-foreground-text">
 							{completedLessonsCount}/{totalLessonsCount} lessons
 							completed • {progressPercent}% progress
 						</p>
 					</div>
-					<div className="shrink-0 rounded-xl border border-slate-800 bg-slate-800/50 px-4 py-2 text-sm font-medium text-slate-300">
+					<div className="shrink-0 rounded-xl border border-foreground-elevated bg-foreground-elevated/50 px-4 py-2 text-sm font-medium text-foreground-text-secondary">
 						{formatLessonLength(currentLesson.length)}
 					</div>
 				</div>
 
 				<Suspense
 					fallback={
-						<div className="h-96 bg-slate-800 rounded-xl animate-pulse" />
+						<div className="h-96 bg-foreground-elevated rounded-xl animate-pulse" />
 					}
 				>
 					<MarkdownContent content={currentLesson.contentMd} />
@@ -204,8 +204,8 @@ function LessonContent({
 
 				<Suspense
 					fallback={
-						<div className="mt-10 border-t border-slate-800 pt-8">
-							<div className="h-11 w-40 bg-slate-800 rounded-xl animate-pulse" />
+						<div className="mt-10 border-t border-foreground-elevated pt-8">
+							<div className="h-11 w-40 bg-foreground-elevated rounded-xl animate-pulse" />
 						</div>
 					}
 				>
@@ -218,14 +218,14 @@ function LessonContent({
 									lessonId={currentLesson.id}
 								/>
 							) : currentLesson.completed ? (
-								<div className="mt-10 border-t border-slate-800 pt-8">
-									<span className="inline-flex items-center gap-2 rounded-xl bg-emerald-600/20 px-5 py-3 text-sm font-medium text-emerald-400">
+								<div className="mt-10 border-t border-foreground-elevated pt-8">
+									<span className="inline-flex items-center gap-2 rounded-xl bg-primary/20 px-5 py-3 text-sm font-medium text-primary">
 										<CheckCircle2 className="w-4 h-4" />
 										Completed
 									</span>
 								</div>
 							) : (
-								<div className="mt-10 border-t border-slate-800 pt-8">
+								<div className="mt-10 border-t border-foreground-elevated pt-8">
 									<fetcher.Form method="post">
 										<input
 											type="hidden"
@@ -237,7 +237,7 @@ function LessonContent({
 											disabled={
 												fetcher.state !== 'idle'
 											}
-											className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+											className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-foreground-text hover:bg-primary  disabled:opacity-50 disabled:cursor-not-allowed"
 										>
 											<CheckCircle2 className="w-4 h-4" />
 											{fetcher.state !== 'idle'
@@ -260,22 +260,22 @@ function LessonSkeleton() {
 		<div className="flex flex-col animate-pulse">
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-4">
-					<div className="w-10 h-10 bg-slate-800 rounded-full" />
+					<div className="w-10 h-10 bg-foreground-elevated rounded-full" />
 					<div className="space-y-2">
-						<div className="h-5 w-64 bg-slate-800 rounded" />
-						<div className="h-4 w-32 bg-slate-800 rounded" />
+						<div className="h-5 w-64 bg-foreground-elevated rounded" />
+						<div className="h-4 w-32 bg-foreground-elevated rounded" />
 					</div>
 				</div>
 				<div className="flex gap-2">
-					<div className="h-10 w-24 bg-slate-800 rounded-xl" />
-					<div className="h-10 w-28 bg-slate-800 rounded-xl" />
+					<div className="h-10 w-24 bg-foreground-elevated rounded-xl" />
+					<div className="h-10 w-28 bg-foreground-elevated rounded-xl" />
 				</div>
 			</div>
 			<div className="space-y-4">
-				<div className="h-4 w-32 bg-slate-800 rounded" />
-				<div className="h-8 w-3/4 bg-slate-800 rounded" />
-				<div className="h-4 w-48 bg-slate-800 rounded" />
-				<div className="h-96 bg-slate-800 rounded-xl" />
+				<div className="h-4 w-32 bg-foreground-elevated rounded" />
+				<div className="h-8 w-3/4 bg-foreground-elevated rounded" />
+				<div className="h-4 w-48 bg-foreground-elevated rounded" />
+				<div className="h-96 bg-foreground-elevated rounded-xl" />
 			</div>
 		</div>
 	)

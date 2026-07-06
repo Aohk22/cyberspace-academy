@@ -90,13 +90,13 @@ export default function CourseDetail() {
 					{(data) => {
 						if (data == null) {
 							return (
-								<div className="rounded-xl border border-dashed border-slate-800 bg-slate-900/50 px-6 py-12 text-center">
-									<h2 className="text-lg font-bold text-white">
+								<div className="rounded-xl border border-dashed border-foreground-elevated bg-foreground/50 px-6 py-12 text-center">
+									<h2 className="text-lg font-bold text-foreground-text">
 										Course not found
 									</h2>
 									<Link
 										to="/courses"
-										className="mt-2 inline-block text-sm text-emerald-400 hover:text-emerald-300"
+										className="mt-2 inline-block text-sm text-primary hover:text-primary"
 									>
 										Back to courses
 									</Link>
@@ -153,49 +153,49 @@ function CourseDetailInner({
 				<div className="flex items-center gap-2">
 					<Link
 						to="/courses"
-						className="text-sm text-slate-500 hover:text-emerald-400 transition-colors"
+						className="text-sm text-foreground-text-muted hover:text-primary "
 					>
 						Courses
 					</Link>
-					<ChevronRight className="w-4 h-4 text-slate-700" />
-					<span className="text-sm text-slate-200 font-medium">
+					<ChevronRight className="w-4 h-4 text-foreground-text-muted" />
+					<span className="text-sm text-background-text font-medium">
 						{course.title ?? 'Course'}
 					</span>
 				</div>
-				<h1 className="text-4xl font-bold text-white tracking-tight">
+				<h1 className="text-4xl font-bold text-foreground-text tracking-tight">
 					{course.title ?? 'Course'}
 				</h1>
-				<p className="text-lg text-slate-400 leading-relaxed">
+				<p className="text-lg text-foreground-text leading-relaxed">
 					{course.description ?? 'Enroll to unlock this course.'}
 				</p>
 			</div>
 
-			<div className="flex flex-wrap items-center gap-6 py-4 border-y border-slate-800">
+			<div className="flex flex-wrap items-center gap-6 py-4 border-y border-foreground-elevated">
 				<div className="flex items-center gap-2">
-					<div className="w-10 h-10 rounded-full bg-slate-800 overflow-hidden">
+					<div className="w-10 h-10 rounded-full bg-foreground-elevated overflow-hidden">
 						<img
 							src={`https://ui-avatars.com/api/?name=${course.instructor ?? 'Instructor'}&background=random`}
 							alt={course.instructor ?? 'Instructor'}
 						/>
 					</div>
 					<div>
-						<p className="text-xs text-slate-500 font-medium">
+						<p className="text-xs text-foreground-text-muted font-medium">
 							Instructor
 						</p>
-						<p className="text-sm font-bold text-white">
+						<p className="text-sm font-bold text-foreground-text">
 							{course.instructor ?? 'Instructor'}
 						</p>
 					</div>
 				</div>
 				<div className="flex items-center gap-2">
-					<div className="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center">
-						<Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+					<div className="w-10 h-10 rounded-xl bg-star/10 flex items-center justify-center">
+						<Star className="w-5 h-5 text-star fill-star" />
 					</div>
 					<div>
-						<p className="text-xs text-slate-500 font-medium">
+						<p className="text-xs text-foreground-text-muted font-medium">
 							Rating
 						</p>
-						<p className="text-sm font-bold text-white">
+						<p className="text-sm font-bold text-foreground-text">
 							{averageRating
 								? `${averageRating} (${reviewCount} reviews)`
 								: 'No reviews yet'}
@@ -203,14 +203,14 @@ function CourseDetailInner({
 					</div>
 				</div>
 				<div className="flex items-center gap-2">
-					<div className="w-10 h-10 rounded-xl bg-emerald-400/10 flex items-center justify-center">
-						<User className="w-5 h-5 text-emerald-400" />
+					<div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+						<User className="w-5 h-5 text-primary" />
 					</div>
 					<div>
-						<p className="text-xs text-slate-500 font-medium">
+						<p className="text-xs text-foreground-text-muted font-medium">
 							Students
 						</p>
-						<p className="text-sm font-bold text-white">
+						<p className="text-sm font-bold text-foreground-text">
 							{studentCount.toLocaleString()} enrolled
 						</p>
 					</div>
@@ -228,10 +228,10 @@ function CourseDetailInner({
 			{enrolled ? (
 				<div className="space-y-6">
 					<div className="flex items-center justify-between">
-						<h2 className="text-2xl font-bold text-white">
+						<h2 className="text-2xl font-bold text-foreground-text">
 							Course Content
 						</h2>
-						<p className="text-sm text-slate-500">
+						<p className="text-sm text-foreground-text-muted">
 							{modules.length} modules • {lessonsCount} lessons
 						</p>
 					</div>
@@ -240,30 +240,30 @@ function CourseDetailInner({
 						{modules.map((module, i) => (
 							<div
 								key={module.id}
-								className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-sm"
+								className="bg-foreground border border-foreground-elevated rounded-xl overflow-hidden shadow-sm"
 							>
-								<div className="p-4 bg-slate-800/50 border-b border-slate-800 flex items-center justify-between">
-									<h3 className="font-bold text-white">
+								<div className="p-4 bg-foreground-elevated/50 border-b border-foreground-elevated flex items-center justify-between">
+									<h3 className="font-bold text-foreground-text">
 										Module {i + 1}: {module.title}
 									</h3>
-									<span className="text-xs text-slate-500 font-medium">
+									<span className="text-xs text-foreground-text-muted font-medium">
 										{module.lessons.length} lessons
 									</span>
 								</div>
-								<div className="divide-y divide-slate-800/50">
+								<div className="divide-y divide-foreground-elevated/50">
 									{module.lessons.map((lesson) => (
 										<Link
 											key={lesson.id}
 											to={`/courses/${course.id}/lessons/${lesson.id}`}
-											className="p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors group"
+											className="p-4 flex items-center justify-between hover:bg-foreground-elevated/50  group"
 										>
 											<div className="flex items-center gap-4">
 												<div
 													className={
-														'w-8 h-8 rounded-full flex items-center justify-center transition-colors' +
+														'w-8 h-8 rounded-full flex items-center justify-center ' +
 														(lesson.completed
-															? ' bg-emerald-500/10 text-emerald-500'
-															: ' bg-slate-800 text-slate-600 group-hover:bg-emerald-500/10 group-hover:text-emerald-400')
+															? ' bg-primary/10 text-primary'
+															: ' bg-foreground-elevated text-foreground-text-muted group-hover:bg-primary/10 group-hover:text-primary')
 													}
 												>
 													{lesson.completed ? (
@@ -275,20 +275,20 @@ function CourseDetailInner({
 												<div>
 													<p
 														className={
-															'text-sm font-medium transition-colors' +
+															'text-sm font-medium ' +
 															(lesson.completed
-																? ' text-slate-500'
-																: ' text-slate-200 group-hover:text-emerald-400')
+																? ' text-foreground-text-muted'
+																: ' text-background-text group-hover:text-primary')
 														}
 													>
 														{lesson.title}
 													</p>
 													<div className="flex items-center gap-2 mt-0.5">
-														<span className="text-[10px] font-bold uppercase text-slate-500">
+														<span className="text-[10px] font-bold uppercase text-foreground-text-muted">
 															Video
 														</span>
-														<span className="w-0.5 h-0.5 bg-slate-700 rounded-full" />
-														<span className="text-[10px] text-slate-500">
+														<span className="w-0.5 h-0.5 bg-foreground-active rounded-full" />
+														<span className="text-[10px] text-foreground-text-muted">
 															{formatLessonLength(
 																lesson.length,
 															)}
@@ -297,7 +297,7 @@ function CourseDetailInner({
 												</div>
 											</div>
 											{!lesson.completed && (
-												<span className="text-xs font-bold text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
+												<span className="text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
 													Start
 												</span>
 											)}
@@ -309,8 +309,8 @@ function CourseDetailInner({
 					</div>
 
 					{/* Review Form */}
-					<div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-						<h3 className="text-lg font-bold text-white">
+					<div className="bg-foreground border border-foreground-elevated rounded-xl p-6 space-y-4">
+						<h3 className="text-lg font-bold text-foreground-text">
 							Leave a Review
 						</h3>
 						<reviewFetcher.Form method="POST">
@@ -325,14 +325,13 @@ function CourseDetailInner({
 										key={star}
 										type="button"
 										onClick={() => setReviewRating(star)}
-										className="transition-colors"
+										className=""
 									>
 										<Star
-											className={`w-5 h-5 ${
-												star <= reviewRating
-													? 'fill-amber-400 text-amber-400'
-													: 'text-slate-600'
-											}`}
+											className={`w-5 h-5 ${star <= reviewRating
+													? 'fill-star text-star'
+													: 'text-foreground-text-muted'
+												}`}
 										/>
 									</button>
 								))}
@@ -351,7 +350,7 @@ function CourseDetailInner({
 								onChange={(e) =>
 									setReviewContent(e.target.value)
 								}
-								className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:bg-slate-700 focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all resize-none"
+								className="w-full px-4 py-3 bg-foreground-elevated border border-foreground-active rounded-xl text-sm text-foreground-text placeholder-foreground-text-muted focus:bg-foreground-active focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none"
 							/>
 							<div className="flex justify-end mt-3">
 								<button
@@ -360,7 +359,7 @@ function CourseDetailInner({
 										!reviewContent.trim() ||
 										reviewFetcher.state === 'submitting'
 									}
-									className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition-all disabled:opacity-50"
+									className="flex items-center gap-2 px-4 py-2 bg-primary text-foreground-text rounded-xl text-sm font-bold hover:bg-primary transition-all disabled:opacity-50"
 								>
 									<Send className="w-4 h-4" />
 									Submit Review
@@ -371,45 +370,45 @@ function CourseDetailInner({
 				</div>
 			) : (
 				<div className="space-y-6">
-					<div className="bg-slate-900 border border-slate-800 rounded-xl p-8 space-y-4">
-						<h2 className="text-2xl font-bold text-white">
+					<div className="bg-foreground border border-foreground-elevated rounded-xl p-8 space-y-4">
+						<h2 className="text-2xl font-bold text-foreground-text">
 							Course Summary
 						</h2>
-						<p className="text-slate-400 leading-relaxed">
+						<p className="text-foreground-text leading-relaxed">
 							{course.description}
 						</p>
 						<div className="space-y-3 pt-2">
-							<div className="flex items-center gap-2 text-sm font-medium text-slate-300">
-								<BookOpen className="w-4 h-4 text-emerald-500" />
+							<div className="flex items-center gap-2 text-sm font-medium text-foreground-text-secondary">
+								<BookOpen className="w-4 h-4 text-primary" />
 								Modules in this course
 							</div>
 							<div className="space-y-3">
 								{modules.map((module, index) => (
 									<div
 										key={module.id}
-										className="rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-4"
+										className="rounded-xl border border-foreground-elevated bg-background/40 px-4 py-4"
 									>
 										<div className="flex items-start justify-between gap-4">
 											<div className="min-w-0">
-												<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+												<p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground-text-muted">
 													Module {index + 1}
 												</p>
-												<p className="mt-2 text-sm text-slate-200">
+												<p className="mt-2 text-sm text-background-text">
 													{module.title}
 												</p>
 											</div>
-											<p className="shrink-0 text-xs text-slate-500">
+											<p className="shrink-0 text-xs text-foreground-text-muted">
 												{module.lessons.length} lessons
 											</p>
 										</div>
-										<div className="mt-4 space-y-2 border-t border-slate-800 pt-4">
+										<div className="mt-4 space-y-2 border-t border-foreground-elevated pt-4">
 											{module.lessons.map(
 												(lesson, lessonIndex) => (
 													<div
 														key={lesson.id}
 														className="flex items-center justify-between gap-4 text-sm"
 													>
-														<div className="min-w-0 text-slate-300">
+														<div className="min-w-0 text-foreground-text-secondary">
 															<p className="truncate">
 																Lesson{' '}
 																{lessonIndex +
@@ -417,7 +416,7 @@ function CourseDetailInner({
 																: {lesson.title}
 															</p>
 														</div>
-														<p className="shrink-0 text-xs text-slate-500">
+														<p className="shrink-0 text-xs text-foreground-text-muted">
 															{formatLessonLength(
 																lesson.length,
 															)}
@@ -433,8 +432,8 @@ function CourseDetailInner({
 					</div>
 
 					{/* Enroll to review */}
-					<div className="bg-slate-900 border border-slate-800 rounded-xl p-6 text-center">
-						<p className="text-sm text-slate-400">
+					<div className="bg-foreground border border-foreground-elevated rounded-xl p-6 text-center">
+						<p className="text-sm text-foreground-text">
 							Enroll in this course to leave a review.
 						</p>
 					</div>
@@ -448,20 +447,20 @@ function CourseDetailSkeleton() {
 	return (
 		<div className="space-y-8 animate-pulse">
 			<div className="space-y-4">
-				<div className="h-4 w-32 bg-slate-800 rounded" />
-				<div className="h-10 w-3/4 bg-slate-800 rounded" />
-				<div className="h-5 w-full bg-slate-800 rounded" />
+				<div className="h-4 w-32 bg-foreground-elevated rounded" />
+				<div className="h-10 w-3/4 bg-foreground-elevated rounded" />
+				<div className="h-5 w-full bg-foreground-elevated rounded" />
 			</div>
-			<div className="flex gap-6 py-4 border-y border-slate-800">
-				<div className="h-10 w-40 bg-slate-800 rounded-lg" />
-				<div className="h-10 w-32 bg-slate-800 rounded-lg" />
-				<div className="h-10 w-36 bg-slate-800 rounded-lg" />
+			<div className="flex gap-6 py-4 border-y border-foreground-elevated">
+				<div className="h-10 w-40 bg-foreground-elevated rounded-lg" />
+				<div className="h-10 w-32 bg-foreground-elevated rounded-lg" />
+				<div className="h-10 w-36 bg-foreground-elevated rounded-lg" />
 			</div>
-			<div className="h-64 bg-slate-800 rounded-xl" />
+			<div className="h-64 bg-foreground-elevated rounded-xl" />
 			<div className="space-y-4">
-				<div className="h-6 w-48 bg-slate-800 rounded" />
+				<div className="h-6 w-48 bg-foreground-elevated rounded" />
 				{[1, 2, 3].map((i) => (
-					<div key={i} className="h-16 bg-slate-800 rounded-xl" />
+					<div key={i} className="h-16 bg-foreground-elevated rounded-xl" />
 				))}
 			</div>
 		</div>

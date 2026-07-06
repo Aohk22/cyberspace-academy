@@ -33,13 +33,13 @@ export default function CourseDetailsForm({
 
 	return (
 		<div className="space-y-4">
-			<h2 className="text-base font-bold text-white">
+			<h2 className="text-base font-bold text-foreground-text">
 				{isCreating ? 'Create Course' : 'Edit Course'}
 			</h2>
 
 			<div className="grid gap-4 md:grid-cols-2">
 				<label className="space-y-1.5">
-					<span className="text-xs font-medium text-slate-400">
+					<span className="text-xs font-medium text-foreground-text-secondary">
 						Title
 					</span>
 					<input
@@ -48,12 +48,12 @@ export default function CourseDetailsForm({
 						onChange={(event) =>
 							onFieldChange('title', event.target.value)
 						}
-						className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
+						className="w-full rounded-lg border border-foreground-elevated bg-foreground px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40"
 					/>
 				</label>
 
 				<label className="space-y-1.5">
-					<span className="text-xs font-medium text-slate-400">
+					<span className="text-xs font-medium text-foreground-text-secondary">
 						Instructor
 					</span>
 					<input
@@ -62,13 +62,13 @@ export default function CourseDetailsForm({
 						onChange={(event) =>
 							onFieldChange('instructor', event.target.value)
 						}
-						className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
+						className="w-full rounded-lg border border-foreground-elevated bg-foreground px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40"
 					/>
 				</label>
 			</div>
 
 			<label className="space-y-1.5">
-				<span className="text-xs font-medium text-slate-400">
+				<span className="text-xs font-medium text-foreground-text-secondary">
 					Description
 				</span>
 				<textarea
@@ -78,13 +78,13 @@ export default function CourseDetailsForm({
 					}
 					rows={3}
 					maxLength={255}
-					className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
+					className="w-full rounded-lg border border-foreground-elevated bg-foreground px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40"
 				/>
 			</label>
 
 			<div className="grid gap-4 md:grid-cols-[1.5fr_0.8fr_1fr]">
 				<label className="space-y-1.5">
-					<span className="text-xs font-medium text-slate-400">
+					<span className="text-xs font-medium text-foreground-text-secondary">
 						Thumbnail URL
 					</span>
 					<input
@@ -94,12 +94,12 @@ export default function CourseDetailsForm({
 						onChange={(event) =>
 							onFieldChange('thumbnail', event.target.value)
 						}
-						className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
+						className="w-full rounded-lg border border-foreground-elevated bg-foreground px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40"
 					/>
 				</label>
 
 				<label className="space-y-1.5">
-					<span className="text-xs font-medium text-slate-400">
+					<span className="text-xs font-medium text-foreground-text-secondary">
 						Length (seconds)
 					</span>
 					<input
@@ -108,12 +108,12 @@ export default function CourseDetailsForm({
 						step={1}
 						value={draft.length}
 						onChange={handleNumberChange}
-						className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
+						className="w-full rounded-lg border border-foreground-elevated bg-foreground px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40"
 					/>
 				</label>
 
 				<label className="space-y-1.5">
-					<span className="text-xs font-medium text-slate-400">
+					<span className="text-xs font-medium text-foreground-text-secondary">
 						Category
 					</span>
 					<select
@@ -123,7 +123,7 @@ export default function CourseDetailsForm({
 								: String(draft.categoryId)
 						}
 						onChange={handleCategorySelect}
-						className="w-full rounded-lg border border-slate-800 bg-slate-950/50 px-3 py-2 text-sm text-white outline-none transition focus:border-emerald-500/40"
+						className="w-full rounded-lg border border-foreground-elevated bg-foreground px-3 py-2 text-sm text-foreground-text outline-none transition focus:border-primary/40"
 					>
 						<option value="">Select category</option>
 						{categories.map((category) => (

@@ -23,29 +23,29 @@ export default function Achievements() {
 			label: 'Total XP',
 			value: '12,450',
 			icon: Star,
-			color: 'text-amber-400',
-			bg: 'bg-amber-400/10',
+			color: 'text-star',
+			bg: 'bg-star/10',
 		},
 		{
 			label: 'Current Streak',
 			value: '15 Days',
 			icon: Flame,
-			color: 'text-orange-400',
-			bg: 'bg-orange-400/10',
+			color: 'text-orange',
+			bg: 'bg-orange/10',
 		},
 		{
 			label: 'Courses Completed',
 			value: '8',
 			icon: Award,
-			color: 'text-emerald-400',
-			bg: 'bg-emerald-400/10',
+			color: 'text-primary',
+			bg: 'bg-primary/10',
 		},
 		{
 			label: 'Skill Points',
 			value: '850',
 			icon: Zap,
-			color: 'text-blue-400',
-			bg: 'bg-blue-400/10',
+			color: 'text-info',
+			bg: 'bg-info/10',
 		},
 	]
 
@@ -128,17 +128,17 @@ export default function Achievements() {
 				{stats.map((stat, idx) => (
 					<div
 						key={stat.label}
-						className="bg-slate-900 p-6 rounded-xl border border-slate-800"
+						className="bg-foreground p-6 rounded-xl border border-foreground-elevated"
 					>
 						<div
 							className={`w-12 h-12 ${stat.bg} rounded-lg flex items-center justify-center mb-4`}
 						>
 							<stat.icon className={`w-6 h-6 ${stat.color}`} />
 						</div>
-						<p className="text-sm font-medium text-slate-400">
+						<p className="text-sm font-medium text-foreground-text">
 							{stat.label}
 						</p>
-						<h3 className="text-2xl font-bold text-white mt-1">
+						<h3 className="text-2xl font-bold text-foreground-text-hl mt-1">
 							{stat.value}
 						</h3>
 					</div>
@@ -149,11 +149,11 @@ export default function Achievements() {
 				{/* Badges Grid */}
 				<div className="lg:col-span-2 space-y-6">
 					<div className="flex items-center justify-between">
-						<h2 className="text-xl font-bold text-white flex items-center gap-2">
-							<Trophy className="w-5 h-5 text-amber-400" />
+						<h2 className="text-xl font-bold text-foreground-text-hl flex items-center gap-2">
+							<Trophy className="w-5 h-5 text-star" />
 							Your Badges
 						</h2>
-						<button className="text-sm font-bold text-emerald-400 hover:text-emerald-300">
+						<button className="text-sm font-bold text-primary hover:text-primary">
 							View All
 						</button>
 					</div>
@@ -162,35 +162,35 @@ export default function Achievements() {
 						{badges.map((badge) => (
 							<div
 								key={badge.id}
-								className="bg-slate-900 p-5 rounded-xl border border-slate-800 flex items-center gap-4 hover:border-emerald-500/30 transition-colors group cursor-default"
+								className="bg-foreground p-5 rounded-xl border border-foreground-elevated flex items-center gap-4 hover:border-primary/30 transition-colors group cursor-default"
 							>
-								<div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
+								<div className="w-16 h-16 bg-foreground-elevated rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">
 									{badge.icon}
 								</div>
 								<div className="flex-1 min-w-0">
 									<div className="flex items-center justify-between mb-1">
-										<h4 className="font-bold text-white truncate">
+										<h4 className="font-bold text-foreground-text-hl truncate">
 											{badge.title}
 										</h4>
 										<span
 											className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
 												badge.rarity === 'Legendary'
-													? 'bg-amber-400/10 text-amber-400'
+													? 'bg-star/10 text-star'
 													: badge.rarity === 'Epic'
-														? 'bg-purple-400/10 text-purple-400'
+														? 'bg-purple/10 text-purple'
 														: badge.rarity ===
 															  'Rare'
-															? 'bg-blue-400/10 text-blue-400'
-															: 'bg-slate-800 text-slate-400'
+															? 'bg-info/10 text-info'
+															: 'bg-foreground-elevated text-foreground-text'
 											}`}
 										>
 											{badge.rarity}
 										</span>
 									</div>
-									<p className="text-xs text-slate-400 line-clamp-1">
+									<p className="text-xs text-foreground-text line-clamp-1">
 										{badge.description}
 									</p>
-									<p className="text-[10px] text-slate-500 mt-2">
+									<p className="text-[10px] text-foreground-text-muted mt-2">
 										Earned on {badge.date}
 									</p>
 								</div>
@@ -201,30 +201,30 @@ export default function Achievements() {
 
 				{/* Milestones & Progress */}
 				<div className="space-y-6">
-					<h2 className="text-xl font-bold text-white flex items-center gap-2">
-						<Target className="w-5 h-5 text-emerald-400" />
+					<h2 className="text-xl font-bold text-foreground-text-hl flex items-center gap-2">
+						<Target className="w-5 h-5 text-primary" />
 						Next Milestones
 					</h2>
 
-					<div className="bg-slate-900 p-6 rounded-xl border border-slate-800 space-y-8">
+					<div className="bg-foreground p-6 rounded-xl border border-foreground-elevated space-y-8">
 						{milestones.map((milestone) => (
 							<div key={milestone.title} className="space-y-3">
 								<div className="flex justify-between items-end">
 									<div>
-										<h4 className="font-bold text-white text-sm">
+										<h4 className="font-bold text-foreground-text-hl text-sm">
 											{milestone.title}
 										</h4>
-										<p className="text-xs text-slate-400 mt-0.5">
+										<p className="text-xs text-foreground-text mt-0.5">
 											{milestone.target}
 										</p>
 									</div>
-									<span className="text-xs font-bold text-emerald-400">
+									<span className="text-xs font-bold text-primary">
 										{milestone.current}
 									</span>
 								</div>
-								<div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+								<div className="h-2 bg-foreground-elevated rounded-full overflow-hidden">
 									<div
-										className="h-full bg-emerald-500 rounded-full"
+										className="h-full bg-primary rounded-full"
 										style={{
 											width: `${milestone.progress}%`,
 										}}
@@ -233,14 +233,14 @@ export default function Achievements() {
 							</div>
 						))}
 
-						<button className="w-full py-3 bg-slate-800 text-slate-300 rounded-2xl text-sm font-bold hover:bg-slate-700 transition-colors flex items-center justify-center gap-2">
+						<button className="w-full py-3 bg-foreground-elevated text-foreground-text-secondary rounded-2xl text-sm font-bold hover:bg-foreground-active transition-colors flex items-center justify-center gap-2">
 							View All Milestones{' '}
 							<ChevronRight className="w-4 h-4" />
 						</button>
 					</div>
 
 					{/* Leaderboard Preview */}
-					<div className="bg-emerald-600 rounded-xl p-6 text-white overflow-hidden relative">
+					<div className="bg-primary rounded-xl p-6 text-white overflow-hidden relative">
 						<div className="relative z-10">
 							<div className="flex items-center gap-2 mb-4">
 								<TrendingUp className="w-5 h-5" />

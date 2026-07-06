@@ -66,41 +66,40 @@ function CoursesInner({
 	const normalizedSearchQuery = deferredSearchQuery.trim().toLowerCase()
 	const filteredCourses = normalizedSearchQuery
 		? courses.filter((course) => {
-				const haystack = [
-					course.title,
-					course.description,
-					course.instructor,
-					course.category,
-				]
-					.join(' ')
-					.toLowerCase()
+			const haystack = [
+				course.title,
+				course.description,
+				course.instructor,
+				course.category,
+			]
+				.join(' ')
+				.toLowerCase()
 
-				return haystack.includes(normalizedSearchQuery)
-			})
+			return haystack.includes(normalizedSearchQuery)
+		})
 		: courses
 
 	return (
 		<div className="space-y-8">
-			<div className="flex flex-wrap items-center gap-3 p-3 border border-slate-800 rounded-xl">
+			<div className="flex flex-wrap items-center gap-3 p-3 border border-foreground-elevated rounded-xl">
 				<div className="relative min-w-0 flex-1">
-					<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+					<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-text-muted" />
 					<input
 						type="text"
 						value={searchQuery}
 						onChange={(event) => setSearchQuery(event.target.value)}
 						placeholder="Search courses..."
-						className="pl-9 pr-3 py-1.5 bg-transparent text-sm text-white placeholder-slate-500 outline-none w-full"
+						className="pl-9 pr-3 py-1.5 bg-transparent text-sm text-foreground-text-hl placeholder-foreground-text-muted outline-none w-full"
 					/>
 				</div>
 
 				<div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide">
 					<Link
 						to="/courses"
-						className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-							activeCategory === 'all'
-								? 'bg-slate-700 text-white'
-								: 'text-slate-400 hover:text-slate-200'
-						}`}
+						className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${activeCategory === 'all'
+								? 'bg-foreground-active text-foreground-text-hl'
+								: 'text-foreground-text hover:text-foreground-text-hl'
+							}`}
 					>
 						All
 					</Link>
@@ -108,11 +107,10 @@ function CoursesInner({
 						<Link
 							key={cat.id}
 							to={`?cat=${cat.name}`}
-							className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-								activeCategory === cat.name
+							className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${activeCategory === cat.name
 									? 'bg-slate-700 text-white'
 									: 'text-slate-400 hover:text-slate-200'
-							}`}
+								}`}
 						>
 							{cat.name}
 						</Link>
@@ -128,11 +126,11 @@ function CoursesInner({
 							<Link
 								key={course.id}
 								to={`/courses/${course.id}`}
-								className="group flex items-center gap-4 p-3 border border-slate-800 rounded-xl hover:border-slate-700 transition-colors"
+								className="group flex items-center gap-4 p-3 border border-foreground-elevated rounded-xl hover:border-foreground-active transition-colors"
 							>
 								<div className="min-w-0 flex-1">
-									<div className="flex items-center gap-2 text-[11px] text-slate-500">
-										<span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+									<div className="flex items-center gap-2 text-[11px] text-foreground-text-muted">
+										<span className="text-[10px] font-bold uppercase tracking-widest text-foreground-text-muted">
 											{course.category}
 										</span>
 										<span>&middot;</span>
@@ -146,39 +144,39 @@ function CoursesInner({
 											{course.lessons_count} lessons
 										</div>
 									</div>
-									<h3 className="text-sm font-bold text-white truncate group-hover:text-emerald-400 transition-colors">
+									<h3 className="text-sm font-bold text-foreground-text truncate group-hover:text-primary transition-colors">
 										{course.title}
 									</h3>
-									<p className="text-xs text-slate-400 truncate">
+									<p className="text-xs text-foreground-text truncate">
 										{course.description}
 									</p>
 								</div>
 
 								<div className="hidden sm:flex items-center gap-3 shrink-0">
 									<div className="flex items-center gap-1.5">
-										<div className="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
+										<div className="w-5 h-5 rounded-full bg-foreground-elevated flex items-center justify-center overflow-hidden">
 											<img
 												src={`https://ui-avatars.com/api/?name=${course.instructor}&background=random`}
 												alt={course.instructor}
 												className="w-full h-full object-cover"
 											/>
 										</div>
-										<span className="text-xs text-slate-400 whitespace-nowrap">
+										<span className="text-xs text-foreground-text whitespace-nowrap">
 											{course.instructor}
 										</span>
 									</div>
-									<ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" />
+									<ChevronRight className="w-4 h-4 text-foreground-text-muted group-hover:text-foreground-text-secondary transition-colors" />
 								</div>
 							</Link>
 						)
 					})}
 				</div>
 			) : (
-				<div className="border border-dashed border-slate-800 rounded-xl px-6 py-10 text-center">
-					<h2 className="text-base font-bold text-white">
+				<div className="border border-dashed border-foreground-elevated rounded-xl px-6 py-10 text-center">
+					<h2 className="text-base font-bold text-foreground-text-hl">
 						No courses found
 					</h2>
-					<p className="mt-1 text-sm text-slate-400">
+					<p className="mt-1 text-sm text-foreground-text">
 						Try a different search term
 						{activeCategory !== 'all'
 							? ` in ${activeCategory}`
@@ -194,13 +192,13 @@ function CoursesInner({
 function CoursesSkeleton() {
 	return (
 		<div className="space-y-8">
-			<div className="flex gap-3 p-3 border border-slate-800 rounded-xl animate-pulse">
-				<div className="h-7 flex-1 bg-slate-800 rounded" />
+			<div className="flex gap-3 p-3 border border-foreground-elevated rounded-xl animate-pulse">
+				<div className="h-7 flex-1 bg-foreground-elevated rounded" />
 				<div className="flex gap-1.5">
 					{[1, 2, 3, 4].map((i) => (
 						<div
 							key={i}
-							className="h-7 w-14 bg-slate-800 rounded-lg"
+							className="h-7 w-14 bg-foreground-elevated rounded-lg"
 						/>
 					))}
 				</div>
@@ -209,16 +207,16 @@ function CoursesSkeleton() {
 				{[1, 2, 3, 4, 5, 6].map((i) => (
 					<div
 						key={i}
-						className="flex gap-3 p-3 border border-slate-800 rounded-xl animate-pulse"
+						className="flex gap-3 p-3 border border-foreground-elevated rounded-xl animate-pulse"
 					>
 						<div className="flex-1 space-y-2 py-1">
 							<div className="flex gap-3">
-								<div className="h-3 w-16 bg-slate-800 rounded" />
-								<div className="h-3 w-12 bg-slate-800 rounded" />
-								<div className="h-3 w-14 bg-slate-800 rounded" />
+								<div className="h-3 w-16 bg-foreground-elevated rounded" />
+								<div className="h-3 w-12 bg-foreground-elevated rounded" />
+								<div className="h-3 w-14 bg-foreground-elevated rounded" />
 							</div>
-							<div className="h-4 w-3/4 bg-slate-800 rounded" />
-							<div className="h-3 w-1/2 bg-slate-800 rounded" />
+							<div className="h-4 w-3/4 bg-foreground-elevated rounded" />
+							<div className="h-3 w-1/2 bg-foreground-elevated rounded" />
 						</div>
 					</div>
 				))}

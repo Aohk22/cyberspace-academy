@@ -28,12 +28,12 @@ const CATEGORIES = [
 const DIFFICULTIES = ['easy', 'medium', 'hard', 'insane'] as const
 
 const categoryStyles: Record<string, string> = {
-	web: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20',
-	network: 'text-purple-400 bg-purple-400/10 border-purple-400/20',
-	crypto: 'text-amber-400 bg-amber-400/10 border-amber-400/20',
-	forensics: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/20',
-	binary: 'text-rose-400 bg-rose-400/10 border-rose-400/20',
-	osint: 'text-indigo-400 bg-indigo-400/10 border-indigo-400/20',
+	web: 'text-primary bg-primary/10 border-primary/20',
+	network: 'text-purple bg-purple/10 border-purple/20',
+	crypto: 'text-star bg-star/10 border-star/20',
+	forensics: 'text-cyan bg-cyan/10 border-cyan/20',
+	binary: 'text-rose bg-rose/10 border-rose/20',
+	osint: 'text-indigo bg-indigo/10 border-indigo/20',
 }
 
 const categoryIcons: Record<string, typeof Globe> = {
@@ -46,10 +46,10 @@ const categoryIcons: Record<string, typeof Globe> = {
 }
 
 const difficultyStyles: Record<string, string> = {
-	easy: 'text-emerald-400 bg-emerald-400/10',
-	medium: 'text-yellow-400 bg-yellow-400/10',
-	hard: 'text-orange-400 bg-orange-400/10',
-	insane: 'text-red-400 bg-red-400/10',
+	easy: 'text-primary bg-primary/10',
+	medium: 'text-yellow bg-yellow/10',
+	hard: 'text-orange bg-orange/10',
+	insane: 'text-error bg-error/10',
 }
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -135,8 +135,8 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 	const normalizedSearch = deferredSearchQuery.trim().toLowerCase()
 	const filtered = normalizedSearch
 		? challenges.filter((c) =>
-				c.name.toLowerCase().includes(normalizedSearch),
-			)
+			c.name.toLowerCase().includes(normalizedSearch),
+		)
 		: challenges
 
 	const solvedCount = challenges.filter((c) => c.completed).length
@@ -148,22 +148,22 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 
 	return (
 		<>
-			{/* Top Bar: Stats + Search + Filter Button */}
 			<div className="flex items-center gap-3 mb-4">
+				{/* Completion statistics. */}
 				<div className="flex items-center gap-4 text-sm shrink-0">
-					<div className="flex items-center gap-1.5 text-slate-400">
-						<CheckCircle2 className="w-4 h-4 text-emerald-400" />
+					<div className="flex items-center gap-1.5">
+						<CheckCircle2 className="w-4 h-4 text-primary" />
 						<span>
-							<span className="text-white font-semibold">
+							<span className="font-semibold">
 								{solvedCount}
 							</span>
 							/{challenges.length}
 						</span>
 					</div>
-					<div className="flex items-center gap-1.5 text-slate-400">
-						<Trophy className="w-4 h-4 text-amber-400" />
+					<div className="flex items-center gap-1.5">
+						<Trophy className="w-4 h-4" />
 						<span>
-							<span className="text-white font-semibold">
+							<span className="font-semibold">
 								{totalPoints}
 							</span>{' '}
 							pts
@@ -171,8 +171,9 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 					</div>
 				</div>
 
+				{/* Search bar. */}
 				<div className="flex-1 relative">
-					<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+					<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground-text-muted" />
 					<input
 						type="text"
 						value={searchQuery}
@@ -188,24 +189,30 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 								return next
 							})
 						}}
-						placeholder="Search challenges..."
-						className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-sm text-white placeholder-slate-500 outline-none focus:border-slate-700 transition-colors"
+						placeholder="Search by title..."
+						className="
+							w-full pl-9 pr-3 py-2 
+							bg-foreground border border-background-text
+							rounded-lg text-sm 
+							placeholder-foreground-text outline-none 
+							focus:border-primary
+						"
 					/>
 				</div>
 
+				{/* Filter button. */}
 				<div className="relative">
 					<button
 						onClick={() => setFilterOpen(!filterOpen)}
-						className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition-all ${
-							hasActiveFilters
-								? 'bg-slate-800 border-slate-600 text-white'
-								: 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
-						}`}
+						className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition-all ${hasActiveFilters
+							? 'bg-foreground-elevated border-foreground-active text-foreground-text'
+							: 'bg-foreground border-foreground-elevated text-foreground-text hover:text-foreground-text-secondary hover:border-foreground-active'
+							}`}
 					>
 						<Filter className="w-3.5 h-3.5" />
 						Filters
 						{hasActiveFilters && (
-							<span className="ml-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
+							<span className="ml-0.5 w-1.5 h-1.5 rounded-full bg-primary" />
 						)}
 					</button>
 
@@ -215,9 +222,9 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 								className="fixed inset-0 z-40"
 								onClick={() => setFilterOpen(false)}
 							/>
-							<div className="absolute right-0 top-full mt-1 z-50 w-64 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl p-4 space-y-4">
+							<div className="absolute right-0 top-full mt-1 z-50 w-64 bg-foreground border border-foreground-elevated rounded-xl shadow-2xl p-4 space-y-4">
 								<div>
-									<h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+									<h4 className="text-[10px] font-bold uppercase tracking-wider text-foreground-text-muted mb-2">
 										Category
 									</h4>
 									<div className="flex flex-wrap gap-1.5">
@@ -225,11 +232,10 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 											onClick={() =>
 												setParam('category', '')
 											}
-											className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
-												!activeCategory
-													? 'bg-slate-700 text-white'
-													: 'text-slate-400 hover:text-slate-200'
-											}`}
+											className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${!activeCategory
+												? 'bg-foreground-active text-foreground-text'
+												: 'text-foreground-text hover:text-foreground-text-secondary'
+												}`}
 										>
 											All
 										</button>
@@ -244,11 +250,10 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 															: cat,
 													)
 												}
-												className={`px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize border transition-all ${
-													activeCategory === cat
-														? `${categoryStyles[cat]}`
-														: 'border-transparent text-slate-400 hover:text-slate-200'
-												}`}
+												className={`px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize border transition-all ${activeCategory === cat
+													? `${categoryStyles[cat]}`
+													: 'border-transparent text-foreground-text hover:text-foreground-text-secondary'
+													}`}
 											>
 												{cat}
 											</button>
@@ -257,7 +262,7 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 								</div>
 
 								<div>
-									<h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+									<h4 className="text-[10px] font-bold uppercase tracking-wider text-foreground-text-muted mb-2">
 										Difficulty
 									</h4>
 									<div className="flex flex-wrap gap-1.5">
@@ -265,11 +270,10 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 											onClick={() =>
 												setParam('difficulty', '')
 											}
-											className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
-												!activeDifficulty
-													? 'bg-slate-700 text-white'
-													: 'text-slate-400 hover:text-slate-200'
-											}`}
+											className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${!activeDifficulty
+												? 'bg-foreground-active text-foreground-text'
+												: 'text-foreground-text hover:text-foreground-text-secondary'
+												}`}
 										>
 											All
 										</button>
@@ -285,11 +289,10 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 															: diff,
 													)
 												}
-												className={`px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize transition-all ${
-													activeDifficulty === diff
-														? `${difficultyStyles[diff]}`
-														: 'text-slate-400 hover:text-slate-200'
-												}`}
+												className={`px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize transition-all ${activeDifficulty === diff
+													? `${difficultyStyles[diff]}`
+													: 'text-foreground-text hover:text-foreground-text-secondary'
+													}`}
 											>
 												{diff}
 											</button>
@@ -312,7 +315,7 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 							{activeCategory}
 							<button
 								onClick={() => setParam('category', '')}
-								className="hover:text-white transition-colors"
+								className="hover:text-foreground-text "
 							>
 								<X className="w-2.5 h-2.5" />
 							</button>
@@ -325,7 +328,7 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 							{activeDifficulty}
 							<button
 								onClick={() => setParam('difficulty', '')}
-								className="hover:text-white transition-colors"
+								className="hover:text-foreground-text "
 							>
 								<X className="w-2.5 h-2.5" />
 							</button>
@@ -348,11 +351,11 @@ function ChallengesInner({ challenges }: { challenges: ChallengeView[] }) {
 					))}
 				</div>
 			) : (
-				<div className="border border-dashed border-slate-800 rounded-xl px-6 py-10 text-center">
-					<h2 className="text-base font-bold text-white">
+				<div className="border border-dashed border-foreground-elevated rounded-xl px-6 py-10 text-center">
+					<h2 className="text-base font-bold text-foreground-text">
 						No challenges found
 					</h2>
-					<p className="mt-1 text-sm text-slate-400">
+					<p className="mt-1 text-sm text-foreground-text">
 						Try adjusting your filters.
 					</p>
 				</div>
@@ -377,19 +380,21 @@ function ChallengeCard({
 	return (
 		<button
 			onClick={onClick}
-			className={`w-full text-left rounded-xl border p-4 transition-all hover:border-slate-700 hover:bg-slate-900/80 ${
-				challenge.completed
-					? 'border-emerald-500/30 bg-emerald-500/5'
-					: 'border-slate-800 bg-slate-900/50'
-			}`}
+			className={`w-full text-left rounded-xl border p-4 transition-all 
+				hover:border-foreground-active 
+				hover:bg-foreground/80 
+				active:bg-foreground/20
+				${challenge.completed
+					? 'border-primary/30 bg-primary/5'
+					: 'border-foreground-elevated bg-foreground/50'
+				}`}
 		>
 			<div className="flex items-start gap-4">
 				{/* Category Icon */}
 				<div
-					className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center ${
-						categoryStyles[challenge.category] ||
-						'text-slate-400 bg-slate-800'
-					}`}
+					className={`w-10 h-10 shrink-0 rounded-lg flex items-center justify-center ${categoryStyles[challenge.category] ||
+						'text-foreground-text bg-foreground-elevated'
+						}`}
 				>
 					{(() => {
 						const Icon = categoryIcons[challenge.category]
@@ -399,25 +404,24 @@ function ChallengeCard({
 
 				<div className="flex-1 min-w-0">
 					<div className="flex items-center gap-2 mb-1">
-						<h3 className="text-sm font-bold text-white">
+						<h3 className="text-sm font-bold text-foreground-text">
 							{challenge.name}
 						</h3>
 						<span
-							className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full capitalize ${
-								difficultyStyles[challenge.difficulty]
-							}`}
+							className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full capitalize ${difficultyStyles[challenge.difficulty]
+								}`}
 						>
 							{challenge.difficulty}
 						</span>
 					</div>
-					<p className="text-xs text-slate-400 leading-relaxed line-clamp-1 mb-1">
+					<p className="text-xs text-foreground-text leading-relaxed line-clamp-1 mb-1">
 						{challenge.description}
 					</p>
-					<div className="flex items-center gap-3 text-[11px] text-slate-500">
+					<div className="flex items-center gap-3 text-[11px] text-foreground-text-muted">
 						<span className="capitalize">
 							{challenge.category}
 						</span>
-						<span className="text-slate-600">|</span>
+						<span className="text-foreground-text-muted">|</span>
 						<span>
 							{challenge.solveCount} solve
 							{challenge.solveCount !== 1 ? 's' : ''}
@@ -426,14 +430,14 @@ function ChallengeCard({
 				</div>
 
 				<div className="text-right shrink-0">
-					<div className="text-sm font-bold text-amber-400">
+					<div className="text-sm font-bold text-star">
 						{challenge.points}
-						<span className="text-[10px] text-slate-500 font-medium">
+						<span className="text-[10px] text-foreground-text-muted font-medium">
 							pts
 						</span>
 					</div>
 					{challenge.completed && (
-						<CheckCircle2 className="w-4 h-4 text-emerald-400 mt-1 ml-auto" />
+						<CheckCircle2 className="w-4 h-4 text-primary mt-1 ml-auto" />
 					)}
 				</div>
 			</div>
@@ -472,15 +476,14 @@ function ChallengePopup({
 						initial={{ opacity: 0, scale: 0.95, y: 20 }}
 						animate={{ opacity: 1, scale: 1, y: 0 }}
 						exit={{ opacity: 0, scale: 0.95, y: 20 }}
-						className="relative w-full max-w-2xl bg-slate-900 rounded-xl shadow-2xl border border-slate-800 max-h-[85vh] overflow-y-auto"
+						className="relative w-full max-w-2xl bg-foreground rounded-xl shadow-2xl border border-foreground-elevated max-h-[85vh] overflow-y-auto"
 					>
 						{/* Header */}
-						<div className="flex items-start justify-between gap-4 p-6 border-b border-slate-800">
+						<div className="flex items-start justify-between gap-4 p-6 border-b border-foreground-elevated">
 							<div className="flex items-center gap-3">
 								<div
-									className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-										categoryStyles[challenge.category]
-									}`}
+									className={`w-12 h-12 rounded-xl flex items-center justify-center ${categoryStyles[challenge.category]
+										}`}
 								>
 									{(() => {
 										const Icon = categoryIcons[challenge.category]
@@ -488,21 +491,19 @@ function ChallengePopup({
 									})()}
 								</div>
 								<div>
-									<h2 className="text-lg font-bold text-white">
+									<h2 className="text-lg font-bold text-foreground-text">
 										{challenge.name}
 									</h2>
 									<div className="flex items-center gap-2 mt-1">
 										<span
-											className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize border ${
-												categoryStyles[challenge.category]
-											}`}
+											className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize border ${categoryStyles[challenge.category]
+												}`}
 										>
 											{challenge.category}
 										</span>
 										<span
-											className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${
-												difficultyStyles[challenge.difficulty]
-											}`}
+											className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${difficultyStyles[challenge.difficulty]
+												}`}
 										>
 											{challenge.difficulty}
 										</span>
@@ -511,7 +512,7 @@ function ChallengePopup({
 							</div>
 							<button
 								onClick={onClose}
-								className="p-1.5 text-slate-500 hover:text-white hover:bg-slate-800 rounded-lg transition-all"
+								className="p-1.5 text-foreground-text-muted hover:text-foreground-text hover:bg-foreground-elevated rounded-lg transition-all"
 							>
 								<X className="w-5 h-5" />
 							</button>
@@ -521,16 +522,16 @@ function ChallengePopup({
 						<div className="p-6 space-y-6">
 							{/* Metadata */}
 							<div className="flex items-center gap-4 text-sm">
-								<div className="flex items-center gap-1.5 text-amber-400">
+								<div className="flex items-center gap-1.5 text-star">
 									<Trophy className="w-4 h-4" />
 									<span className="font-semibold">
 										{challenge.points}
 									</span>
-									<span className="text-slate-500">
+									<span className="text-foreground-text-muted">
 										points
 									</span>
 								</div>
-								<div className="flex items-center gap-1.5 text-slate-400">
+								<div className="flex items-center gap-1.5 text-foreground-text">
 									<Users className="w-4 h-4" />
 									<span>
 										{challenge.solveCount} solve
@@ -545,7 +546,7 @@ function ChallengePopup({
 									{challenge.tags.map((tag) => (
 										<span
 											key={tag}
-											className="text-[11px] text-slate-500 bg-slate-800 px-2 py-0.5 rounded"
+											className="text-[11px] text-foreground-text-muted bg-foreground-elevated px-2 py-0.5 rounded"
 										>
 											#{tag}
 										</span>
@@ -555,17 +556,17 @@ function ChallengePopup({
 
 							{/* Problem Statement */}
 							<div>
-								<h3 className="text-sm font-bold text-white mb-2">
+								<h3 className="text-sm font-bold text-foreground-text mb-2">
 									Challenge
 								</h3>
-								<p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+								<p className="text-sm text-foreground-text-secondary leading-relaxed whitespace-pre-wrap">
 									{challenge.description}
 								</p>
 							</div>
 
 							{/* Feedback Messages */}
 							{isCorrect === true && (
-								<div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200 flex items-center gap-2">
+								<div className="rounded-lg border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary flex items-center gap-2">
 									<CheckCircle2 className="w-4 h-4" />
 									<span>
 										Correct! +
@@ -577,19 +578,19 @@ function ChallengePopup({
 								</div>
 							)}
 							{isCorrect === false && (
-								<div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200 flex items-center gap-2">
+								<div className="rounded-lg border border-error/30 bg-error/10 px-4 py-3 text-sm text-error flex items-center gap-2">
 									<XCircle className="w-4 h-4" />
 									<span>Incorrect flag. Try again.</span>
 								</div>
 							)}
 							{result && 'error' in result && (
-								<div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200 flex items-center gap-2">
+								<div className="rounded-lg border border-error/30 bg-error/10 px-4 py-3 text-sm text-error flex items-center gap-2">
 									<XCircle className="w-4 h-4" />
 									<span>{result.error}</span>
 								</div>
 							)}
 							{challenge.completed && (
-								<div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200 flex items-center gap-2">
+								<div className="rounded-lg border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary flex items-center gap-2">
 									<CheckCircle2 className="w-4 h-4" />
 									<span>
 										You have already solved this
@@ -615,7 +616,7 @@ function ChallengePopup({
 										value={challenge.id}
 									/>
 									<div>
-										<label className="block text-xs font-medium text-slate-400 mb-1.5">
+										<label className="block text-xs font-medium text-foreground-text mb-1.5">
 											Flag
 										</label>
 										<div className="flex items-center gap-2">
@@ -625,12 +626,12 @@ function ChallengePopup({
 												placeholder="flag{...}"
 												required
 												disabled={isSubmitting}
-												className="flex-1 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm text-white outline-none transition focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10 disabled:opacity-50 font-mono"
+												className="flex-1 rounded-lg border border-foreground-active bg-background px-3 py-2.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10 disabled:opacity-50 font-mono"
 											/>
 											<button
 												type="submit"
 												disabled={isSubmitting}
-												className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 transition-colors disabled:opacity-40"
+												className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-foreground-text hover:bg-primary  disabled:opacity-40"
 											>
 												<Send className="w-4 h-4" />
 												{isSubmitting
@@ -653,14 +654,14 @@ function ChallengesSkeleton() {
 	return (
 		<div className="space-y-4 animate-pulse">
 			<div className="flex items-center gap-3">
-				<div className="h-4 w-32 bg-slate-800 rounded" />
-				<div className="flex-1 h-9 bg-slate-800 rounded-lg" />
-				<div className="h-9 w-24 bg-slate-800 rounded-lg" />
+				<div className="h-4 w-32 bg-foreground-elevated rounded" />
+				<div className="flex-1 h-9 bg-foreground-elevated rounded-lg" />
+				<div className="h-9 w-24 bg-foreground-elevated rounded-lg" />
 			</div>
 			{[1, 2, 3].map((i) => (
 				<div
 					key={i}
-					className="h-24 bg-slate-800 rounded-xl"
+					className="h-24 bg-foreground-elevated rounded-xl"
 				/>
 			))}
 		</div>

@@ -71,23 +71,23 @@ export default function ResetPassword() {
 	const isLoading = navigation.state === 'submitting'
 
 	return (
-		<div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+		<div data-theme="dark" className="min-h-screen bg-background flex items-center justify-center p-6">
 			<div className="max-w-md w-full">
 				<div className="flex flex-col items-center mb-10">
-					<div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-emerald-900/20">
-						<GraduationCap className="text-white w-8 h-8" />
+					<div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-primary/20">
+						<GraduationCap className="text-foreground-text-hl w-8 h-8" />
 					</div>
-					<h1 className="text-3xl font-bold text-white tracking-tight">
+					<h1 className="text-3xl font-bold text-foreground-text-hl tracking-tight">
 						New Password
 					</h1>
-					<p className="text-slate-400 mt-2 font-medium">
+					<p className="text-foreground-text mt-2 font-medium">
 						Choose a new password for your account.
 					</p>
 				</div>
 
-				<div className="bg-slate-900 rounded-xl shadow-2xl shadow-black/50 border border-slate-800 p-8 md:p-12">
+				<div className="bg-foreground rounded-xl shadow-2xl shadow-black/50 border border-foreground-elevated p-8 md:p-12">
 					{actionData?.error && (
-						<div className="mb-6 flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-xs text-red-400">
+						<div className="mb-6 flex items-center gap-2 bg-error/10 border border-error/30 rounded-xl px-4 py-3 text-xs text-error">
 							<AlertCircle className="w-4 h-4 shrink-0" />
 							{actionData.error}
 						</div>
@@ -97,21 +97,21 @@ export default function ResetPassword() {
 						<input type="hidden" name="token" value={token} />
 
 						<div className="space-y-2">
-							<label className="text-sm font-bold text-slate-300 ml-1">
+							<label className="text-sm font-bold text-foreground-text-secondary ml-1">
 								New Password
 							</label>
 							<div className="relative group">
-								<Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-emerald-400 transition-colors" />
+								<Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-text-muted group-focus-within:text-primary transition-colors" />
 								<input
 									type="password"
 									name="password"
 									required
 									minLength={8}
 									placeholder="••••••••"
-									className="w-full pl-12 pr-4 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-sm text-white focus:bg-slate-700 focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
+									className="w-full pl-12 pr-4 py-4 bg-foreground-elevated border border-foreground-active rounded-2xl text-sm text-foreground-text-hl focus:bg-foreground-active focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"
 								/>
 							</div>
-							<p className="text-[10px] text-slate-500 ml-1">
+							<p className="text-[10px] text-foreground-text-muted ml-1">
 								Must be at least 8 characters long.
 							</p>
 						</div>
@@ -119,7 +119,7 @@ export default function ResetPassword() {
 						<button
 							type="submit"
 							disabled={isLoading}
-							className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 disabled:opacity-70"
+							className="w-full py-4 bg-primary text-foreground-text-hl rounded-2xl font-bold hover:bg-primary transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-70"
 						>
 							{isLoading ? (
 								<Loader2 className="w-5 h-5 animate-spin" />
@@ -130,10 +130,10 @@ export default function ResetPassword() {
 					</Form>
 				</div>
 
-				<p className="mt-8 text-center text-slate-500 font-medium">
+				<p className="mt-8 text-center text-foreground-text-muted font-medium">
 					<Link
 						to="/login"
-						className="text-emerald-400 font-bold hover:text-emerald-300 transition-colors"
+						className="text-primary font-bold hover:text-primary transition-colors"
 					>
 						Back to Login
 					</Link>

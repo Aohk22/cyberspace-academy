@@ -170,16 +170,16 @@ export default function AdminPathDetail() {
 
 	return (
 		<div className="space-y-4 max-w-2xl">
-			<div className="rounded-lg border border-slate-800 bg-slate-900 p-4">
-				<h2 className="text-sm font-semibold text-white">
+			<div className="rounded-lg border border-foreground-elevated bg-foreground p-4">
+				<h2 className="text-sm font-semibold text-foreground-text-hl">
 					{path.title}
 				</h2>
 				{path.description ? (
-					<p className="mt-1 text-xs text-slate-400">
+					<p className="mt-1 text-xs text-foreground-text">
 						{path.description}
 					</p>
 				) : null}
-				<div className="mt-3 flex items-center gap-3 text-xs text-slate-500">
+				<div className="mt-3 flex items-center gap-3 text-xs text-foreground-text-muted">
 					<span>
 						{courses.length} course{courses.length !== 1 ? 's' : ''}
 					</span>
@@ -193,9 +193,9 @@ export default function AdminPathDetail() {
 			</div>
 
 			{courses.length > 0 ? (
-				<div className="overflow-hidden rounded-lg border border-slate-800">
+				<div className="overflow-hidden rounded-lg border border-foreground-elevated">
 					<table className="w-full text-left text-xs">
-						<thead className="bg-slate-800/50 text-[10px] uppercase tracking-widest text-slate-500">
+						<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
 							<tr>
 								<th className="px-3 py-2">#</th>
 								<th className="px-3 py-2">Course</th>
@@ -205,16 +205,16 @@ export default function AdminPathDetail() {
 								</th>
 							</tr>
 						</thead>
-						<tbody className="divide-y divide-slate-800">
+						<tbody className="divide-y divide-foreground-elevated">
 							{courses.map((course, index) => (
 								<tr key={course.courseId}>
-									<td className="px-3 py-2 text-slate-500">
+									<td className="px-3 py-2 text-foreground-text-muted">
 										{course.position}
 									</td>
-									<td className="px-3 py-2 font-medium text-white">
+									<td className="px-3 py-2 font-medium text-foreground-text-hl">
 										{course.title}
 									</td>
-									<td className="px-3 py-2 text-slate-500">
+									<td className="px-3 py-2 text-foreground-text-muted">
 										{formatDuration(course.length)}
 									</td>
 									<td className="px-3 py-2">
@@ -246,7 +246,7 @@ export default function AdminPathDetail() {
 														index === 0 ||
 														isSubmitting
 													}
-													className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200 disabled:opacity-30"
+													className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-foreground-elevated hover:text-foreground-text-secondary disabled:opacity-30"
 												>
 													<ArrowUp className="h-3.5 w-3.5" />
 												</button>
@@ -260,7 +260,7 @@ export default function AdminPathDetail() {
 																1 ||
 														isSubmitting
 													}
-													className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-slate-800 hover:text-slate-200 disabled:opacity-30"
+													className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-foreground-elevated hover:text-foreground-text-secondary disabled:opacity-30"
 												>
 													<ArrowDown className="h-3.5 w-3.5" />
 												</button>
@@ -296,7 +296,7 @@ export default function AdminPathDetail() {
 												<button
 													type="submit"
 													disabled={isSubmitting}
-													className="rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+													className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-error/10 hover:text-error disabled:opacity-50"
 												>
 													<Trash2 className="h-3.5 w-3.5" />
 												</button>
@@ -309,8 +309,8 @@ export default function AdminPathDetail() {
 					</table>
 				</div>
 			) : (
-				<div className="rounded-lg border border-dashed border-slate-800 bg-slate-950/40 p-6 text-center">
-					<p className="text-xs text-slate-400">
+				<div className="rounded-lg border border-dashed border-foreground-elevated bg-background/40 p-6 text-center">
+					<p className="text-xs text-foreground-text">
 						No courses in this path yet.
 					</p>
 				</div>
@@ -322,7 +322,7 @@ export default function AdminPathDetail() {
 					<select
 						name="courseId"
 						required
-						className="flex-1 rounded-lg border border-slate-700 bg-slate-800 py-1.5 px-3 text-xs text-white outline-none transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+						className="flex-1 rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text-hl outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
 					>
 						<option value="">Select a course...</option>
 						{availableCourses.map((c) => (
@@ -334,7 +334,7 @@ export default function AdminPathDetail() {
 					<button
 						type="submit"
 						disabled={isSubmitting}
-						className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-emerald-700 disabled:opacity-60"
+						className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-foreground-text-hl transition-colors hover:bg-primary disabled:opacity-60"
 					>
 						{isSubmitting ? (
 							<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -345,7 +345,7 @@ export default function AdminPathDetail() {
 					</button>
 				</Form>
 			) : (
-				<p className="text-xs text-slate-500 text-center">
+				<p className="text-xs text-foreground-text-muted text-center">
 					All courses are already in this path.
 				</p>
 			)}
@@ -353,7 +353,7 @@ export default function AdminPathDetail() {
 			<div className="pt-2">
 				<Link
 					to="/admin/paths"
-					className="text-xs font-medium text-slate-500 hover:text-slate-300 transition-colors"
+					className="text-xs font-medium text-foreground-text-muted hover:text-foreground-text-secondary transition-colors"
 				>
 					&larr; Back to paths
 				</Link>

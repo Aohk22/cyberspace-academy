@@ -7,6 +7,7 @@ import {
 	courses,
 	modules,
 	lessons,
+	reviews,
 	usersToCourses,
 	learningPaths,
 	pathCourses,
@@ -348,6 +349,51 @@ const USERS_TO_COURSES = [
 	{ userId: 3, courseId: 2 },
 ]
 
+const REVIEWS = [
+	{
+		userIndex: 0,
+		courseIndex: 0,
+		rating: 5,
+		content:
+			'Excellent introduction to ethical hacking. The lab setup guide was very practical.',
+	},
+	{
+		userIndex: 1,
+		courseIndex: 0,
+		rating: 4,
+		content:
+			'Great course, but some sections could use more real-world examples.',
+	},
+	{
+		userIndex: 0,
+		courseIndex: 1,
+		rating: 4,
+		content:
+			'Network defense concepts are well explained. The iptables section was super useful.',
+	},
+	{
+		userIndex: 2,
+		courseIndex: 1,
+		rating: 2,
+		content:
+			'A bit too advanced for beginners. The firewall rules section was confusing.',
+	},
+	{
+		userIndex: 0,
+		courseIndex: 2,
+		rating: 3,
+		content:
+			'Decent overview of cloud security. I wish it covered more AWS-specific topics.',
+	},
+	{
+		userIndex: 1,
+		courseIndex: 2,
+		rating: 5,
+		content:
+			'Cloud security architecture was eye-opening. Highly recommended for anyone moving to the cloud.',
+	},
+]
+
 const LEARNING_PATHS = [
 	{
 		title: 'Security Foundations',
@@ -481,6 +527,17 @@ async function seed() {
 	console.log(
 		'✅ Inserted user-course enrollments (trigger auto-populated users_to_lessons)',
 	)
+
+	await db.insert(reviews).values(
+		REVIEWS.map((r) => ({
+			userId: userIdMap[r.userIndex + 1],
+			courseId: courseIdMap[r.courseIndex + 1],
+			rating: r.rating,
+			content: r.content,
+		})),
+	)
+
+	console.log(`✅ Inserted ${REVIEWS.length} reviews`)
 
 	const insertedPaths = await db
 		.insert(learningPaths)
