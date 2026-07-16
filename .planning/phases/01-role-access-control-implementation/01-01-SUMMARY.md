@@ -140,6 +140,7 @@ Each task was committed atomically:
 ### Auto-fixed Issues
 
 **1. [Rule 3 - Blocking] Migrated `app/pages/Challenges.tsx` broken import after removing `canAccessChallenges`**
+
 - **Found during:** Task 4 (trim access.ts)
 - **Issue:** Deleting `canAccessChallenges` left `app/pages/Challenges.tsx` importing a now-nonexistent export → typecheck error `TS2305: Module has no exported member 'canAccessChallenges'`.
 - **Fix:** Replaced both call sites with `can(user, 'accessChallenges')` and switched import to `can` from `~/auth/permissions` (D-04 migration scope covers all call sites; this is exactly the Wave-2-style cleanup triggered early by the deletion).
@@ -148,6 +149,7 @@ Each task was committed atomically:
 - **Committed in:** `a9ced20`
 
 **2. [Rule 1 - Bug] Coerced `session.get('viewAsLearner')` to boolean in authMiddleware**
+
 - **Found during:** Task 2 (typecheck)
 - **Issue:** `session.get('viewAsLearner')` is `boolean | undefined`, not assignable to the new `viewAsLearner: boolean` field → typecheck error `TS2322`.
 - **Fix:** Changed to `const viewAsLearner = session.get('viewAsLearner') === true` so the field is always boolean.
@@ -175,5 +177,6 @@ None - no external service configuration required.
 - `viewAsLearner` is now available on `UserContext` for any page that needs the staff-preview switch.
 
 ---
-*Phase: 01-role-access-control-implementation*
-*Completed: 2026-07-17*
+
+_Phase: 01-role-access-control-implementation_
+_Completed: 2026-07-17_

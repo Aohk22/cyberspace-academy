@@ -17,13 +17,13 @@ created: 2026-07-17
 
 ## Test Infrastructure
 
-| Property | Value |
-|----------|-------|
-| **Framework** | vitest |
-| **Config file** | vitest.config.ts |
-| **Quick run command** | `pnpm exec vitest run app/auth/permissions.test.ts` |
-| **Full suite command** | `pnpm exec vitest run` |
-| **Estimated runtime** | ~30 seconds |
+| Property               | Value                                               |
+| ---------------------- | --------------------------------------------------- |
+| **Framework**          | vitest                                              |
+| **Config file**        | vitest.config.ts                                    |
+| **Quick run command**  | `pnpm exec vitest run app/auth/permissions.test.ts` |
+| **Full suite command** | `pnpm exec vitest run`                              |
+| **Estimated runtime**  | ~30 seconds                                         |
 
 ---
 
@@ -38,13 +38,13 @@ created: 2026-07-17
 
 ## Per-Task Verification Map
 
-| Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
-|---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 01-01-01 | 01 | 1 | — | T-01-01 / — | can() denies when user null | unit | `vitest run app/auth/permissions.test.ts` | ✅ W0 | ⬜ pending |
-| 01-02-01 | 01 | 1 | — | T-01-02 / — | admin ⇒ staff only | unit | `vitest run app/auth/permissions.test.ts` | ✅ W0 | ⬜ pending |
-| 01-03-01 | 01 | 2 | — | T-01-03 / — | accessChallenges ⇒ lite/pro only | unit | `vitest run app/auth/permissions.test.ts` | ✅ W0 | ⬜ pending |
+| Task ID  | Plan | Wave | Requirement | Threat Ref  | Secure Behavior                  | Test Type | Automated Command                         | File Exists | Status     |
+| -------- | ---- | ---- | ----------- | ----------- | -------------------------------- | --------- | ----------------------------------------- | ----------- | ---------- |
+| 01-01-01 | 01   | 1    | —           | T-01-01 / — | can() denies when user null      | unit      | `vitest run app/auth/permissions.test.ts` | ✅ W0       | ⬜ pending |
+| 01-02-01 | 01   | 1    | —           | T-01-02 / — | admin ⇒ staff only               | unit      | `vitest run app/auth/permissions.test.ts` | ✅ W0       | ⬜ pending |
+| 01-03-01 | 01   | 2    | —           | T-01-03 / — | accessChallenges ⇒ lite/pro only | unit      | `vitest run app/auth/permissions.test.ts` | ✅ W0       | ⬜ pending |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+_Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky_
 
 ---
 
@@ -53,15 +53,15 @@ created: 2026-07-17
 - [ ] `app/auth/permissions.test.ts` — unit tests for `can(user, action)` covering admin / accessChallenges / viewAsLearner and the null-user case
 - [ ] Migrate `app/.server/payment/access.test.ts` — remove `canAccessChallenges` import, point challenge-access assertions at `can()`
 
-*Existing vitest infrastructure covers the rest of phase requirements.*
+_Existing vitest infrastructure covers the rest of phase requirements._
 
 ---
 
 ## Manual-Only Verifications
 
-| Behavior | Requirement | Why Manual | Test Instructions |
-|----------|-------------|------------|-------------------|
-| Staff `viewAsLearner` preview renders learner UI | — | Requires session flag set via admin preview toggle in browser | Log in as staff, enable view-as-learner, confirm admin routes are hidden |
+| Behavior                                         | Requirement | Why Manual                                                    | Test Instructions                                                        |
+| ------------------------------------------------ | ----------- | ------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Staff `viewAsLearner` preview renders learner UI | —           | Requires session flag set via admin preview toggle in browser | Log in as staff, enable view-as-learner, confirm admin routes are hidden |
 
 ---
 
