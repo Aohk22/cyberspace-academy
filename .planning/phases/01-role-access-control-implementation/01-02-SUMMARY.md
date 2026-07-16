@@ -164,3 +164,11 @@ None - no external service configuration required.
 ---
 *Phase: 01-role-access-control-implementation*
 *Completed: 2026-07-16*
+
+## Self-Check: PASSED
+
+- SUMMARY.md created at `.planning/phases/01-role-access-control-implementation/01-02-SUMMARY.md` ✅
+- Task commits present: `b78b2bb` (Task 1+2), `60700c8` (Task 3) ✅
+- All grep gates clean (no `user.role !== 'staff'`, no `canAccessChallenges`, no narrow role enum) ✅
+- `pnpm run typecheck` exit 0, `pnpm run fmt` clean ✅
+- Only `app/auth/permissions.ts:10` retains `user.role === 'staff'` — this is the canonical `can()` implementation, not a scattered guard, and is excluded by the acceptance-criteria pattern.
