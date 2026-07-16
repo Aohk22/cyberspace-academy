@@ -1,10 +1,17 @@
 import { sql } from 'drizzle-orm'
-import { BookMarked, CheckCircle2, GraduationCap, Star, Users } from 'lucide-react'
+import {
+	BookMarked,
+	CheckCircle2,
+	GraduationCap,
+	Star,
+	Users,
+} from 'lucide-react'
 import { Link, redirect, useLoaderData, useSearchParams } from 'react-router'
 import { z } from 'zod'
 import { db } from '~/.server/database/connection'
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
 import type { Route } from './+types/AdminDashboard'
 
 export const handle = {
@@ -58,19 +65,22 @@ function renderStars(rating: number) {
 	return (
 		<span className="inline-flex items-center gap-0.5">
 			{Array.from({ length: full }, (_, i) => (
-				<Star key={`full-${i}`} className="h-3 w-3 fill-star text-yellow-400" />
+				<Star
+					key={`full-${i}`}
+					className="h-3 w-3 fill-star text-star"
+				/>
 			))}
 			{hasHalf && (
 				<span className="relative h-3 w-3">
-					<Star className="absolute h-3 w-3 text-yellow-400" />
+					<Star className="absolute h-3 w-3 text-star" />
 					<Star
-						className="absolute h-3 w-3 fill-star text-yellow-400"
+						className="absolute h-3 w-3 fill-star text-star"
 						style={{ clipPath: 'inset(0 50% 0 0)' }}
 					/>
 				</span>
 			)}
 			{Array.from({ length: empty }, (_, i) => (
-				<Star key={`empty-${i}`} className="h-3 w-3 text-foreground-text-muted" />
+				<Star key={`empty-${i}`} className="h-3 w-3 text-muted" />
 			))}
 		</span>
 	)
@@ -97,17 +107,15 @@ function MetricCard({
 	meta: string
 }) {
 	return (
-		<div className="rounded-lg border border-foreground-elevated bg-foreground p-2">
+		<div className="rounded-lg border border-hairline bg-surface p-2">
 			<div
 				className={`flex h-6 w-6 items-center justify-center rounded-md ${tone}`}
 			>
 				<Icon className="h-3.5 w-3.5" />
 			</div>
-			<p className="mt-1.5 text-[11px] font-medium text-foreground-text">
-				{label}
-			</p>
-			<p className="mt-0.5 text-base font-bold text-foreground-text">{value}</p>
-			<p className="mt-0.5 text-[10px] text-foreground-text-muted">{meta}</p>
+			<p className="mt-1.5 text-[11px] font-medium text-ink">{label}</p>
+			<p className="mt-0.5 text-base font-bold text-ink">{value}</p>
+			<p className="mt-0.5 text-[10px] text-muted">{meta}</p>
 		</div>
 	)
 }
@@ -118,7 +126,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
 
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -225,7 +233,7 @@ export default function AdminDashboard() {
 	return (
 		<div className="space-y-6">
 			{created ? (
-				<div className="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs text-primary">
+				<div className="flex items-center gap-2 rounded-lg border border-deep-green/30 bg-deep-green/10 px-3 py-2 text-xs text-deep-green">
 					<CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
 					<span>User created successfully.</span>
 				</div>
@@ -243,56 +251,60 @@ export default function AdminDashboard() {
 					label="Courses"
 					value={String(metrics.totalCourses)}
 					icon={BookMarked}
-					tone="bg-info/10 text-info"
+					tone="bg-deep-green/10 text-deep-green"
 					meta="Total courses in platform"
 				/>
 				<MetricCard
 					label="Tracked Lessons"
 					value={compactNumber(metrics.totalEnrollments)}
 					icon={GraduationCap}
-					tone="bg-star/10 text-star"
+					tone="bg-coral/10 text-coral"
 					meta="Across all enrollments"
 				/>
 			</section>
 
-			<section className="rounded-lg border border-foreground-elevated bg-foreground p-4">
+			<section className="rounded-lg border border-hairline bg-surface p-4">
 				<div className="mb-3 flex items-center justify-between gap-4">
-					<h2 className="text-sm font-semibold text-foreground-text">
+					<h2 className="text-sm font-semibold text-ink">
 						Course Ratings
 					</h2>
-					<Star className="h-4 w-4 text-yellow-400" />
+					<Star className="h-4 w-4 text-star" />
 				</div>
 				<div className="overflow-x-auto">
 					<table className="w-full text-left text-xs">
-						<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
+						<thead className="bg-soft-stone/50 text-[10px] uppercase tracking-widest text-muted">
 							<tr>
 								<th className="px-3 py-2">Course</th>
 								<th className="px-3 py-2">Rating</th>
 								<th className="px-3 py-2">Reviews</th>
 							</tr>
 						</thead>
-						<tbody className="divide-y divide-foreground-elevated">
+						<tbody className="divide-y divide-hairline">
 							{courseRatings.length > 0 ? (
 								courseRatings.map((c) => (
 									<tr key={c.id}>
-										<td className="max-w-48 px-3 py-2 font-medium text-foreground-text truncate">
+										<td className="max-w-48 px-3 py-2 font-medium text-ink truncate">
 											{c.title}
 										</td>
 										<td className="px-3 py-2">
 											{c.averageRating ? (
 												<div className="flex items-center gap-2">
-													{renderStars(c.averageRating)}
-													<span className="text-foreground-text">
-														{c.averageRating.toFixed(1)}
+													{renderStars(
+														c.averageRating,
+													)}
+													<span className="text-ink">
+														{c.averageRating.toFixed(
+															1,
+														)}
 													</span>
 												</div>
 											) : (
-												<span className="text-foreground-text-muted">
+												<span className="text-muted">
 													No ratings
 												</span>
 											)}
 										</td>
-										<td className="px-3 py-2 text-foreground-text">
+										<td className="px-3 py-2 text-ink">
 											{c.reviewCount}
 										</td>
 									</tr>
@@ -301,7 +313,7 @@ export default function AdminDashboard() {
 								<tr>
 									<td
 										colSpan={3}
-										className="px-3 py-4 text-center text-foreground-text-muted"
+										className="px-3 py-4 text-center text-muted"
 									>
 										No courses found.
 									</td>
@@ -313,12 +325,12 @@ export default function AdminDashboard() {
 			</section>
 
 			<section className="grid grid-cols-1 gap-4 xl:grid-cols-[1.1fr_0.9fr]">
-				<div className="rounded-lg border border-foreground-elevated bg-foreground p-4">
+				<div className="rounded-lg border border-hairline bg-surface p-4">
 					<div className="mb-3 flex items-center justify-between gap-4">
-						<h2 className="text-sm font-semibold text-foreground-text">
+						<h2 className="text-sm font-semibold text-ink">
 							Course Completion
 						</h2>
-						<Users className="h-4 w-4 text-primary" />
+						<Users className="h-4 w-4 text-deep-green" />
 					</div>
 					<div className="mb-3">
 						<select
@@ -332,7 +344,7 @@ export default function AdminDashboard() {
 								}
 								setSearchParams(params)
 							}}
-							className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+							className="w-full rounded-lg border border-hairline bg-soft-stone py-1.5 px-3 text-xs text-ink outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 						>
 							<option value="">Select a user...</option>
 							{allUsers.map((u) => (
@@ -344,9 +356,9 @@ export default function AdminDashboard() {
 					</div>
 					{selectedUserId ? (
 						<>
-							<p className="mb-3 text-xs text-foreground-text">
+							<p className="mb-3 text-xs text-ink">
 								Completion for{' '}
-								<span className="font-medium text-background-text">
+								<span className="font-medium text-ink">
 									{selectedUserName}
 								</span>
 							</p>
@@ -355,16 +367,16 @@ export default function AdminDashboard() {
 									{userCompletions.map((course) => (
 										<div key={course.courseId}>
 											<div className="mb-1 flex items-center justify-between gap-4 text-xs">
-												<p className="min-w-0 truncate font-medium text-background-text">
+												<p className="min-w-0 truncate font-medium text-ink">
 													{course.title}
 												</p>
-												<span className="shrink-0 font-bold text-foreground-text">
+												<span className="shrink-0 font-bold text-ink">
 													{formatPercent(
 														course.completionRate,
 													)}
 												</span>
 											</div>
-											<div className="h-1.5 overflow-hidden rounded-full bg-foreground-elevated">
+											<div className="h-1.5 overflow-hidden rounded-full bg-soft-stone">
 												<div
 													className="h-full rounded-full bg-primary"
 													style={{
@@ -372,7 +384,7 @@ export default function AdminDashboard() {
 													}}
 												/>
 											</div>
-											<p className="mt-0.5 text-[10px] text-foreground-text-muted">
+											<p className="mt-0.5 text-[10px] text-muted">
 												{course.completedLessons}/
 												{course.totalLessons} lessons
 												complete
@@ -381,49 +393,50 @@ export default function AdminDashboard() {
 									))}
 								</div>
 							) : (
-								<p className="text-xs text-foreground-text-muted">
+								<p className="text-xs text-muted">
 									This user is not enrolled in any courses.
 								</p>
 							)}
 						</>
 					) : (
-						<p className="text-xs text-foreground-text-muted">
+						<p className="text-xs text-muted">
 							Select a user to view their per-course completion.
 						</p>
 					)}
 				</div>
 
-				<div className="rounded-lg border border-foreground-elevated bg-foreground p-4">
+				<div className="rounded-lg border border-hairline bg-surface p-4">
 					<div className="mb-3 flex items-center justify-between gap-4">
-						<h2 className="text-sm font-semibold text-foreground-text">
+						<h2 className="text-sm font-semibold text-ink">
 							Recent Users
 						</h2>
 						<Users className="h-4 w-4 text-purple" />
 					</div>
-					<div className="overflow-hidden rounded-lg border border-foreground-elevated">
+					<div className="overflow-hidden rounded-lg border border-hairline">
 						<table className="w-full text-left text-xs">
-							<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
+							<thead className="bg-soft-stone/50 text-[10px] uppercase tracking-widest text-muted">
 								<tr>
 									<th className="px-3 py-2">Name</th>
 									<th className="px-3 py-2">Email</th>
 									<th className="px-3 py-2">Role</th>
 								</tr>
 							</thead>
-							<tbody className="divide-y divide-foreground-elevated">
+							<tbody className="divide-y divide-hairline">
 								{recentUsers.map((u) => (
 									<tr key={u.id}>
-										<td className="px-3 py-2 font-medium text-foreground-text">
+										<td className="px-3 py-2 font-medium text-ink">
 											{u.name}
 										</td>
-										<td className="px-3 py-2 text-foreground-text">
+										<td className="px-3 py-2 text-ink">
 											{u.email}
 										</td>
 										<td className="px-3 py-2">
 											<span
-												className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${u.role === 'staff'
-													? 'bg-primary/10 text-primary'
-													: 'bg-foreground-active text-foreground-text-secondary'
-													}`}
+												className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+													u.role === 'staff'
+														? 'bg-deep-green/10 text-deep-green'
+														: 'bg-hairline text-body-muted'
+												}`}
 											>
 												{u.role}
 											</span>
@@ -436,7 +449,7 @@ export default function AdminDashboard() {
 					{recentUsers.length > 0 ? (
 						<Link
 							to="/admin/users"
-							className="mt-3 inline-flex text-xs font-medium text-primary hover:text-primary"
+							className="mt-3 inline-flex text-xs font-medium text-deep-green hover:text-deep-green"
 						>
 							View all users &rarr;
 						</Link>

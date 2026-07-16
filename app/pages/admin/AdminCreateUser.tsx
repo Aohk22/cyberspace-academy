@@ -17,6 +17,8 @@ import { z } from 'zod'
 import { register } from '~/.server/auth/register'
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
+import { USER_ROLES } from '~/.server/database/types'
 import type { Route } from './+types/AdminCreateUser'
 
 export const handle = {
@@ -31,7 +33,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 	return null
@@ -41,7 +43,7 @@ const createUserSchema = z.object({
 	name: z.string().trim().min(1, 'Name is required'),
 	email: z.string().trim().email('Invalid email address'),
 	password: z.string().min(8, 'Password must be at least 8 characters'),
-	role: z.enum(['learner', 'staff']),
+	role: z.enum(USER_ROLES),
 })
 
 export async function action({ request, context }: Route.ActionArgs) {
@@ -49,7 +51,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -97,23 +99,26 @@ export default function AdminCreateUser() {
 			) : null}
 
 			<Form method="POST" className="space-y-4">
-				<div className="rounded-lg border border-foreground-elevated bg-foreground p-4 space-y-3">
+				<div className="rounded-lg border border-hairline bg-surface p-4 space-y-3">
 					<div className="space-y-1">
 						<label
 							htmlFor="name"
-							className="text-xs font-semibold text-foreground-text-secondary"
+							className="text-xs font-semibold text-body-muted"
 						>
 							Full Name
 						</label>
 						<div className="relative">
-							<User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-text-muted" />
+							<User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted" />
 							<input
 								id="name"
 								name="name"
 								type="text"
 								required
 								placeholder="Alex Johnson"
-								className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 pl-9 pr-3 text-xs text-foreground-text-hl placeholder-foreground-text-muted outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
+								className="
+								w-full rounded-lg border border-hairline 
+								bg-soft-stone py-1.5 pl-9 pr-3 text-xs 
+								text-ink placeholder-muted outline-none transition-colors focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 							/>
 						</div>
 					</div>
@@ -121,19 +126,22 @@ export default function AdminCreateUser() {
 					<div className="space-y-1">
 						<label
 							htmlFor="email"
-							className="text-xs font-semibold text-foreground-text-secondary"
+							className="text-xs font-semibold text-body-muted"
 						>
 							Email Address
 						</label>
 						<div className="relative">
-							<Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-text-muted" />
+							<Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted" />
 							<input
 								id="email"
 								name="email"
 								type="email"
 								required
 								placeholder="name@example.com"
-								className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 pl-9 pr-3 text-xs text-foreground-text-hl placeholder-foreground-text-muted outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
+								className="
+								w-full rounded-lg border border-hairline 
+								bg-soft-stone py-1.5 pl-9 pr-3 text-xs 
+								text-ink placeholder-muted outline-none transition-colors focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 							/>
 						</div>
 					</div>
@@ -141,12 +149,12 @@ export default function AdminCreateUser() {
 					<div className="space-y-1">
 						<label
 							htmlFor="password"
-							className="text-xs font-semibold text-foreground-text-secondary"
+							className="text-xs font-semibold text-body-muted"
 						>
 							Password
 						</label>
 						<div className="relative">
-							<Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-text-muted" />
+							<Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted" />
 							<input
 								id="password"
 								name="password"
@@ -154,10 +162,13 @@ export default function AdminCreateUser() {
 								required
 								minLength={8}
 								placeholder="••••••••"
-								className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 pl-9 pr-3 text-xs text-foreground-text-hl placeholder-foreground-text-muted outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
+								className="
+								w-full rounded-lg border border-hairline 
+								bg-soft-stone py-1.5 pl-9 pr-3 text-xs 
+								text-ink placeholder-muted outline-none transition-colors focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 							/>
 						</div>
-						<p className="text-[10px] text-foreground-text-muted">
+						<p className="text-[10px] text-muted">
 							Must be at least 8 characters.
 						</p>
 					</div>
@@ -165,18 +176,21 @@ export default function AdminCreateUser() {
 					<div className="space-y-1">
 						<label
 							htmlFor="role"
-							className="text-xs font-semibold text-foreground-text-secondary"
+							className="text-xs font-semibold text-body-muted"
 						>
 							Role
 						</label>
 						<div className="relative">
-							<ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-text-muted pointer-events-none" />
+							<ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted pointer-events-none" />
 							<select
 								id="role"
 								name="role"
 								required
 								defaultValue="learner"
-								className="w-full appearance-none rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 pl-9 pr-8 text-xs text-foreground-text-hl outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
+								className="
+								w-full rounded-lg border border-hairline 
+								bg-soft-stone py-1.5 pl-9 pr-3 text-xs 
+								text-ink placeholder-muted outline-none transition-colors focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 							>
 								<option value="learner">Learner</option>
 								<option value="staff">Staff</option>
@@ -189,7 +203,7 @@ export default function AdminCreateUser() {
 					<button
 						type="submit"
 						disabled={isSubmitting}
-						className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-xs font-bold text-foreground-text-hl transition-colors hover:bg-primary disabled:cursor-not-allowed disabled:opacity-60"
+						className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-deep-green px-4 py-2 text-xs font-bold text-on-dark transition-colors hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
 					>
 						{isSubmitting ? (
 							<Loader2 className="h-3.5 w-3.5 animate-spin" />

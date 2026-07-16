@@ -23,6 +23,7 @@ import { z } from 'zod'
 import { db } from '~/.server/database/connection'
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
 import type { Route } from './+types/AdminPaths'
 
 export const handle = {
@@ -46,7 +47,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -73,7 +74,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -154,7 +155,7 @@ export default function AdminPaths() {
 				</div>
 			) : null}
 			{actionData?.success ? (
-				<div className="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs text-primary">
+				<div className="flex items-center gap-2 rounded-lg border border-deep-green/30 bg-deep-green/10 px-3 py-2 text-xs text-deep-green">
 					<CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
 					<span>Learning path saved.</span>
 				</div>
@@ -162,13 +163,13 @@ export default function AdminPaths() {
 
 			<Form
 				method="POST"
-				className="rounded-lg border border-foreground-elevated bg-foreground p-4 space-y-3"
+				className="rounded-lg border border-hairline bg-surface p-4 space-y-3"
 			>
 				<input type="hidden" name="intent" value="create" />
 				<div className="space-y-1">
 					<label
 						htmlFor="title"
-						className="text-xs font-semibold text-foreground-text-secondary"
+						className="text-xs font-semibold text-body-muted"
 					>
 						Title
 					</label>
@@ -178,13 +179,13 @@ export default function AdminPaths() {
 						type="text"
 						required
 						placeholder="e.g. Security Foundations"
-						className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+						className="w-full rounded-lg border border-hairline bg-soft-stone py-1.5 px-3 text-xs text-ink placeholder-muted outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 					/>
 				</div>
 				<div className="space-y-1">
 					<label
 						htmlFor="description"
-						className="text-xs font-semibold text-foreground-text-secondary"
+						className="text-xs font-semibold text-body-muted"
 					>
 						Description
 					</label>
@@ -193,13 +194,13 @@ export default function AdminPaths() {
 						name="description"
 						type="text"
 						placeholder="Optional description"
-						className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+						className="w-full rounded-lg border border-hairline bg-soft-stone py-1.5 px-3 text-xs text-ink placeholder-muted outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 					/>
 				</div>
 				<div className="space-y-1">
 					<label
 						htmlFor="thumbnail"
-						className="text-xs font-semibold text-foreground-text-secondary"
+						className="text-xs font-semibold text-body-muted"
 					>
 						Thumbnail URL
 					</label>
@@ -208,13 +209,13 @@ export default function AdminPaths() {
 						name="thumbnail"
 						type="text"
 						placeholder="Optional image URL"
-						className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+						className="w-full rounded-lg border border-hairline bg-soft-stone py-1.5 px-3 text-xs text-ink placeholder-muted outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 					/>
 				</div>
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-foreground-text  hover:bg-primary disabled:opacity-60"
+					className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-deep-green px-3 py-1.5 text-xs font-bold text-on-dark hover:brightness-110 disabled:opacity-60"
 				>
 					{isSubmitting ? (
 						<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -225,9 +226,9 @@ export default function AdminPaths() {
 				</button>
 			</Form>
 
-			<div className="overflow-hidden rounded-lg border border-foreground-elevated">
+			<div className="overflow-hidden rounded-lg border border-hairline">
 				<table className="w-full text-left text-xs">
-					<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
+					<thead className="bg-soft-stone/50 text-[10px] uppercase tracking-widest text-muted">
 						<tr>
 							<th className="px-3 py-2">Title</th>
 							<th className="px-3 py-2">Courses</th>
@@ -235,7 +236,7 @@ export default function AdminPaths() {
 							<th className="px-3 py-2 text-right">Actions</th>
 						</tr>
 					</thead>
-					<tbody className="divide-y divide-foreground-elevated">
+					<tbody className="divide-y divide-hairline">
 						{paths.map((path) =>
 							editingId === path.id ? (
 								<tr key={path.id}>
@@ -255,18 +256,18 @@ export default function AdminPaths() {
 												value={path.id}
 											/>
 											<div className="space-y-1">
-												<label className="text-[10px] font-semibold text-foreground-text">
+												<label className="text-[10px] font-semibold text-ink">
 													Title
 												</label>
 												<input
 													name="title"
 													defaultValue={path.title}
 													required
-													className="w-44 rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-2 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+													className="w-44 rounded-lg border border-hairline bg-soft-stone py-1.5 px-2 text-xs text-ink placeholder-muted outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 												/>
 											</div>
 											<div className="space-y-1">
-												<label className="text-[10px] font-semibold text-foreground-text">
+												<label className="text-[10px] font-semibold text-ink">
 													Description
 												</label>
 												<input
@@ -274,11 +275,11 @@ export default function AdminPaths() {
 													defaultValue={
 														path.description ?? ''
 													}
-													className="w-44 rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-2 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+													className="w-44 rounded-lg border border-hairline bg-soft-stone py-1.5 px-2 text-xs text-ink placeholder-muted outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 												/>
 											</div>
 											<div className="space-y-1">
-												<label className="text-[10px] font-semibold text-foreground-text">
+												<label className="text-[10px] font-semibold text-ink">
 													Thumbnail URL
 												</label>
 												<input
@@ -286,14 +287,14 @@ export default function AdminPaths() {
 													defaultValue={
 														path.thumbnail ?? ''
 													}
-													className="w-44 rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-2 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+													className="w-44 rounded-lg border border-hairline bg-soft-stone py-1.5 px-2 text-xs text-ink placeholder-muted outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 												/>
 											</div>
 											<div className="flex items-center gap-1 pb-1">
 												<button
 													type="submit"
 													disabled={editSubmitting}
-													className="rounded-lg p-1.5 text-primary  hover:bg-primary/10 disabled:opacity-50"
+													className="rounded-lg p-1.5 text-deep-green  hover:bg-deep-green/10 disabled:opacity-50"
 													title="Save"
 												>
 													{editSubmitting ? (
@@ -307,7 +308,7 @@ export default function AdminPaths() {
 													onClick={() =>
 														setEditingId(null)
 													}
-													className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-foreground-active/20 hover:text-foreground-text-secondary"
+													className="rounded-lg p-1.5 text-muted  hover:bg-hairline/20 hover:text-body-muted"
 													title="Cancel"
 												>
 													<X className="h-3.5 w-3.5" />
@@ -326,20 +327,20 @@ export default function AdminPaths() {
 									<td className="px-3 py-2">
 										<Link
 											to={`/admin/paths/${path.id}`}
-											className="font-medium text-foreground-text hover:text-primary "
+											className="font-medium text-ink hover:text-deep-green "
 										>
 											{path.title}
 										</Link>
 										{path.description ? (
-											<p className="text-[10px] text-foreground-text-muted mt-0.5 leading-tight">
+											<p className="text-[10px] text-muted mt-0.5 leading-tight">
 												{path.description}
 											</p>
 										) : null}
 									</td>
-									<td className="px-3 py-2 text-foreground-text-muted">
+									<td className="px-3 py-2 text-muted">
 										{path.coursesCount}
 									</td>
-									<td className="px-3 py-2 text-foreground-text-muted">
+									<td className="px-3 py-2 text-muted">
 										{formatDuration(path.totalDuration)}
 									</td>
 									<td className="px-3 py-2">
@@ -349,7 +350,7 @@ export default function AdminPaths() {
 												onClick={() =>
 													setEditingId(path.id)
 												}
-												className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-foreground-active/20 hover:text-foreground-text-secondary"
+												className="rounded-lg p-1.5 text-muted  hover:bg-hairline/20 hover:text-body-muted"
 												title="Edit"
 											>
 												<Pencil className="h-3.5 w-3.5" />
@@ -378,7 +379,7 @@ export default function AdminPaths() {
 												/>
 												<button
 													type="submit"
-													className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-error/10 hover:text-error"
+													className="rounded-lg p-1.5 text-muted  hover:bg-error/10 hover:text-error"
 												>
 													<Trash2 className="h-3.5 w-3.5" />
 												</button>
@@ -392,7 +393,7 @@ export default function AdminPaths() {
 							<tr>
 								<td
 									colSpan={4}
-									className="px-3 py-6 text-center text-foreground-text-muted"
+									className="px-3 py-6 text-center text-muted"
 								>
 									No learning paths yet.
 								</td>

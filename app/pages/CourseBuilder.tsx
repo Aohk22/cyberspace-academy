@@ -18,6 +18,7 @@ import type {
 } from '~/components/course-builder/types'
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
 import type { Route } from './+types/CourseBuilder'
 import { db } from '~/.server/database/connection'
 import {
@@ -151,7 +152,7 @@ async function requireStaffUser(context: Route.LoaderArgs['context']) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
 
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -201,10 +202,10 @@ async function getCourseCurriculum(
 	const questions =
 		lessonIds.length > 0
 			? await db
-				.select()
-				.from(challengeQuestions)
-				.where(inArray(challengeQuestions.lessonId, lessonIds))
-				.orderBy(asc(challengeQuestions.orderIndex))
+					.select()
+					.from(challengeQuestions)
+					.where(inArray(challengeQuestions.lessonId, lessonIds))
+					.orderBy(asc(challengeQuestions.orderIndex))
 			: []
 
 	const questionIds = questions.map((q) => q.id)
@@ -212,10 +213,10 @@ async function getCourseCurriculum(
 	const options =
 		questionIds.length > 0
 			? await db
-				.select()
-				.from(challengeOptions)
-				.where(inArray(challengeOptions.questionId, questionIds))
-				.orderBy(asc(challengeOptions.orderIndex))
+					.select()
+					.from(challengeOptions)
+					.where(inArray(challengeOptions.questionId, questionIds))
+					.orderBy(asc(challengeOptions.orderIndex))
 			: []
 
 	const optionsByQuestion = new Map<
@@ -316,8 +317,8 @@ async function loadBuilderData(
 		Number.isNaN(selectedCourseId) || selectedCourseId <= 0
 			? null
 			: (builderCourses.find(
-				(course) => course.id === selectedCourseId,
-			) ?? null)
+					(course) => course.id === selectedCourseId,
+				) ?? null)
 
 	const curriculum = selectedCourse
 		? await getCourseCurriculum(selectedCourse.id)
@@ -506,17 +507,17 @@ export async function action({ request, context }: Route.ActionArgs) {
 			await db.delete(challengeSubmissions).where(
 				sql`question_id IN (
 					SELECT id FROM challenge_questions WHERE lesson_id IN (${sql.join(
-					lessonIds.map((id) => sql`${id}`),
-					sql`, `,
-				)})
+						lessonIds.map((id) => sql`${id}`),
+						sql`, `,
+					)})
 				)`,
 			)
 			await db.delete(challengeOptions).where(
 				sql`question_id IN (
 					SELECT id FROM challenge_questions WHERE lesson_id IN (${sql.join(
-					lessonIds.map((id) => sql`${id}`),
-					sql`, `,
-				)})
+						lessonIds.map((id) => sql`${id}`),
+						sql`, `,
+					)})
 				)`,
 			)
 			await db.delete(challengeQuestions).where(
@@ -763,7 +764,7 @@ export default function CourseBuilder() {
 	return (
 		<div className="space-y-8">
 			{savedMessage ? (
-				<div className="flex items-center gap-3 rounded-2xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary">
+				<div className="flex items-center gap-3 rounded-2xl border border-deep-green/30 bg-deep-green/10 px-4 py-3 text-sm text-deep-green">
 					<CheckCircle2 className="h-4 w-4" />
 					<span>{savedMessage}</span>
 				</div>
@@ -806,8 +807,8 @@ export default function CourseBuilder() {
 function CourseBuilderSkeleton() {
 	return (
 		<div className="space-y-8 animate-pulse">
-			<div className="h-96 bg-foreground-elevated rounded-xl" />
-			<div className="h-64 bg-foreground-elevated rounded-xl" />
+			<div className="h-96 bg-soft-stone rounded-xl" />
+			<div className="h-64 bg-soft-stone rounded-xl" />
 		</div>
 	)
 }

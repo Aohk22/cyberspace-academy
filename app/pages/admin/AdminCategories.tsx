@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { db } from '~/.server/database/connection'
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
 import type { Route } from './+types/AdminCategories'
 
 export const handle = {
@@ -33,7 +34,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -53,7 +54,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -124,7 +125,7 @@ export default function AdminCategories() {
 				</div>
 			) : null}
 			{actionData?.success ? (
-				<div className="flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs text-primary">
+				<div className="flex items-center gap-2 rounded-lg border border-deep-green/30 bg-deep-green/10 px-3 py-2 text-xs text-deep-green">
 					<CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
 					<span>Category saved.</span>
 				</div>
@@ -137,12 +138,12 @@ export default function AdminCategories() {
 					name="name"
 					required
 					placeholder="New category name"
-					className="flex-1 rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text placeholder-foreground-text-muted outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
+					className="flex-1 rounded-lg border border-hairline bg-soft-stone py-1.5 px-3 text-xs text-ink placeholder-muted outline-none transition-colors focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 				/>
 				<button
 					type="submit"
 					disabled={isSubmitting}
-					className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-foreground-text transition-colors hover:bg-primary disabled:opacity-60"
+					className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-deep-green px-3 py-1.5 text-xs font-bold text-on-dark transition-colors hover:brightness-110 disabled:opacity-60"
 				>
 					{isSubmitting ? (
 						<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -153,22 +154,22 @@ export default function AdminCategories() {
 				</button>
 			</Form>
 
-			<div className="overflow-hidden rounded-lg border border-foreground-elevated">
+			<div className="overflow-hidden rounded-lg border border-hairline">
 				<table className="w-full text-left text-xs">
-					<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
+					<thead className="bg-soft-stone/50 text-[10px] uppercase tracking-widest text-muted">
 						<tr>
 							<th className="px-3 py-2">Name</th>
 							<th className="px-3 py-2">Courses</th>
 							<th className="px-3 py-2 text-right">Actions</th>
 						</tr>
 					</thead>
-					<tbody className="divide-y divide-foreground-elevated">
+					<tbody className="divide-y divide-hairline">
 						{categories.map((cat) => (
 							<tr key={cat.id}>
-								<td className="px-3 py-2 font-medium text-foreground-text">
+								<td className="px-3 py-2 font-medium text-ink">
 									{cat.name}
 								</td>
-								<td className="px-3 py-2 text-foreground-text-muted">
+								<td className="px-3 py-2 text-muted">
 									{cat.courseCount}
 								</td>
 								<td className="px-3 py-2">
@@ -201,7 +202,7 @@ export default function AdminCategories() {
 														}
 													}
 												}}
-												className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-error/10 hover:text-error disabled:opacity-50"
+												className="rounded-lg p-1.5 text-muted transition-colors hover:bg-error/10 hover:text-error disabled:opacity-50"
 											>
 												<Trash2 className="h-3.5 w-3.5" />
 											</button>
@@ -214,7 +215,7 @@ export default function AdminCategories() {
 							<tr>
 								<td
 									colSpan={3}
-									className="px-3 py-6 text-center text-foreground-text-muted"
+									className="px-3 py-6 text-center text-muted"
 								>
 									No categories yet.
 								</td>

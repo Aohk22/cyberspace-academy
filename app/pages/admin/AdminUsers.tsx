@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { db } from '~/.server/database/connection'
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
 import type { Route } from './+types/AdminUsers'
 
 export const handle = {
@@ -34,7 +35,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -70,7 +71,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -94,12 +95,12 @@ export default function AdminUsers() {
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center justify-between gap-4">
-				<p className="text-xs text-foreground-text-muted">
+				<p className="text-xs text-muted">
 					{total} total user{total !== 1 ? 's' : ''}
 				</p>
 				<Link
 					to="/users/new"
-					className="inline-flex items-center justify-center gap-1.5 shrink-0 rounded-lg border border-foreground-active bg-foreground-elevated px-3 py-2 text-xs font-semibold text-background-text  hover:bg-foreground-active"
+					className="inline-flex items-center justify-center gap-1.5 shrink-0 rounded-lg border border-hairline bg-soft-stone px-3 py-2 text-xs font-semibold text-ink  hover:bg-hairline"
 				>
 					<Plus className="h-3.5 w-3.5" />
 					New User
@@ -108,19 +109,19 @@ export default function AdminUsers() {
 
 			<Form method="GET" className="flex items-center gap-2">
 				<div className="relative flex-1">
-					<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-text-muted" />
+					<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted" />
 					<input
 						type="text"
 						name="search"
 						defaultValue={search}
 						placeholder="Search by name or email..."
-						className="w-full rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 pl-9 pr-3 text-xs text-foreground-text placeholder-foreground-text-muted outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+						className="w-full rounded-lg border border-hairline bg-soft-stone py-1.5 pl-9 pr-3 text-xs text-ink placeholder-muted outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 					/>
 				</div>
 				<select
 					name="role"
 					defaultValue={roleFilter}
-					className="rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text outline-none  focus:border-primary focus:ring-2 focus:ring-primary/20"
+					className="rounded-lg border border-hairline bg-soft-stone py-1.5 px-3 text-xs text-ink outline-none  focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 				>
 					<option value="">All roles</option>
 					<option value="learner">Learner</option>
@@ -128,14 +129,14 @@ export default function AdminUsers() {
 				</select>
 				<button
 					type="submit"
-					className="rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-foreground-text  hover:bg-primary"
+					className="rounded-lg bg-deep-green px-3 py-1.5 text-xs font-bold text-on-dark hover:brightness-110"
 				>
 					Search
 				</button>
 				{search || roleFilter ? (
 					<Link
 						to="/users"
-						className="flex items-center gap-1 rounded-lg border border-foreground-active px-3 py-1.5 text-xs text-foreground-text hover:text-foreground-text-secondary"
+						className="flex items-center gap-1 rounded-lg border border-hairline px-3 py-1.5 text-xs text-ink hover:text-body-muted"
 					>
 						<X className="h-3 w-3" />
 						Clear
@@ -143,9 +144,9 @@ export default function AdminUsers() {
 				) : null}
 			</Form>
 
-			<div className="overflow-hidden rounded-lg border border-foreground-elevated">
+			<div className="overflow-hidden rounded-lg border border-hairline">
 				<table className="w-full text-left text-xs">
-					<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
+					<thead className="bg-soft-stone/50 text-[10px] uppercase tracking-widest text-muted">
 						<tr>
 							<th className="px-3 py-2">Name</th>
 							<th className="px-3 py-2">Email</th>
@@ -153,21 +154,22 @@ export default function AdminUsers() {
 							<th className="px-3 py-2 text-right">Actions</th>
 						</tr>
 					</thead>
-					<tbody className="divide-y divide-foreground-elevated">
+					<tbody className="divide-y divide-hairline">
 						{users.map((u) => (
 							<tr key={u.id}>
-								<td className="px-3 py-2 font-medium text-foreground-text">
+								<td className="px-3 py-2 font-medium text-ink">
 									{u.name}
 								</td>
-								<td className="px-3 py-2 text-foreground-text">
+								<td className="px-3 py-2 text-ink">
 									{u.email}
 								</td>
 								<td className="px-3 py-2">
 									<span
-										className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${u.role === 'staff'
-											? 'bg-primary/10 text-primary'
-											: 'bg-foreground-active text-foreground-text-secondary'
-											}`}
+										className={`inline-block rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+											u.role === 'staff'
+												? 'bg-deep-green/10 text-deep-green'
+												: 'bg-hairline text-body-muted'
+										}`}
 									>
 										{u.role}
 									</span>
@@ -176,7 +178,7 @@ export default function AdminUsers() {
 									<div className="flex items-center justify-end gap-1">
 										<Link
 											to={`/users/${u.id}/edit`}
-											className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-foreground-elevated hover:text-foreground-text-secondary"
+											className="rounded-lg p-1.5 text-muted  hover:bg-soft-stone hover:text-body-muted"
 										>
 											<UserPen className="h-3.5 w-3.5" />
 										</Link>
@@ -206,7 +208,7 @@ export default function AdminUsers() {
 											<button
 												type="submit"
 												disabled={isDeleting}
-												className="rounded-lg p-1.5 text-foreground-text-muted  hover:bg-error/10 hover:text-error disabled:opacity-50"
+												className="rounded-lg p-1.5 text-muted  hover:bg-error/10 hover:text-error disabled:opacity-50"
 											>
 												{isDeleting ? (
 													<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -223,7 +225,7 @@ export default function AdminUsers() {
 							<tr>
 								<td
 									colSpan={4}
-									className="px-3 py-6 text-center text-foreground-text-muted"
+									className="px-3 py-6 text-center text-muted"
 								>
 									No users found.
 								</td>

@@ -1,9 +1,4 @@
-import {
-	Outlet,
-	Link,
-	useLocation,
-	useLoaderData,
-} from 'react-router'
+import { Outlet, Link, useLocation, useLoaderData } from 'react-router'
 import {
 	LayoutDashboard,
 	GraduationCap,
@@ -19,16 +14,21 @@ import {
 	Moon,
 	Sun,
 } from 'lucide-react'
-import { useState, lazy, Suspense } from 'react'
+import { useState, lazy, Suspense, useEffect } from 'react'
 import { userContext } from '~/context'
 import { useTheme } from '~/theme-context'
 import type { Route } from './+types/MainLayout'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
 
 const PricingModal = lazy(() => import('~/components/PricingModal'))
 const AiTutor = lazy(() => import('~/components/AiTutor'))
 
-type NavItem = { label: string; href: string; icon: React.ComponentType<{ className?: string }> }
+type NavItem = {
+	label: string
+	href: string
+	icon: React.ComponentType<{ className?: string }>
+}
 
 const userNavItems: NavItem[] = [
 	{ label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -58,12 +58,21 @@ export async function loader({ context }: Route.LoaderArgs) {
 export default function MainLayout() {
 	const { user } = useLoaderData()
 	const location = useLocation()
-	const [role, setRole] = useState(user.role)
 	const [activeLink, setActiveLink] = useState(location.pathname)
 	const [isPricingOpen, setIsPricingOpen] = useState(false)
 	const [aiOpen, setAiOpen] = useState(false)
 	const { theme, toggleTheme } = useTheme()
 	const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+
+	const canUseAI = user.role !== 'learner'
+
+	useEffect(() => {
+		function onOpenPricing() {
+			setIsPricingOpen(true)
+		}
+		window.addEventListener('open-pricing', onOpenPricing)
+		return () => window.removeEventListener('open-pricing', onOpenPricing)
+	}, [])
 
 	function NavItem({ nav }: { nav: NavItem }) {
 		return (
@@ -71,23 +80,22 @@ export default function MainLayout() {
 				key={nav.href}
 				to={nav.href}
 				onClick={() => setActiveLink(nav.href)}
-				className={
-					`
+				className={`
 					flex items-center
 					${sidebarCollapsed ? 'justify-center px-0 py-2' : 'pl-4 pr-4 pt-2 pb-2 gap-2'}
 					text-sm
-					hover:text-foreground-text-hl
-					hover:bg-foreground-text-hl-bg
+					hover:text-deep-green
+					hover:bg-soft-stone
 
-					${(activeLink === nav.href) ?
-						`
-						border-primary border-r-5
-						text-primary
-					` :
-						''
-					}
+					${
+						activeLink === nav.href
+							? `
+						border-r-2 border-deep-green
+						text-deep-green
 					`
-				}
+							: ''
+					}
+					`}
 				title={sidebarCollapsed ? nav.label : undefined}
 			>
 				<nav.icon className="" />
@@ -96,28 +104,31 @@ export default function MainLayout() {
 		)
 	}
 
-	// TODO: remove colors
 	function SubscriptionCard() {
 		return (
-			<div className="m-2">
-				<div className="
-				p-4 rounded-xl 
-				max-w-50
-				">
+			<div className="mx-2 my-1">
+				<div
+					className="
+				group relative overflow-hidden
+				p-4 rounded-xl
+				bg-deep-green
+				hover:shadow-lg hover:shadow-deep-green/20
+				transition-all duration-200
+				"
+				>
 					<div className="relative z-10">
-						<div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center mb-3">
-							<Zap className="w-4 h-4" />
+						<div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mb-3">
+							<Zap className="w-5 h-5 text-on-dark" />
 						</div>
-						<p className="font-bold text-sm mb-1">
+						<p className="font-bold text-on-dark text-sm mb-1">
 							Go Pro
 						</p>
-						<p className="text-[10px] text-white mb-3">
-							Unlock all premium courses and
-							certificates.
+						<p className="text-[10px] text-body-muted mb-3">
+							Unlock all premium courses and certificates.
 						</p>
 						<button
 							onClick={() => setIsPricingOpen(true)}
-							className="w-full py-2 bg-white  rounded-xl text-[10px] font-bold transition-colors"
+							className="w-full py-2 bg-surface text-deep-green rounded-xl text-xs font-bold transition-all hover:brightness-110 active:scale-[0.97]"
 						>
 							Upgrade Now
 						</button>
@@ -129,28 +140,42 @@ export default function MainLayout() {
 	}
 
 	return (
-		<div data-theme={theme} className="
+		<div
+			data-theme={theme}
+			className="
 			flex min-h-screen
 			w-full
 			h-screen
 			max-w-full
 			overflow-hidden
-		">
-			<aside className={`
+		"
+		>
+			<aside
+				className={`
 				relative flex-col border-r
 				h-full
-				bg-foreground
-				text-foreground-text
+				bg-surface
+				text-ink
 				transition-all duration-150
 				${sidebarCollapsed ? 'min-w-16 max-w-16' : 'min-w-52 max-w-52'}
-			`}>
-				<div className="p-4">
+			`}
+			>
+				<div className="p-4 bg-deep-green">
 					<div className="flex items-center justify-center">
-						<Link to="/" className="flex items-center justify-center">
+						<Link
+							to="/"
+							className="flex items-center justify-center"
+						>
 							{sidebarCollapsed ? (
-								<h1 className='font-bold text-xs'>CS</h1>
+								<h1 className="font-bold text-xs text-on-dark">
+									CS
+								</h1>
 							) : (
-								<h1 className='font-bold'>CyberSpace<br />Academy</h1>
+								<h1 className="font-bold text-on-dark">
+									CyberSpace
+									<br />
+									Academy
+								</h1>
 							)}
 						</Link>
 					</div>
@@ -161,7 +186,7 @@ export default function MainLayout() {
 						<NavItem nav={item} />
 					))}
 
-					{role === 'staff' && (
+					{user && can(user, 'admin') && (
 						<>
 							<hr className="my-3 border-t border-black" />
 
@@ -171,10 +196,7 @@ export default function MainLayout() {
 						</>
 					)}
 
-					{role !== 'staff' && (
-						<SubscriptionCard />
-					)}
-
+					{user.role === 'learner' && <SubscriptionCard />}
 				</nav>
 
 				<button
@@ -184,21 +206,28 @@ export default function MainLayout() {
 						absolute right-0 top-0
 						w-3 cursor-col-resize
 						h-full
-						hover:bg-foreground-text-hl-bg
+						hover:bg-soft-stone
 						flex items-center justify-center
 					"
-					title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+					title={
+						sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'
+					}
 				/>
 			</aside>
 
-			<main className="
+			<main
+				className="
 				flex-1 flex flex-col min-w-0
-			">
-				<header className="
+				bg-canvas
+			"
+			>
+				<header
+					className="
 					h-16 min-h-16
 					border-b sticky px-6 flex items-center justify-end gap-2
-					bg-foreground
-				">
+					bg-surface
+				"
+				>
 					<button
 						type="button"
 						onClick={toggleTheme}
@@ -206,46 +235,48 @@ export default function MainLayout() {
 						aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
 					>
 						{theme === 'dark' ? (
-							<Sun className="w-4 h-4 text-foreground-text" />
+							<Sun className="w-4 h-4 text-ink" />
 						) : (
-							<Moon className="w-4 h-4 text-foreground-text" />
+							<Moon className="w-4 h-4 text-ink" />
 						)}
 					</button>
 				</header>
 
-				<div className="
-					p-6 md:p-10 max-w-7xl w-full mx-auto
-					h-full
-					bg-background
-					text-background-text
+				<div
+					className="
+					p-6 md:p-10 mx-auto
+					h-full w-full
+					bg-canvas
+					text-ink
 					overflow-scroll
-				">
+				"
+				>
 					<Outlet />
 				</div>
 			</main>
 
-			<button onClick={() => setAiOpen(true)} className='
-				flex fixed gap-2
-				left-6 bottom-6
-				p-2
-				bg-primary
-				text-white
-				border
-				border-black
-				rounded-2xl
-				ring-0
-				ring-black
-				z-999
-			'>
-				<MessageCircle />
-				AI Tutor
-			</button>
+			{canUseAI && (
+				<button
+					onClick={() => setAiOpen(true)}
+					className="
+					flex fixed gap-2
+					left-6 bottom-6
+					p-2
+					bg-deep-green
+					text-on-dark
+					border
+					border-deep-green
+					rounded-2xl
+					z-999
+				"
+				>
+					<MessageCircle />
+					AI Tutor
+				</button>
+			)}
 
 			<Suspense fallback={null}>
-				<AiTutor
-					isOpen={aiOpen}
-					onClose={() => setAiOpen(false)}
-				/>
+				<AiTutor isOpen={aiOpen} onClose={() => setAiOpen(false)} />
 			</Suspense>
 
 			<Suspense fallback={null}>
@@ -254,7 +285,6 @@ export default function MainLayout() {
 					onClose={() => setIsPricingOpen(false)}
 				/>
 			</Suspense>
-
 		</div>
 	)
 }

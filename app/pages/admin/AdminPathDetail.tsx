@@ -12,6 +12,7 @@ import { z } from 'zod'
 import { db } from '~/.server/database/connection'
 import { userContext } from '~/context'
 import { NoUserContextError } from '~/error'
+import { can } from '~/auth/permissions'
 import type { Route } from './+types/AdminPathDetail'
 
 export const handle = {
@@ -45,7 +46,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -93,7 +94,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 	if (user === null) {
 		throw new NoUserContextError('User context resolved to null.')
 	}
-	if (user.role !== 'staff') {
+	if (!can(user, 'admin')) {
 		throw redirect('/')
 	}
 
@@ -170,16 +171,12 @@ export default function AdminPathDetail() {
 
 	return (
 		<div className="space-y-4 max-w-2xl">
-			<div className="rounded-lg border border-foreground-elevated bg-foreground p-4">
-				<h2 className="text-sm font-semibold text-foreground-text-hl">
-					{path.title}
-				</h2>
+			<div className="rounded-lg border border-hairline bg-surface p-4">
+				<h2 className="text-sm font-semibold text-ink">{path.title}</h2>
 				{path.description ? (
-					<p className="mt-1 text-xs text-foreground-text">
-						{path.description}
-					</p>
+					<p className="mt-1 text-xs text-ink">{path.description}</p>
 				) : null}
-				<div className="mt-3 flex items-center gap-3 text-xs text-foreground-text-muted">
+				<div className="mt-3 flex items-center gap-3 text-xs text-muted">
 					<span>
 						{courses.length} course{courses.length !== 1 ? 's' : ''}
 					</span>
@@ -193,9 +190,9 @@ export default function AdminPathDetail() {
 			</div>
 
 			{courses.length > 0 ? (
-				<div className="overflow-hidden rounded-lg border border-foreground-elevated">
+				<div className="overflow-hidden rounded-lg border border-hairline">
 					<table className="w-full text-left text-xs">
-						<thead className="bg-foreground-elevated/50 text-[10px] uppercase tracking-widest text-foreground-text-muted">
+						<thead className="bg-soft-stone/50 text-[10px] uppercase tracking-widest text-muted">
 							<tr>
 								<th className="px-3 py-2">#</th>
 								<th className="px-3 py-2">Course</th>
@@ -205,16 +202,16 @@ export default function AdminPathDetail() {
 								</th>
 							</tr>
 						</thead>
-						<tbody className="divide-y divide-foreground-elevated">
+						<tbody className="divide-y divide-hairline">
 							{courses.map((course, index) => (
 								<tr key={course.courseId}>
-									<td className="px-3 py-2 text-foreground-text-muted">
+									<td className="px-3 py-2 text-muted">
 										{course.position}
 									</td>
-									<td className="px-3 py-2 font-medium text-foreground-text-hl">
+									<td className="px-3 py-2 font-medium text-ink">
 										{course.title}
 									</td>
-									<td className="px-3 py-2 text-foreground-text-muted">
+									<td className="px-3 py-2 text-muted">
 										{formatDuration(course.length)}
 									</td>
 									<td className="px-3 py-2">
@@ -246,7 +243,7 @@ export default function AdminPathDetail() {
 														index === 0 ||
 														isSubmitting
 													}
-													className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-foreground-elevated hover:text-foreground-text-secondary disabled:opacity-30"
+													className="rounded-lg p-1.5 text-muted transition-colors hover:bg-soft-stone hover:text-body-muted disabled:opacity-30"
 												>
 													<ArrowUp className="h-3.5 w-3.5" />
 												</button>
@@ -260,7 +257,7 @@ export default function AdminPathDetail() {
 																1 ||
 														isSubmitting
 													}
-													className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-foreground-elevated hover:text-foreground-text-secondary disabled:opacity-30"
+													className="rounded-lg p-1.5 text-muted transition-colors hover:bg-soft-stone hover:text-body-muted disabled:opacity-30"
 												>
 													<ArrowDown className="h-3.5 w-3.5" />
 												</button>
@@ -296,7 +293,7 @@ export default function AdminPathDetail() {
 												<button
 													type="submit"
 													disabled={isSubmitting}
-													className="rounded-lg p-1.5 text-foreground-text-muted transition-colors hover:bg-error/10 hover:text-error disabled:opacity-50"
+													className="rounded-lg p-1.5 text-muted transition-colors hover:bg-error/10 hover:text-error disabled:opacity-50"
 												>
 													<Trash2 className="h-3.5 w-3.5" />
 												</button>
@@ -309,8 +306,8 @@ export default function AdminPathDetail() {
 					</table>
 				</div>
 			) : (
-				<div className="rounded-lg border border-dashed border-foreground-elevated bg-background/40 p-6 text-center">
-					<p className="text-xs text-foreground-text">
+				<div className="rounded-lg border border-dashed border-hairline bg-canvas/40 p-6 text-center">
+					<p className="text-xs text-ink">
 						No courses in this path yet.
 					</p>
 				</div>
@@ -322,7 +319,7 @@ export default function AdminPathDetail() {
 					<select
 						name="courseId"
 						required
-						className="flex-1 rounded-lg border border-foreground-active bg-foreground-elevated py-1.5 px-3 text-xs text-foreground-text-hl outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
+						className="flex-1 rounded-lg border border-hairline bg-soft-stone py-1.5 px-3 text-xs text-ink outline-none transition-colors focus:border-deep-green focus:ring-2 focus:ring-deep-green/20"
 					>
 						<option value="">Select a course...</option>
 						{availableCourses.map((c) => (
@@ -334,7 +331,7 @@ export default function AdminPathDetail() {
 					<button
 						type="submit"
 						disabled={isSubmitting}
-						className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-foreground-text-hl transition-colors hover:bg-primary disabled:opacity-60"
+						className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-deep-green px-3 py-1.5 text-xs font-bold text-on-dark transition-colors hover:brightness-110 disabled:opacity-60"
 					>
 						{isSubmitting ? (
 							<Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -345,7 +342,7 @@ export default function AdminPathDetail() {
 					</button>
 				</Form>
 			) : (
-				<p className="text-xs text-foreground-text-muted text-center">
+				<p className="text-xs text-muted text-center">
 					All courses are already in this path.
 				</p>
 			)}
@@ -353,7 +350,7 @@ export default function AdminPathDetail() {
 			<div className="pt-2">
 				<Link
 					to="/admin/paths"
-					className="text-xs font-medium text-foreground-text-muted hover:text-foreground-text-secondary transition-colors"
+					className="text-xs font-medium text-muted hover:text-body-muted transition-colors"
 				>
 					&larr; Back to paths
 				</Link>
