@@ -11,9 +11,14 @@
 		"db:push": "drizzle-kit push",
 		"db:seed": "tsx ./scripts/seed.ts",
 		"db:wipe": "tsx ./scripts/wipe.ts",
+		"payos:confirm-webhook": "tsx ./scripts/confirm-webhook.ts",
+		"test": "vitest run",
+		"test:watch": "vitest",
 		"fmt": "pnpm exec prettier . --write"
 	},
 	"dependencies": {
+		"@payos/node": "^2.0.5",
+		"@payos/payos-checkout": "^1.0.8",
 		"@react-router/node": "7.12.0",
 		"@react-router/serve": "7.12.0",
 		"bcrypt": "^6.0.0",
@@ -44,6 +49,7 @@
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
-		"vite-tsconfig-paths": "^5.1.4"
+		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^4.1.10"
 	}
 }
