@@ -1,7 +1,10 @@
 import { redirect } from 'react-router'
 import { userContext } from '~/context'
+import { db } from '~/.server/database/connection'
 import { destroySession, getSession } from '~/.server/auth/sessions'
 import { getUserById } from '~/.server/database/utils'
+import { users } from '~/.server/database/schema'
+import { eq } from 'drizzle-orm'
 import type { Route } from '../+types/root'
 
 export const authMiddleware: Route.MiddlewareFunction = async ({
@@ -18,15 +21,25 @@ export const authMiddleware: Route.MiddlewareFunction = async ({
 	}
 
 	if (userName && userRole) {
-		const viewAsLearner = session.get('viewAsLearner')
-		const isStaff = userRole === 'staff'
-		const effectiveRole =
-			isStaff && viewAsLearner ? 'learner' : userRole
+		const subscriptionEndsAt = session.get('subscriptionEndsAt') ?? null
+		let role = userRole
+		if (
+			(role === 'lite' || role === 'pro') &&
+			subscriptionEndsAt &&
+			new Date(subscriptionEndsAt) < new Date()
+		) {
+			role = 'learner'
+		}
+		const viewAsLearner = session.get('viewAsLearner') === true
+		const isStaff = role === 'staff'
+		const effectiveRole = isStaff && viewAsLearner ? 'learner' : role
 		context.set(userContext, {
 			id: Number(userId),
 			name: userName,
 			role: effectiveRole,
 			isStaff,
+			subscriptionEndsAt,
+			viewAsLearner,
 		})
 	} else {
 		const user = await getUserById(userId)
@@ -37,11 +50,28 @@ export const authMiddleware: Route.MiddlewareFunction = async ({
 				},
 			})
 		}
+
+		let role = user.role
+		const subscriptionEndsAt = user.subscriptionEndsAt
+		if (
+			(role === 'lite' || role === 'pro') &&
+			subscriptionEndsAt &&
+			subscriptionEndsAt < new Date()
+		) {
+			role = 'learner'
+			await db
+				.update(users)
+				.set({ role: 'learner' })
+				.where(eq(users.id, user.id))
+		}
+
 		context.set(userContext, {
 			id: user.id,
 			name: user.name,
-			role: user.role,
-			isStaff: user.role === 'staff',
+			role,
+			isStaff: role === 'staff',
+			subscriptionEndsAt: subscriptionEndsAt?.toISOString() ?? null,
+			viewAsLearner: false,
 		})
 	}
 }
