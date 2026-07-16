@@ -20,6 +20,10 @@ and course/challenge/learning-path features. Test generation retroactively layer
 **Plans:** 2 plans
 
 Plans:
+**Wave 1**
 
 - [ ] 01-01-PLAN.md — Build shared `can()` + UserContext.viewAsLearner + authMiddleware/adminMiddleware wiring + tests + access.ts/types.ts cleanup
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 01-02-PLAN.md — Migrate all page call sites (admin guards, CourseBuilder, IndexRedirect, Challenges, admin role enums) to `can()`
