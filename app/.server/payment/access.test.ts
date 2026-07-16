@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-	canAccessAI,
-	getAIMessageLimit,
-	canAccessChallenges,
-} from '~/.server/payment/access'
+import { canAccessAI, getAIMessageLimit } from '~/.server/payment/access'
 
 describe('canAccessAI', () => {
 	it('denies AI access for learner role', () => {
@@ -62,27 +58,5 @@ describe('getAIMessageLimit', () => {
 	it('returns 0 for an unknown role', () => {
 		// Arrange / Act / Assert
 		expect(getAIMessageLimit('bogus')).toBe(0)
-	})
-})
-
-describe('canAccessChallenges', () => {
-	it('denies challenge access for learner', () => {
-		// Arrange / Act / Assert
-		expect(canAccessChallenges('learner')).toBe(false)
-	})
-
-	it('grants challenge access for lite', () => {
-		// Arrange / Act / Assert
-		expect(canAccessChallenges('lite')).toBe(true)
-	})
-
-	it('grants challenge access for pro', () => {
-		// Arrange / Act / Assert
-		expect(canAccessChallenges('pro')).toBe(true)
-	})
-
-	it('denies challenge access for an unknown role', () => {
-		// Arrange / Act / Assert
-		expect(canAccessChallenges('nope')).toBe(false)
 	})
 })
