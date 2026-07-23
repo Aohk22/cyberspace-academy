@@ -10,9 +10,11 @@ import {
 	Users,
 	BookMarked,
 	Book,
-	Swords,
+	Receipt,
+	SquareTerminal,
 	Moon,
 	Sun,
+	User,
 } from 'lucide-react'
 import { useState, lazy, Suspense, useEffect } from 'react'
 import { userContext } from '~/context'
@@ -32,10 +34,11 @@ type NavItem = {
 
 const userNavItems: NavItem[] = [
 	{ label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-	{ label: 'Challenges', href: '/challenges', icon: Swords },
+	{ label: 'Challenges', href: '/challenges', icon: SquareTerminal },
 	{ label: 'Courses', href: '/courses', icon: Book },
 	{ label: 'Learning Paths', href: '/learning-path', icon: Map },
 	{ label: 'Achievements', href: '/achievements', icon: GraduationCap },
+	{ label: 'Settings', href: '/settings', icon: Settings },
 ]
 
 const staffNavItems: NavItem[] = [
@@ -43,8 +46,8 @@ const staffNavItems: NavItem[] = [
 	{ label: 'Course Builder', href: '/course-builder', icon: SquarePen },
 	{ label: 'Users', href: '/users', icon: Users },
 	{ label: 'Categories', href: '/categories', icon: BookMarked },
+	{ label: 'Payments', href: '/admin/payments', icon: Receipt },
 	{ label: 'Paths', href: '/paths-admin', icon: Map },
-	{ label: 'Settings', href: '/settings', icon: Settings },
 ]
 
 export async function loader({ context }: Route.LoaderArgs) {
@@ -74,7 +77,41 @@ export default function MainLayout() {
 		return () => window.removeEventListener('open-pricing', onOpenPricing)
 	}, [])
 
-	function NavItem({ nav }: { nav: NavItem }) {
+	function NavItem({
+		nav,
+		locked = false,
+	}: {
+		nav: NavItem
+		locked?: boolean
+	}) {
+		if (locked) {
+			return (
+				<button
+					type="button"
+					key={nav.href}
+					onClick={() =>
+						window.dispatchEvent(new Event('open-pricing'))
+					}
+					className={`
+						flex items-center w-full text-left
+					${sidebarCollapsed ? 'justify-center px-0 py-3' : 'pl-5 pr-4 pt-3 pb-3 gap-3'}
+					text-base text-muted
+						hover:bg-soft-stone hover:text-ink
+						relative
+						`}
+					title={sidebarCollapsed ? nav.label : undefined}
+				>
+					<nav.icon className="" />
+					{!sidebarCollapsed && nav.label}
+					{!sidebarCollapsed && (
+						<span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+							Pro
+						</span>
+					)}
+				</button>
+			)
+		}
+
 		return (
 			<Link
 				key={nav.href}
@@ -82,8 +119,8 @@ export default function MainLayout() {
 				onClick={() => setActiveLink(nav.href)}
 				className={`
 					flex items-center
-					${sidebarCollapsed ? 'justify-center px-0 py-2' : 'pl-4 pr-4 pt-2 pb-2 gap-2'}
-					text-sm
+					${sidebarCollapsed ? 'justify-center px-0 py-3' : 'pl-5 pr-4 pt-3 pb-3 gap-3'}
+					text-base
 					hover:text-deep-green
 					hover:bg-soft-stone
 
@@ -167,11 +204,11 @@ export default function MainLayout() {
 							className="flex items-center justify-center"
 						>
 							{sidebarCollapsed ? (
-								<h1 className="font-bold text-xs text-on-dark">
+								<h1 className="font-extrabold text-base tracking-wide text-on-dark">
 									CS
 								</h1>
 							) : (
-								<h1 className="font-bold text-on-dark">
+								<h1 className="font-extrabold text-xl leading-tight tracking-wide text-on-dark">
 									CyberSpace
 									<br />
 									Academy
@@ -181,9 +218,15 @@ export default function MainLayout() {
 					</div>
 				</div>
 
-				<nav className="flex-1">
+				<nav className="flex-1 mt-3">
 					{userNavItems.map((item) => (
-						<NavItem nav={item} />
+						<NavItem
+							nav={item}
+							locked={
+								item.href === '/learning-path' &&
+								!can(user, 'accessLearningPaths')
+							}
+						/>
 					))}
 
 					{user && can(user, 'admin') && (
@@ -218,7 +261,7 @@ export default function MainLayout() {
 			<main
 				className="
 				flex-1 flex flex-col min-w-0
-				bg-canvas
+				bg-canvas text-[18px]
 			"
 			>
 				<header
@@ -231,15 +274,27 @@ export default function MainLayout() {
 					<button
 						type="button"
 						onClick={toggleTheme}
-						className="p-2  hover: rounded-full"
+						className="p-2 hover: rounded-full"
 						aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
 					>
 						{theme === 'dark' ? (
-							<Sun className="w-4 h-4 text-ink" />
+							<Sun className="w-6 h-6 text-ink" />
 						) : (
-							<Moon className="w-4 h-4 text-ink" />
+							<Moon className="w-6 h-6 text-ink" />
 						)}
 					</button>
+
+					<div className="flex items-center gap-2 pl-2 border-l border-black/10">
+						<User className="w-6 h-6 text-ink" />
+						<div className="text-right leading-tight">
+							<p className="text-sm font-semibold text-ink">
+								{user.name}
+							</p>
+							<p className="text-[10px] uppercase tracking-wider text-muted">
+								{user.role}
+							</p>
+						</div>
+					</div>
 				</header>
 
 				<div

@@ -17,7 +17,6 @@ import {
 	Star,
 	ChevronRight,
 	Send,
-	ThumbsUp,
 } from 'lucide-react'
 import { userContext } from '~/context'
 import type { Route } from './+types/CourseDetail'
@@ -90,13 +89,13 @@ export default function CourseDetail() {
 					{(data) => {
 						if (data == null) {
 							return (
-								<div className="rounded-xl border border-dashed border-foreground-elevated bg-foreground/50 px-6 py-12 text-center">
-									<h2 className="text-lg font-bold text-foreground-text">
+								<div className="rounded-xl border border-dashed border-hairline bg-surface/50 px-6 py-12 text-center">
+									<h2 className="text-lg font-bold text-ink">
 										Course not found
 									</h2>
 									<Link
 										to="/courses"
-										className="mt-2 inline-block text-sm text-primary hover:text-primary"
+										className="mt-2 inline-block text-sm text-deep-green hover:text-deep-green"
 									>
 										Back to courses
 									</Link>
@@ -153,49 +152,47 @@ function CourseDetailInner({
 				<div className="flex items-center gap-2">
 					<Link
 						to="/courses"
-						className="text-sm text-foreground-text-muted hover:text-primary "
+						className="text-sm text-muted hover:text-deep-green "
 					>
 						Courses
 					</Link>
-					<ChevronRight className="w-4 h-4 text-foreground-text-muted" />
-					<span className="text-sm text-background-text font-medium">
+					<ChevronRight className="w-4 h-4 text-muted" />
+					<span className="text-sm text-ink font-medium">
 						{course.title ?? 'Course'}
 					</span>
 				</div>
-				<h1 className="text-4xl font-bold text-foreground-text tracking-tight">
+				<h1 className="text-4xl font-bold text-ink tracking-tight">
 					{course.title ?? 'Course'}
 				</h1>
-				<p className="text-lg text-foreground-text leading-relaxed">
+				<p className="text-lg text-ink leading-relaxed">
 					{course.description ?? 'Enroll to unlock this course.'}
 				</p>
 			</div>
 
-			<div className="flex flex-wrap items-center gap-6 py-4 border-y border-foreground-elevated">
+			<div className="flex flex-wrap items-center gap-6 py-4 border-y border-hairline">
 				<div className="flex items-center gap-2">
-					<div className="w-10 h-10 rounded-full bg-foreground-elevated overflow-hidden">
+					<div className="w-10 h-10 rounded-full bg-soft-stone overflow-hidden">
 						<img
 							src={`https://ui-avatars.com/api/?name=${course.instructor ?? 'Instructor'}&background=random`}
 							alt={course.instructor ?? 'Instructor'}
 						/>
 					</div>
 					<div>
-						<p className="text-xs text-foreground-text-muted font-medium">
+						<p className="text-xs text-muted font-medium">
 							Instructor
 						</p>
-						<p className="text-sm font-bold text-foreground-text">
+						<p className="text-sm font-bold text-ink">
 							{course.instructor ?? 'Instructor'}
 						</p>
 					</div>
 				</div>
 				<div className="flex items-center gap-2">
-					<div className="w-10 h-10 rounded-xl bg-star/10 flex items-center justify-center">
-						<Star className="w-5 h-5 text-star fill-star" />
+					<div className="w-10 h-10 rounded-xl bg-coral/10 flex items-center justify-center">
+						<Star className="w-5 h-5 text-coral fill-coral" />
 					</div>
 					<div>
-						<p className="text-xs text-foreground-text-muted font-medium">
-							Rating
-						</p>
-						<p className="text-sm font-bold text-foreground-text">
+						<p className="text-xs text-muted font-medium">Rating</p>
+						<p className="text-sm font-bold text-ink">
 							{averageRating
 								? `${averageRating} (${reviewCount} reviews)`
 								: 'No reviews yet'}
@@ -203,14 +200,14 @@ function CourseDetailInner({
 					</div>
 				</div>
 				<div className="flex items-center gap-2">
-					<div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-						<User className="w-5 h-5 text-primary" />
+					<div className="w-10 h-10 rounded-xl bg-deep-green/10 flex items-center justify-center">
+						<User className="w-5 h-5 text-deep-green" />
 					</div>
 					<div>
-						<p className="text-xs text-foreground-text-muted font-medium">
+						<p className="text-xs text-muted font-medium">
 							Students
 						</p>
-						<p className="text-sm font-bold text-foreground-text">
+						<p className="text-sm font-bold text-ink">
 							{studentCount.toLocaleString()} enrolled
 						</p>
 					</div>
@@ -228,10 +225,10 @@ function CourseDetailInner({
 			{enrolled ? (
 				<div className="space-y-6">
 					<div className="flex items-center justify-between">
-						<h2 className="text-2xl font-bold text-foreground-text">
+						<h2 className="text-2xl font-bold text-ink">
 							Course Content
 						</h2>
-						<p className="text-sm text-foreground-text-muted">
+						<p className="text-sm text-muted">
 							{modules.length} modules • {lessonsCount} lessons
 						</p>
 					</div>
@@ -240,30 +237,30 @@ function CourseDetailInner({
 						{modules.map((module, i) => (
 							<div
 								key={module.id}
-								className="bg-foreground border border-foreground-elevated rounded-xl overflow-hidden shadow-sm"
+								className="bg-surface border border-hairline rounded-xl overflow-hidden shadow-sm"
 							>
-								<div className="p-4 bg-foreground-elevated/50 border-b border-foreground-elevated flex items-center justify-between">
-									<h3 className="font-bold text-foreground-text">
+								<div className="p-4 bg-soft-stone/50 border-b border-hairline flex items-center justify-between">
+									<h3 className="font-bold text-ink">
 										Module {i + 1}: {module.title}
 									</h3>
-									<span className="text-xs text-foreground-text-muted font-medium">
+									<span className="text-xs text-muted font-medium">
 										{module.lessons.length} lessons
 									</span>
 								</div>
-								<div className="divide-y divide-foreground-elevated/50">
+								<div className="divide-y divide-hairline">
 									{module.lessons.map((lesson) => (
 										<Link
 											key={lesson.id}
 											to={`/courses/${course.id}/lessons/${lesson.id}`}
-											className="p-4 flex items-center justify-between hover:bg-foreground-elevated/50  group"
+											className="p-4 flex items-center justify-between hover:bg-soft-stone/50  group"
 										>
 											<div className="flex items-center gap-4">
 												<div
 													className={
 														'w-8 h-8 rounded-full flex items-center justify-center ' +
 														(lesson.completed
-															? ' bg-primary/10 text-primary'
-															: ' bg-foreground-elevated text-foreground-text-muted group-hover:bg-primary/10 group-hover:text-primary')
+															? ' bg-deep-green/10 text-deep-green'
+															: ' bg-soft-stone text-muted group-hover:bg-deep-green/10 group-hover:text-deep-green')
 													}
 												>
 													{lesson.completed ? (
@@ -277,18 +274,18 @@ function CourseDetailInner({
 														className={
 															'text-sm font-medium ' +
 															(lesson.completed
-																? ' text-foreground-text-muted'
-																: ' text-background-text group-hover:text-primary')
+																? ' text-muted'
+																: ' text-ink group-hover:text-deep-green')
 														}
 													>
 														{lesson.title}
 													</p>
 													<div className="flex items-center gap-2 mt-0.5">
-														<span className="text-[10px] font-bold uppercase text-foreground-text-muted">
+														<span className="text-[10px] font-bold uppercase text-muted">
 															Video
 														</span>
-														<span className="w-0.5 h-0.5 bg-foreground-active rounded-full" />
-														<span className="text-[10px] text-foreground-text-muted">
+														<span className="w-0.5 h-0.5 bg-hairline rounded-full" />
+														<span className="text-[10px] text-muted">
 															{formatLessonLength(
 																lesson.length,
 															)}
@@ -297,7 +294,7 @@ function CourseDetailInner({
 												</div>
 											</div>
 											{!lesson.completed && (
-												<span className="text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+												<span className="text-xs font-bold text-deep-green opacity-0 group-hover:opacity-100 transition-opacity">
 													Start
 												</span>
 											)}
@@ -309,8 +306,8 @@ function CourseDetailInner({
 					</div>
 
 					{/* Review Form */}
-					<div className="bg-foreground border border-foreground-elevated rounded-xl p-6 space-y-4">
-						<h3 className="text-lg font-bold text-foreground-text">
+					<div className="bg-surface border border-hairline rounded-xl p-6 space-y-4">
+						<h3 className="text-lg font-bold text-ink">
 							Leave a Review
 						</h3>
 						<reviewFetcher.Form method="POST">
@@ -328,10 +325,11 @@ function CourseDetailInner({
 										className=""
 									>
 										<Star
-											className={`w-5 h-5 ${star <= reviewRating
-													? 'fill-star text-star'
-													: 'text-foreground-text-muted'
-												}`}
+											className={`w-5 h-5 ${
+												star <= reviewRating
+													? 'fill-coral text-coral'
+													: 'text-muted'
+											}`}
 										/>
 									</button>
 								))}
@@ -350,7 +348,7 @@ function CourseDetailInner({
 								onChange={(e) =>
 									setReviewContent(e.target.value)
 								}
-								className="w-full px-4 py-3 bg-foreground-elevated border border-foreground-active rounded-xl text-sm text-foreground-text placeholder-foreground-text-muted focus:bg-foreground-active focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all resize-none"
+								className="w-full px-4 py-3 bg-soft-stone border border-hairline rounded-xl text-sm text-ink placeholder-muted focus:bg-hairline focus:ring-2 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all resize-none"
 							/>
 							<div className="flex justify-end mt-3">
 								<button
@@ -359,7 +357,7 @@ function CourseDetailInner({
 										!reviewContent.trim() ||
 										reviewFetcher.state === 'submitting'
 									}
-									className="flex items-center gap-2 px-4 py-2 bg-primary text-foreground-text rounded-xl text-sm font-bold hover:bg-primary transition-all disabled:opacity-50"
+									className="flex items-center gap-2 px-4 py-2 bg-deep-green text-on-dark rounded-xl text-sm font-bold hover:brightness-110 transition-all disabled:opacity-50"
 								>
 									<Send className="w-4 h-4" />
 									Submit Review
@@ -370,45 +368,45 @@ function CourseDetailInner({
 				</div>
 			) : (
 				<div className="space-y-6">
-					<div className="bg-foreground border border-foreground-elevated rounded-xl p-8 space-y-4">
-						<h2 className="text-2xl font-bold text-foreground-text">
+					<div className="bg-surface border border-hairline rounded-xl p-8 space-y-4">
+						<h2 className="text-2xl font-bold text-ink">
 							Course Summary
 						</h2>
-						<p className="text-foreground-text leading-relaxed">
+						<p className="text-ink leading-relaxed">
 							{course.description}
 						</p>
 						<div className="space-y-3 pt-2">
-							<div className="flex items-center gap-2 text-sm font-medium text-foreground-text-secondary">
-								<BookOpen className="w-4 h-4 text-primary" />
+							<div className="flex items-center gap-2 text-sm font-medium text-body-muted">
+								<BookOpen className="w-4 h-4 text-deep-green" />
 								Modules in this course
 							</div>
 							<div className="space-y-3">
 								{modules.map((module, index) => (
 									<div
 										key={module.id}
-										className="rounded-xl border border-foreground-elevated bg-background/40 px-4 py-4"
+										className="rounded-xl border border-hairline bg-canvas/40 px-4 py-4"
 									>
 										<div className="flex items-start justify-between gap-4">
 											<div className="min-w-0">
-												<p className="text-xs font-semibold uppercase tracking-[0.18em] text-foreground-text-muted">
+												<p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
 													Module {index + 1}
 												</p>
-												<p className="mt-2 text-sm text-background-text">
+												<p className="mt-2 text-sm text-ink">
 													{module.title}
 												</p>
 											</div>
-											<p className="shrink-0 text-xs text-foreground-text-muted">
+											<p className="shrink-0 text-xs text-muted">
 												{module.lessons.length} lessons
 											</p>
 										</div>
-										<div className="mt-4 space-y-2 border-t border-foreground-elevated pt-4">
+										<div className="mt-4 space-y-2 border-t border-hairline pt-4">
 											{module.lessons.map(
 												(lesson, lessonIndex) => (
 													<div
 														key={lesson.id}
 														className="flex items-center justify-between gap-4 text-sm"
 													>
-														<div className="min-w-0 text-foreground-text-secondary">
+														<div className="min-w-0 text-body-muted">
 															<p className="truncate">
 																Lesson{' '}
 																{lessonIndex +
@@ -416,7 +414,7 @@ function CourseDetailInner({
 																: {lesson.title}
 															</p>
 														</div>
-														<p className="shrink-0 text-xs text-foreground-text-muted">
+														<p className="shrink-0 text-xs text-muted">
 															{formatLessonLength(
 																lesson.length,
 															)}
@@ -432,8 +430,8 @@ function CourseDetailInner({
 					</div>
 
 					{/* Enroll to review */}
-					<div className="bg-foreground border border-foreground-elevated rounded-xl p-6 text-center">
-						<p className="text-sm text-foreground-text">
+					<div className="bg-surface border border-hairline rounded-xl p-6 text-center">
+						<p className="text-sm text-ink">
 							Enroll in this course to leave a review.
 						</p>
 					</div>
@@ -447,20 +445,20 @@ function CourseDetailSkeleton() {
 	return (
 		<div className="space-y-8 animate-pulse">
 			<div className="space-y-4">
-				<div className="h-4 w-32 bg-foreground-elevated rounded" />
-				<div className="h-10 w-3/4 bg-foreground-elevated rounded" />
-				<div className="h-5 w-full bg-foreground-elevated rounded" />
+				<div className="h-4 w-32 bg-soft-stone rounded" />
+				<div className="h-10 w-3/4 bg-soft-stone rounded" />
+				<div className="h-5 w-full bg-soft-stone rounded" />
 			</div>
-			<div className="flex gap-6 py-4 border-y border-foreground-elevated">
-				<div className="h-10 w-40 bg-foreground-elevated rounded-lg" />
-				<div className="h-10 w-32 bg-foreground-elevated rounded-lg" />
-				<div className="h-10 w-36 bg-foreground-elevated rounded-lg" />
+			<div className="flex gap-6 py-4 border-y border-hairline">
+				<div className="h-10 w-40 bg-soft-stone rounded-lg" />
+				<div className="h-10 w-32 bg-soft-stone rounded-lg" />
+				<div className="h-10 w-36 bg-soft-stone rounded-lg" />
 			</div>
-			<div className="h-64 bg-foreground-elevated rounded-xl" />
+			<div className="h-64 bg-soft-stone rounded-xl" />
 			<div className="space-y-4">
-				<div className="h-6 w-48 bg-foreground-elevated rounded" />
+				<div className="h-6 w-48 bg-soft-stone rounded" />
 				{[1, 2, 3].map((i) => (
-					<div key={i} className="h-16 bg-foreground-elevated rounded-xl" />
+					<div key={i} className="h-16 bg-soft-stone rounded-xl" />
 				))}
 			</div>
 		</div>

@@ -77,7 +77,10 @@ export async function getLearningPaths(
 	const completedMap = new Map<number, number>()
 	for (const row of completedRes.rows) {
 		const r = row as { pathId: number; completed: number }
-		completedMap.set(r.pathId, (completedMap.get(r.pathId) ?? 0) + r.completed)
+		completedMap.set(
+			r.pathId,
+			(completedMap.get(r.pathId) ?? 0) + r.completed,
+		)
 	}
 
 	const roadmapRes = await db.execute(sql`
@@ -200,7 +203,8 @@ export async function getLearningPathDetail(
 	`)
 
 	const total = (totalItemsRes.rows[0] as { total: number }).total
-	const completed = (completedItemsRes.rows[0] as { completed: number }).completed
+	const completed = (completedItemsRes.rows[0] as { completed: number })
+		.completed
 	path.progress = total > 0 ? Math.round((completed / total) * 100) : 0
 
 	const [coursesRes, challengesRes] = await Promise.all([
@@ -244,13 +248,16 @@ export async function getLearningPathDetail(
 		`),
 	])
 
-	const roadmap = z
-		.array(roadmapItemSchema)
-		.parse(
-			([...coursesRes.rows, ...challengesRes.rows] as { type: string; position: number }[]).sort(
-				(a, b) => a.type.localeCompare(b.type) || a.position - b.position,
-			),
-		)
+	const roadmap = z.array(roadmapItemSchema).parse(
+		(
+			[...coursesRes.rows, ...challengesRes.rows] as {
+				type: string
+				position: number
+			}[]
+		).sort(
+			(a, b) => a.type.localeCompare(b.type) || a.position - b.position,
+		),
+	)
 
 	return { ...path, roadmap }
 }

@@ -14,7 +14,7 @@ const envFile = ENV_FILES[appEnv]
 
 if (!envFile) {
 	throw new Error(
-		`Unknown APP_ENV "${appEnv}". Expected one of: ${Object.keys(ENV_FILES).join(', ')}`
+		`Unknown APP_ENV "${appEnv}". Expected one of: ${Object.keys(ENV_FILES).join(', ')}`,
 	)
 }
 

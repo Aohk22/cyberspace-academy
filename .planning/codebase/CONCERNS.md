@@ -7,9 +7,9 @@
 ### Hardcoded plan prices at $0 (payment non-functional)
 
 - **Issue:** All plan prices are hardcoded to `0` in `app/routes/payment.ts` (lines 11-14), with an explicit TODO comment `// TODO: set VND prices`. This means:
-  - Every "checkout" creates a PayOS payment link for 0 VND — the payment flow is a no-op
-  - Users can never actually purchase Lite or Pro plans through the UI
-  - The entire subscription/payment integration is effectively untestable end-to-end
+    - Every "checkout" creates a PayOS payment link for 0 VND — the payment flow is a no-op
+    - Users can never actually purchase Lite or Pro plans through the UI
+    - The entire subscription/payment integration is effectively untestable end-to-end
 - **Files:** `app/routes/payment.ts`
 - **Impact:** Payment system is cosmetic only — critical revenue feature is non-functional
 - **Fix approach:** Replace `PLAN_PRICES` with real VND values (e.g., `Lite: 99000`, `Pro: 199000`) and test the full PayOS checkout + webhook flow
@@ -24,9 +24,9 @@
 ### Inconsistent database query approach
 
 - **Issue:** Codebase mixes two query styles arbitrarily within the same files:
-  - Raw SQL via Drizzle's `sql` tagged template (e.g., `app/.server/database/utils.ts`, `app/.server/queries/*.ts`)
-  - Drizzle query builder (e.g., `app/.server/database/utils.ts` uses `db.select().from(users).where(eq(...))` for some queries)
-  - No consistent pattern — some functions in the same file use both styles
+    - Raw SQL via Drizzle's `sql` tagged template (e.g., `app/.server/database/utils.ts`, `app/.server/queries/*.ts`)
+    - Drizzle query builder (e.g., `app/.server/database/utils.ts` uses `db.select().from(users).where(eq(...))` for some queries)
+    - No consistent pattern — some functions in the same file use both styles
 - **Files:** `app/.server/database/utils.ts`, `app/.server/queries/*.ts`
 - **Impact:** Maintenance confusion; developers must context-switch between two styles
 - **Fix approach:** Document and enforce one pattern. Given AGENTS.md says "Drizzle for schema only — queries use raw sql tagged template", the Drizzle query builder calls should be migrated.
@@ -55,11 +55,11 @@
 ### Missing `onDelete: 'cascade'` on critical foreign keys
 
 - **Issue:** Several tables have foreign keys to `users` without `onDelete: 'cascade'`, including:
-  - `reviews.user_id`, `reviews.course_id`
-  - `users_to_lessons.user_id`, `users_to_lessons.lesson_id`
-  - `users_to_courses.user_id`, `users_to_courses.course_id`
-  - `chat_messages.user_id`
-  - `challenge_submissions` (only has cascade on `questionId`, not on `userId`)
+    - `reviews.user_id`, `reviews.course_id`
+    - `users_to_lessons.user_id`, `users_to_lessons.lesson_id`
+    - `users_to_courses.user_id`, `users_to_courses.course_id`
+    - `chat_messages.user_id`
+    - `challenge_submissions` (only has cascade on `questionId`, not on `userId`)
 - **Files:** `app/.server/database/schema.ts`
 - **Impact:** Deleting a user or course can orphan records and fail with FK constraint violations
 - **Fix approach:** Add `{ onDelete: 'cascade' }` to all FK references where cascade semantics are correct
@@ -81,9 +81,9 @@
 ### Password reset token exposed in URL
 
 - **Issue:** `app/pages/ForgotPassword.tsx` passes the reset token as a URL query parameter (`/reset-password?token=...`). Tokens in URLs are:
-  - Logged in browser history
-  - Sent in Referer headers to external sites
-  - Visible on screen if user shares their screen
+    - Logged in browser history
+    - Sent in Referer headers to external sites
+    - Visible on screen if user shares their screen
 - **Files:** `app/pages/ForgotPassword.tsx` (line 37), `app/pages/ResetPassword.tsx` (line 27)
 - **Impact:** Token could be intercepted via Referer header or browser history
 - **Fix approach:** Use POST-based token submission instead of URL query params
@@ -178,10 +178,10 @@
 ### N+1 queries in course detail loading
 
 - **Issue:** `getCourseDetailData()` in `app/.server/queries/course-detail.ts` runs 4 separate queries sequentially:
-  1. Enrollment check
-  2. Full course/module/lesson data
-  3. Review stats (AVG rating + COUNT)
-  4. Student count
+    1. Enrollment check
+    2. Full course/module/lesson data
+    3. Review stats (AVG rating + COUNT)
+    4. Student count
 - **Files:** `app/.server/queries/course-detail.ts`
 - **Cause:** Sequential queries 3 and 4 could be combined into one, or at least run in parallel via `Promise.all`
 - **Improvement path:** Combine review stats query into a single query, or use `Promise.all` for independent queries
@@ -286,4 +286,4 @@
 
 ---
 
-*Concerns audit: 2026-07-15*
+_Concerns audit: 2026-07-15_

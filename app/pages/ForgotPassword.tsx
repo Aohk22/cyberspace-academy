@@ -57,43 +57,43 @@ export default function ForgotPassword() {
 	const isLoading = navigation.state === 'submitting'
 
 	return (
-		<div data-theme="dark" className="min-h-screen bg-background flex items-center justify-center p-6">
+		<div className="min-h-screen bg-canvas flex items-center justify-center p-6">
 			<div className="max-w-md w-full">
 				<div className="flex flex-col items-center mb-10">
-					<div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-primary/20">
-						<GraduationCap className="text-foreground-text-hl w-8 h-8" />
+					<div className="w-14 h-14 bg-deep-green rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-deep-green/20">
+						<GraduationCap className="text-on-dark w-8 h-8" />
 					</div>
-					<h1 className="text-3xl font-bold text-foreground-text-hl tracking-tight">
+					<h1 className="text-3xl font-bold text-ink tracking-tight">
 						Reset Password
 					</h1>
-					<p className="text-foreground-text mt-2 font-medium">
+					<p className="text-ink mt-2 font-medium">
 						Enter your email to receive a reset link.
 					</p>
 				</div>
 
-				<div className="bg-foreground rounded-xl shadow-2xl shadow-black/50 border border-foreground-elevated p-8 md:p-12">
+				<div className="bg-surface rounded-xl shadow-2xl shadow-black/50 border border-hairline p-8 md:p-12">
 					{actionData?.success ? (
 						<div className="space-y-6 text-center">
-							<div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-								<CheckCircle2 className="w-8 h-8 text-primary" />
+							<div className="w-16 h-16 bg-deep-green/10 rounded-full flex items-center justify-center mx-auto">
+								<CheckCircle2 className="w-8 h-8 text-deep-green" />
 							</div>
-							<p className="text-sm text-foreground-text-secondary">
+							<p className="text-sm text-body-muted">
 								{actionData.message}
 							</p>
-							<div className="bg-foreground-elevated rounded-xl p-4 text-left">
-								<p className="text-xs text-foreground-text-muted mb-2">
+							<div className="bg-soft-stone rounded-xl p-4 text-left">
+								<p className="text-xs text-muted mb-2">
 									Reset link (dev mode):
 								</p>
 								<a
 									href={actionData.resetLink}
-									className="text-xs text-primary break-all hover:text-primary"
+									className="text-xs text-deep-green break-all hover:text-deep-green"
 								>
 									{actionData.resetLink}
 								</a>
 							</div>
 							<Link
 								to="/login"
-								className="block w-full py-3 bg-primary text-foreground-text-hl rounded-xl text-sm font-bold hover:bg-primary transition-all text-center"
+								className="block w-full py-3 bg-deep-green text-on-dark rounded-xl text-sm font-bold hover:brightness-110 transition-all text-center"
 							>
 								Back to Login
 							</Link>
@@ -107,17 +107,17 @@ export default function ForgotPassword() {
 							)}
 
 							<div className="space-y-2">
-								<label className="text-sm font-bold text-foreground-text-secondary ml-1">
+								<label className="text-sm font-bold text-body-muted ml-1">
 									Email Address
 								</label>
 								<div className="relative group">
-									<Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-text-muted group-focus-within:text-primary transition-colors" />
+									<Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted group-focus-within:text-deep-green transition-colors" />
 									<input
 										type="email"
 										name="email"
 										required
 										placeholder="name@company.com"
-										className="w-full pl-12 pr-4 py-4 bg-foreground-elevated border border-foreground-active rounded-2xl text-sm text-foreground-text-hl focus:bg-foreground-active focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+										className="w-full pl-12 pr-4 py-4 bg-soft-stone border border-hairline rounded-2xl text-sm text-ink focus:bg-hairline focus:ring-4 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 									/>
 								</div>
 							</div>
@@ -125,7 +125,7 @@ export default function ForgotPassword() {
 							<button
 								type="submit"
 								disabled={isLoading}
-								className="w-full py-4 bg-primary text-foreground-text-hl rounded-2xl font-bold hover:bg-primary transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-70"
+								className="w-full py-4 bg-deep-green text-on-dark rounded-2xl font-bold hover:brightness-110 transition-all shadow-lg shadow-deep-green/20 flex items-center justify-center gap-2 disabled:opacity-70"
 							>
 								{isLoading ? (
 									<Loader2 className="w-5 h-5 animate-spin" />
@@ -140,11 +140,11 @@ export default function ForgotPassword() {
 					)}
 				</div>
 
-				<p className="mt-8 text-center text-foreground-text-muted font-medium">
+				<p className="mt-8 text-center text-muted font-medium">
 					Remember your password?{' '}
 					<Link
 						to="/login"
-						className="text-primary font-bold hover:text-primary transition-colors"
+						className="text-deep-green font-bold hover:text-deep-green transition-colors"
 					>
 						Sign in
 					</Link>

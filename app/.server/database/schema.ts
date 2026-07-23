@@ -9,7 +9,7 @@ import {
 	pgSchema,
 } from 'drizzle-orm/pg-core'
 
-export const cyberspaceSchema = pgSchema('cyberspace');
+export const cyberspaceSchema = pgSchema('cyberspace')
 
 export const users = cyberspaceSchema.table('users', {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -18,6 +18,7 @@ export const users = cyberspaceSchema.table('users', {
 	password: text().notNull(),
 	role: varchar({ length: 20 }).notNull().default('learner'),
 	achievementPoints: integer('achievement_points').notNull().default(0),
+	subscriptionEndsAt: timestamp('subscription_ends_at'),
 })
 
 export const reviews = cyberspaceSchema.table('reviews', {
@@ -93,16 +94,19 @@ export const usersToLessons = cyberspaceSchema.table(
 	(t) => [primaryKey({ columns: [t.userId, t.lessonId] })],
 )
 
-export const challengeQuestions = cyberspaceSchema.table('challenge_questions', {
-	id: integer().primaryKey().generatedAlwaysAsIdentity(),
-	lessonId: integer('lesson_id')
-		.notNull()
-		.references(() => lessons.id),
-	questionText: text('question_text').notNull(),
-	type: varchar({ length: 20 }).notNull().default('multiple_choice'),
-	correctAnswer: text('correct_answer'),
-	orderIndex: integer('order_index').notNull().default(0),
-})
+export const challengeQuestions = cyberspaceSchema.table(
+	'challenge_questions',
+	{
+		id: integer().primaryKey().generatedAlwaysAsIdentity(),
+		lessonId: integer('lesson_id')
+			.notNull()
+			.references(() => lessons.id),
+		questionText: text('question_text').notNull(),
+		type: varchar({ length: 20 }).notNull().default('multiple_choice'),
+		correctAnswer: text('correct_answer'),
+		orderIndex: integer('order_index').notNull().default(0),
+	},
+)
 
 export const challengeOptions = cyberspaceSchema.table('challenge_options', {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -234,13 +238,70 @@ export const userChallenges = cyberspaceSchema.table(
 	(t) => [primaryKey({ columns: [t.userId, t.challengeId] })],
 )
 
-export const passwordResetTokens = cyberspaceSchema.table('password_reset_tokens', {
+export const badges = cyberspaceSchema.table('badges', {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+	name: varchar({ length: 255 }).notNull(),
+	description: text().notNull(),
+	icon: varchar({ length: 50 }).notNull(),
+	rarity: varchar({ length: 20 }).notNull().default('common'),
+	criteriaType: varchar({ length: 50 }).notNull(),
+	criteriaValue: integer().notNull(),
+	criteriaMeta: varchar({ length: 50 }),
+	createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+export const userBadges = cyberspaceSchema.table(
+	'user_badges',
+	{
+		userId: integer('user_id')
+			.notNull()
+			.references(() => users.id, { onDelete: 'cascade' }),
+		badgeId: integer('badge_id')
+			.notNull()
+			.references(() => badges.id, { onDelete: 'cascade' }),
+		awardedAt: timestamp('awarded_at').defaultNow().notNull(),
+	},
+	(t) => [primaryKey({ columns: [t.userId, t.badgeId] })],
+)
+
+export const passwordResetTokens = cyberspaceSchema.table(
+	'password_reset_tokens',
+	{
+		id: integer().primaryKey().generatedAlwaysAsIdentity(),
+		userId: integer('user_id')
+			.notNull()
+			.references(() => users.id, { onDelete: 'cascade' }),
+		token: varchar({ length: 255 }).notNull().unique(),
+		expiresAt: timestamp('expires_at').notNull(),
+		usedAt: timestamp('used_at'),
+		createdAt: timestamp('created_at').defaultNow().notNull(),
+	},
+)
+
+export const chatMessages = cyberspaceSchema.table(
+	'chat_messages',
+	{
+		id: integer().primaryKey().generatedAlwaysAsIdentity(),
+		userId: integer('user_id')
+			.notNull()
+			.references(() => users.id),
+		date: varchar({ length: 10 }).notNull(),
+		count: integer().notNull().default(0),
+	},
+	(t) => [unique().on(t.userId, t.date)],
+)
+
+export const orders = cyberspaceSchema.table('orders', {
+	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+	orderCode: integer('order_code').notNull().unique(),
+	paymentLinkId: varchar('payment_link_id', { length: 255 }),
 	userId: integer('user_id')
 		.notNull()
-		.references(() => users.id, { onDelete: 'cascade' }),
-	token: varchar({ length: 255 }).notNull().unique(),
+		.references(() => users.id),
+	plan: varchar({ length: 50 }).notNull(),
+	amount: integer().notNull(),
+	status: varchar({ length: 20 }).notNull().default('PENDING'),
 	expiresAt: timestamp('expires_at').notNull(),
-	usedAt: timestamp('used_at'),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
+	updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })

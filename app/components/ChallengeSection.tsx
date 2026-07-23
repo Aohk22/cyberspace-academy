@@ -16,21 +16,21 @@ export default function ChallengeSection({
 	const allCorrect = correctCount === totalCount && totalCount > 0
 
 	return (
-		<div className="mt-10 border-t border-foreground-elevated pt-8">
+		<div className="mt-10 border-t border-hairline pt-8">
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-3">
-					<div className="w-8 h-8 rounded-xl bg-star/10 flex items-center justify-center">
-						<Flag className="w-4 h-4 text-star" />
+					<div className="w-8 h-8 rounded-xl bg-coral/10 flex items-center justify-center">
+						<Flag className="w-4 h-4 text-coral" />
 					</div>
-					<h2 className="text-lg font-bold text-foreground-text">Challenge</h2>
+					<h2 className="text-lg font-bold text-ink">Challenge</h2>
 				</div>
-				<span className="text-sm text-foreground-text-secondary">
+				<span className="text-sm text-body-muted">
 					{correctCount}/{totalCount} correct
 				</span>
 			</div>
 
 			{allCorrect && (
-				<div className="mb-6 rounded-2xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary flex items-center gap-2">
+				<div className="mb-6 rounded-2xl border border-deep-green/30 bg-deep-green/10 px-4 py-3 text-sm text-deep-green flex items-center gap-2">
 					<CheckCircle2 className="w-4 h-4" />
 					<span>All questions answered correctly!</span>
 				</div>
@@ -67,33 +67,34 @@ function QuestionCard({
 
 	const error =
 		fetcher.data &&
-			typeof fetcher.data === 'object' &&
-			'error' in fetcher.data
+		typeof fetcher.data === 'object' &&
+		'error' in fetcher.data
 			? (fetcher.data as { error: string }).error
 			: null
 
 	return (
 		<div
-			className={`rounded-2xl border p-5  ${hasSubmitted
-				? isCorrect
-					? 'border-primary/30 bg-primary/5'
-					: 'border-error/30 bg-error/5'
-				: 'border-foreground-elevated bg-foreground'
-				}`}
+			className={`rounded-2xl border p-5  ${
+				hasSubmitted
+					? isCorrect
+						? 'border-deep-green/30 bg-deep-green/5'
+						: 'border-error/30 bg-error/5'
+					: 'border-hairline bg-surface'
+			}`}
 		>
 			<div className="flex items-start justify-between gap-4">
 				<div className="flex items-start gap-3 min-w-0">
-					<span className="shrink-0 w-7 h-7 rounded-full bg-foreground-elevated flex items-center justify-center text-xs font-bold text-foreground-text-secondary">
+					<span className="shrink-0 w-7 h-7 rounded-full bg-soft-stone flex items-center justify-center text-xs font-bold text-body-muted">
 						{index + 1}
 					</span>
-					<p className="text-sm font-medium text-foreground-text pt-1">
+					<p className="text-sm font-medium text-ink pt-1">
 						{question.questionText}
 					</p>
 				</div>
 				{hasSubmitted && (
 					<div className="shrink-0 mt-1">
 						{isCorrect ? (
-							<CheckCircle2 className="w-5 h-5 text-primary" />
+							<CheckCircle2 className="w-5 h-5 text-deep-green" />
 						) : (
 							<XCircle className="w-5 h-5 text-error" />
 						)}
@@ -149,10 +150,11 @@ function MultipleChoiceInput({
 			{question.options.map((opt) => (
 				<label
 					key={opt.id}
-					className={`flex items-center gap-3 rounded-xl border px-4 py-3 cursor-pointer  ${disabled
-						? 'border-primary/50 bg-primary/20 opacity-60 cursor-not-allowed'
-						: 'border-foreground-elevated bg-foreground hover:border-primary/40'
-						}`}
+					className={`flex items-center gap-3 rounded-xl border px-4 py-3 cursor-pointer  ${
+						disabled
+							? 'border-deep-green/50 bg-deep-green/20 opacity-60 cursor-not-allowed'
+							: 'border-hairline bg-surface hover:border-deep-green/40'
+					}`}
 				>
 					<input
 						type="radio"
@@ -161,16 +163,14 @@ function MultipleChoiceInput({
 						disabled={disabled}
 						className="accent-primary"
 					/>
-					<span className="text-sm text-foreground-text">
-						{opt.optionText}
-					</span>
+					<span className="text-sm text-ink">{opt.optionText}</span>
 				</label>
 			))}
 			{!disabled && (
 				<button
 					type="submit"
 					disabled={fetcher.state !== 'idle'}
-					className="mt-2 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-medium text-foreground-text hover:bg-primary/90  disabled:opacity-40"
+					className="mt-2 inline-flex items-center gap-2 rounded-xl bg-deep-green px-4 py-2 text-xs font-medium text-on-dark hover:brightness-110 disabled:opacity-40"
 				>
 					<Send className="w-3 h-3" />
 					Submit
@@ -202,13 +202,13 @@ function FlagInput({
 					name="answer"
 					placeholder="Enter your answer..."
 					disabled={disabled}
-					className="flex-1 rounded-xl border border-foreground-elevated bg-foreground px-4 py-2.5 text-sm text-foreground-text outline-none transition focus:border-primary/40 focus:ring-2 focus:ring-primary/10 disabled:opacity-50"
+					className="flex-1 rounded-xl border border-hairline bg-surface px-4 py-2.5 text-sm text-ink outline-none transition focus:border-deep-green/40 focus:ring-2 focus:ring-deep-green/10 disabled:opacity-50"
 				/>
 				{!disabled && (
 					<button
 						type="submit"
 						disabled={fetcher.state !== 'idle'}
-						className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-medium text-foreground-text hover:bg-primary/90  disabled:opacity-40"
+						className="inline-flex items-center gap-2 rounded-xl bg-deep-green px-4 py-2.5 text-xs font-medium text-on-dark hover:brightness-110 disabled:opacity-40"
 					>
 						<Send className="w-3 h-3" />
 						Submit

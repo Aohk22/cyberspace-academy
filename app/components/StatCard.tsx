@@ -18,31 +18,36 @@ function StatValue({
 }
 
 function StatValueSkeleton() {
-	return <div className="
-		h-5 w-14 bg-foreground rounded animate-pulse
-	" />
+	return (
+		<div
+			className="
+		h-5 w-14 bg-surface rounded animate-pulse
+	"
+		/>
+	)
 }
 
-export default function StatCard({
-	label,
-	value,
-	icon: Icon,
-}: StatCardProps) {
+export default function StatCard({ label, value, icon: Icon }: StatCardProps) {
 	return (
 		<div className="flex items-center gap-3 p-3">
 			<div
-				className='
+				className="
 					flex items-center justify-center
 					w-9 h-9
-					rounded-lg shrink-0 
-				'
+					rounded-lg shrink-0
+					bg-deep-green/10
+				"
 			>
-				<Icon className='w-4 h-4' />
+				<Icon className="w-4 h-4" />
 			</div>
 			<div className="min-w-0">
-				<p className="
+				<p
+					className="
 					text-xs font-medium
-				">{label}</p>
+				"
+				>
+					{label}
+				</p>
 				<Suspense fallback={<StatValueSkeleton />}>
 					<StatValue value={value} />
 				</Suspense>

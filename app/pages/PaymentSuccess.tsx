@@ -1,5 +1,10 @@
 import { redirect } from 'react-router'
-import { Link, useLoaderData, useRevalidator, useSearchParams } from 'react-router'
+import {
+	Link,
+	useLoaderData,
+	useRevalidator,
+	useSearchParams,
+} from 'react-router'
 import { CheckCircle2, Loader2 } from 'lucide-react'
 import { getSession, commitSession } from '~/.server/auth/sessions'
 import { getUserById } from '~/.server/database/utils'
@@ -79,7 +84,8 @@ export async function loader({ request }: Route.LoaderArgs) {
 				await tx
 					.update(users)
 					.set({
-						role: existingUser?.role === 'staff' ? 'staff' : planRole,
+						role:
+							existingUser?.role === 'staff' ? 'staff' : planRole,
 						subscriptionEndsAt: newEnd,
 					})
 					.where(eq(users.id, order.userId))

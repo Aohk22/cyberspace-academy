@@ -6,38 +6,38 @@ repo_url: https://github.com/aohk22/cyberspace-academy
 edit_uri: edit/main/docs
 
 nav:
-  - Home: index.md
-  - Explaination: explanation.md
-  - Reference:
-      - Database Schematic: reference/database-schematic.md
-      - Sitemap: reference/sitemap.md
-  - Feature Tracking:
-      - Challenges: feature-tracking/challenges.md
-      - Admin Dashboard: feature-tracking/admin-dashboard.md
-      - Learning Paths: feature-tracking/learning-path.md
+    - Home: index.md
+    - Explaination: explanation.md
+    - Reference:
+          - Database Schematic: reference/database-schematic.md
+          - Sitemap: reference/sitemap.md
+    - Feature Tracking:
+          - Challenges: feature-tracking/challenges.md
+          - Admin Dashboard: feature-tracking/admin-dashboard.md
+          - Learning Paths: feature-tracking/learning-path.md
 
 theme:
-  name: material
-  features:
-    - navigation.instant
-    - navigation.instant.prefetch
-    - navigation.instant.progress
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.path
+    name: material
+    features:
+        - navigation.instant
+        - navigation.instant.prefetch
+        - navigation.instant.progress
+        - navigation.tabs
+        - navigation.tabs.sticky
+        - navigation.path
 
 plugins:
-  - search
-  - panzoom:
-      always_show_hint: true
-      hint_location: "top"
+    - search
+    - panzoom:
+          always_show_hint: true
+          hint_location: 'top'
 
 markdown_extensions:
-  - attr_list
-  - md_in_html
-  - pymdownx.blocks.caption
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+    - attr_list
+    - md_in_html
+    - pymdownx.blocks.caption
+    - pymdownx.superfences:
+          custom_fences:
+              - name: mermaid
+                class: mermaid
+                format: !!python/name:pymdownx.superfences.fence_code_format

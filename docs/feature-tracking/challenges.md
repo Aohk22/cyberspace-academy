@@ -7,8 +7,8 @@
 - Number of solves for a challenge should be visible.
 - Users can track whether they have completed a challenge.
 - Challenge categories: web, network, crypto, forensics, binary exploitataion, OSINT.
-- Challenge metadata: 
-    - difficulty, 
+- Challenge metadata:
+    - difficulty,
     - achievement points for completing,
     - category,
     - challenge name,

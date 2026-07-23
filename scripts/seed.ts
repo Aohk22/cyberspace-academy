@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import '../app/.server/env'
 import { sql } from 'drizzle-orm'
 import { db } from '../app/.server/database/connection'
 import {
@@ -18,6 +18,8 @@ import {
 	challengeTags,
 	userChallenges,
 	pathChallenges,
+	badges,
+	userBadges,
 } from '../app/.server/database/schema'
 
 const CATEGORIES = [
@@ -425,6 +427,90 @@ const PATH_CHALLENGES = [
 	{ pathIndex: 1, challengeIndex: 2, position: 0 },
 ]
 
+const BADGES = [
+	{
+		name: 'First Blood',
+		description: 'Solve your very first challenge.',
+		icon: '🩸',
+		rarity: 'common',
+		criteriaType: 'challenges_solved' as const,
+		criteriaValue: 1,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Challenge Adept',
+		description: 'Solve 5 challenges.',
+		icon: '🛡️',
+		rarity: 'rare',
+		criteriaType: 'challenges_solved' as const,
+		criteriaValue: 5,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Challenge Master',
+		description: 'Solve 25 challenges.',
+		icon: '👑',
+		rarity: 'legendary',
+		criteriaType: 'challenges_solved' as const,
+		criteriaValue: 25,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Bookworm',
+		description: 'Complete your first lesson.',
+		icon: '📘',
+		rarity: 'common',
+		criteriaType: 'lessons_completed' as const,
+		criteriaValue: 1,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Scholar',
+		description: 'Complete an entire course.',
+		icon: '🎓',
+		rarity: 'epic',
+		criteriaType: 'courses_completed' as const,
+		criteriaValue: 1,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Rising Star',
+		description: 'Earn 500 achievement points.',
+		icon: '⭐',
+		rarity: 'rare',
+		criteriaType: 'points_total' as const,
+		criteriaValue: 500,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Point Hoarder',
+		description: 'Earn 1000 achievement points.',
+		icon: '💎',
+		rarity: 'epic',
+		criteriaType: 'points_total' as const,
+		criteriaValue: 1000,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Legend',
+		description: 'Earn 2000 achievement points.',
+		icon: '🏆',
+		rarity: 'legendary',
+		criteriaType: 'points_total' as const,
+		criteriaValue: 2000,
+		criteriaMeta: null,
+	},
+	{
+		name: 'Web Specialist',
+		description: 'Solve 3 web challenges.',
+		icon: '🌐',
+		rarity: 'epic',
+		criteriaType: 'challenges_category' as const,
+		criteriaValue: 3,
+		criteriaMeta: 'web',
+	},
+]
+
 async function seed() {
 	console.log('🌱 Seeding database...')
 
@@ -661,7 +747,7 @@ async function seed() {
 			tagNames: ['pcap', 'traffic-analysis'],
 		},
 		{
-			name: 'Caesar\'s Secret',
+			name: "Caesar's Secret",
 			description:
 				'We intercepted an encrypted message: "fdjlv{ohwv_ghfubsw_whd}". It looks like a classical cipher. Can you decode it?',
 			flag: 'flag{lets_decrypt_tea}',
@@ -772,16 +858,12 @@ async function seed() {
 
 	console.log(`✅ Inserted ${insertedTags.length} tags`)
 
-	const tagMap = Object.fromEntries(
-		insertedTags.map((t) => [t.name, t.id]),
-	)
+	const tagMap = Object.fromEntries(insertedTags.map((t) => [t.name, t.id]))
 
 	// Insert challenges
 	const insertedChallenges = await db
 		.insert(challenges)
-		.values(
-			CHALLENGES.map(({ tagNames: _, ...c }) => c),
-		)
+		.values(CHALLENGES.map(({ tagNames: _, ...c }) => c))
 		.returning()
 
 	console.log(`✅ Inserted ${insertedChallenges.length} challenges`)
@@ -846,6 +928,92 @@ async function seed() {
 	`)
 
 	console.log('✅ Updated achievement points')
+
+	// Insert badge definitions
+	const insertedBadges = await db
+		.insert(badges)
+		.values(
+			BADGES.map(
+				({
+					name,
+					description,
+					icon,
+					rarity,
+					criteriaType,
+					criteriaValue,
+					criteriaMeta,
+				}) => ({
+					name,
+					description,
+					icon,
+					rarity,
+					criteriaType,
+					criteriaValue,
+					criteriaMeta,
+				}),
+			),
+		)
+		.returning()
+
+	console.log(`✅ Inserted ${insertedBadges.length} badge definitions`)
+
+	// Award badges to users who already meet each badge's criteria.
+	// Single INSERT ... SELECT per badge, using raw SQL with CTEs for each metric.
+	for (const badge of insertedBadges) {
+		await db.execute(sql`
+			WITH challenge_solves AS (
+				SELECT uc.user_id, c.category, COUNT(*)::int AS solved
+				FROM user_challenges uc
+				INNER JOIN challenges c ON c.id = uc.challenge_id
+				GROUP BY uc.user_id, c.category
+			),
+			total_challenges AS (
+				SELECT user_id, COUNT(*)::int AS solved
+				FROM user_challenges
+				GROUP BY user_id
+			),
+			lessons_done AS (
+				SELECT user_id, COUNT(*)::int AS completed
+				FROM users_to_lessons
+				WHERE completed = true
+				GROUP BY user_id
+			),
+			courses_done AS (
+				SELECT utc.user_id, COUNT(DISTINCT utc.course_id)::int AS completed
+				FROM users_to_courses utc
+				WHERE NOT EXISTS (
+					SELECT 1 FROM users_to_lessons utl
+					INNER JOIN lessons l ON l.id = utl.lesson_id
+					INNER JOIN modules m ON m.id = l.module_id
+					WHERE m.course_id = utc.course_id
+					AND (utl.user_id <> utc.user_id OR utl.completed = false)
+				)
+				GROUP BY utc.user_id
+			)
+			INSERT INTO user_badges (user_id, badge_id)
+			SELECT u.id, ${badge.id}
+			FROM users u
+			WHERE (
+				${badge.criteriaType} = 'challenges_solved'
+				AND (SELECT COALESCE(solved, 0) FROM total_challenges t WHERE t.user_id = u.id) >= ${badge.criteriaValue}
+			) OR (
+				${badge.criteriaType} = 'lessons_completed'
+				AND (SELECT COALESCE(completed, 0) FROM lessons_done l WHERE l.user_id = u.id) >= ${badge.criteriaValue}
+			) OR (
+				${badge.criteriaType} = 'points_total'
+				AND u.achievement_points >= ${badge.criteriaValue}
+			) OR (
+				${badge.criteriaType} = 'courses_completed'
+				AND (SELECT COALESCE(completed, 0) FROM courses_done cd WHERE cd.user_id = u.id) >= ${badge.criteriaValue}
+			) OR (
+				${badge.criteriaType} = 'challenges_category'
+				AND (SELECT COALESCE(solved, 0) FROM challenge_solves cs WHERE cs.user_id = u.id AND cs.category = ${badge.criteriaMeta}) >= ${badge.criteriaValue}
+			)
+			ON CONFLICT DO NOTHING
+		`)
+	}
+
+	console.log('✅ Awarded badges to qualifying users')
 
 	console.log('🎉 Seeding complete!')
 }

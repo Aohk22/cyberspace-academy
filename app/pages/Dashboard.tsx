@@ -17,8 +17,8 @@ import RecommendedCourseFallback from '~/components/fallbacks/RecommendedCourseF
 export const handle = {
 	section: {
 		title: 'User Home',
-		subtitle: 'Keep track of your learning.'
-	}
+		subtitle: 'Keep track of your learning.',
+	},
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
@@ -70,11 +70,13 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
 			</section>
 
 			<section>
-				<h2 className="
+				<h2
+					className="
 					text-lg font-semibold
-					text-background-text
+					text-ink
 					mb-4
-				">
+				"
+				>
 					Continue Learning
 				</h2>
 				<React.Suspense fallback={<ContinueLearningFallback />}>
@@ -85,9 +87,11 @@ export default function Dashboard({ loaderData }: Route.ComponentProps) {
 			</section>
 
 			<section>
-				<h2 className="
-					text-lg font-semibold text-background-text mb-4
-				">
+				<h2
+					className="
+					text-lg font-semibold text-ink mb-4
+				"
+				>
 					All enrolled courses
 				</h2>
 				<React.Suspense fallback={<RecommendedCourseFallback />}>

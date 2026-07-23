@@ -1,4 +1,5 @@
 <!-- refreshed: 2026-07-15 -->
+
 # Architecture
 
 **Analysis Date:** 2026-07-15
@@ -40,7 +41,7 @@
 │  Challenges  Achievements│            │  AdminCreateUser             │
 │  `app/pages/*.tsx`       │            │  `app/pages/admin/*.tsx`     │
 └──────────────────────────┘            └──────────────────────────────┘
-           │                                             
+           │
            ▼
 ┌───────────────────────────────────────────────────────────────────────┐
 │                      SERVER LAYER (Server-only)                       │
@@ -67,34 +68,35 @@
 
 ## Component Responsibilities
 
-| Component | Responsibility | File |
-|-----------|----------------|------|
-| Root Layout | HTML shell, `<ThemeProvider>`, global error boundary | `app/root.tsx` |
-| MainLayout | Authenticated app shell: sidebar nav, header, outer chrome | `app/layouts/MainLayout.tsx` |
-| SectionLayout | Content wrapper: title/subtitle header per section | `app/layouts/SectionLayout.tsx` |
-| Protected Route | Applies `authMiddleware`, redirects unauthenticated users | `app/routes/protected.tsx` |
-| Admin Protected Route | Applies `adminMiddleware`, redirects non-staff users | `app/routes/admin-protected.tsx` |
-| Auth Middleware | Reads session cookie, validates, sets `userContext` | `app/middleware/auth.ts` |
-| Admin Middleware | Checks `userContext.role === 'staff'` | `app/middleware/admin.ts` |
-| Route Manifest | Single file listing all routes with layout nesting | `app/routes.ts` |
-| DB Connection | pg Pool + Drizzle client, sets `search_path` to `cyberspace` | `app/.server/database/connection.ts` |
-| DB Schema | All Drizzle table definitions under `cyberspace` pgSchema | `app/.server/database/schema.ts` |
-| Zod Types | `createSelectSchema` + extended Zod schemas for row parsing | `app/.server/database/types.ts` |
-| DB Utils | Mix of Drizzle builder and raw SQL utility functions | `app/.server/database/utils.ts` |
-| Query Files | Domain-specific raw SQL queries with Zod row validation | `app/.server/queries/*.ts` |
-| Auth Services | Login validation, registration, session management | `app/.server/auth/*.ts` |
-| Payment Provider | PayOS SDK wrapper for payment link CRUD + webhook verification | `app/.server/payment/provider.ts` |
-| Payment Access | Subscription-based feature gating (AI, challenges) | `app/.server/payment/access.ts` |
-| Chat Handler | OpenRouter API integration with rate limiting | `app/.server/chat/handler.ts` |
-| User Context | React Router `createContext` for authenticated user data | `app/context.ts` |
-| Theme Context | Client-side light/dark theme toggle with localStorage | `app/theme-context.tsx` |
-| Env Loader | Loads `.dev.env`/`.preview.env`/`.prod.env` based on `APP_ENV` | `app/.server/env.ts` |
+| Component             | Responsibility                                                 | File                                 |
+| --------------------- | -------------------------------------------------------------- | ------------------------------------ |
+| Root Layout           | HTML shell, `<ThemeProvider>`, global error boundary           | `app/root.tsx`                       |
+| MainLayout            | Authenticated app shell: sidebar nav, header, outer chrome     | `app/layouts/MainLayout.tsx`         |
+| SectionLayout         | Content wrapper: title/subtitle header per section             | `app/layouts/SectionLayout.tsx`      |
+| Protected Route       | Applies `authMiddleware`, redirects unauthenticated users      | `app/routes/protected.tsx`           |
+| Admin Protected Route | Applies `adminMiddleware`, redirects non-staff users           | `app/routes/admin-protected.tsx`     |
+| Auth Middleware       | Reads session cookie, validates, sets `userContext`            | `app/middleware/auth.ts`             |
+| Admin Middleware      | Checks `userContext.role === 'staff'`                          | `app/middleware/admin.ts`            |
+| Route Manifest        | Single file listing all routes with layout nesting             | `app/routes.ts`                      |
+| DB Connection         | pg Pool + Drizzle client, sets `search_path` to `cyberspace`   | `app/.server/database/connection.ts` |
+| DB Schema             | All Drizzle table definitions under `cyberspace` pgSchema      | `app/.server/database/schema.ts`     |
+| Zod Types             | `createSelectSchema` + extended Zod schemas for row parsing    | `app/.server/database/types.ts`      |
+| DB Utils              | Mix of Drizzle builder and raw SQL utility functions           | `app/.server/database/utils.ts`      |
+| Query Files           | Domain-specific raw SQL queries with Zod row validation        | `app/.server/queries/*.ts`           |
+| Auth Services         | Login validation, registration, session management             | `app/.server/auth/*.ts`              |
+| Payment Provider      | PayOS SDK wrapper for payment link CRUD + webhook verification | `app/.server/payment/provider.ts`    |
+| Payment Access        | Subscription-based feature gating (AI, challenges)             | `app/.server/payment/access.ts`      |
+| Chat Handler          | OpenRouter API integration with rate limiting                  | `app/.server/chat/handler.ts`        |
+| User Context          | React Router `createContext` for authenticated user data       | `app/context.ts`                     |
+| Theme Context         | Client-side light/dark theme toggle with localStorage          | `app/theme-context.tsx`              |
+| Env Loader            | Loads `.dev.env`/`.preview.env`/`.prod.env` based on `APP_ENV` | `app/.server/env.ts`                 |
 
 ## Pattern Overview
 
 **Overall:** React Router v7 Framework — SSR with nested layouts, middleware, and file-based route action/loader pattern.
 
 **Key Characteristics:**
+
 - **Single route manifest** (`app/routes.ts`) — routes defined in a central config, not file-system routing
 - **Nested layout hierarchy** — Unauthenticated → AuthGuard → MainLayout → SectionLayout → AdminGuard
 - **Middleware-based auth** — Route-level middleware (`v8_middleware: true`) that injects user via `context.set(userContext, ...)`
@@ -106,6 +108,7 @@
 ## Layers
 
 **Public Pages Layer:**
+
 - Purpose: Unauthenticated entry points (login, register, password reset)
 - Location: `app/pages/` (Login.tsx, Register.tsx, etc.)
 - Contains: Route loaders for redirect logic, route actions for form processing, page components
@@ -113,6 +116,7 @@
 - Used by: Direct URL access (no layout wrapper in route config)
 
 **Middleware Layer:**
+
 - Purpose: Route-level guards that redirect unauthenticated/non-admin users
 - Location: `app/middleware/auth.ts`, `app/middleware/admin.ts`
 - Contains: `MiddlewareFunction` that reads session, validates, sets `userContext`
@@ -120,6 +124,7 @@
 - Used by: `app/routes/protected.tsx`, `app/routes/admin-protected.tsx`
 
 **Layout Layer:**
+
 - Purpose: Nested UI chrome — sidebar, header, section title bars
 - Location: `app/layouts/MainLayout.tsx`, `app/layouts/SectionLayout.tsx`, `app/layouts/UnderConstructionLayout.tsx`
 - Contains: Nav components, theme toggle, AI tutor button, pricing modal
@@ -127,6 +132,7 @@
 - Used by: Routes nested inside layout wrappers in `app/routes.ts`
 
 **Page Layer:**
+
 - Purpose: Individual route components with loaders, actions, and UI
 - Location: `app/pages/*.tsx`, `app/pages/admin/*.tsx`
 - Contains: Route loader for data fetching, route action for form/mutation handling, React components
@@ -134,14 +140,15 @@
 - Used by: Router based on URL matching
 
 **Server Layer:**
+
 - Purpose: All server-only business logic, never imported on client
 - Location: `app/.server/`
 - Sub-layers:
-  - **Auth** (`auth/`): Login validation, registration, cookie sessions
-  - **Database** (`database/`): Drizzle schema, connection, types, utility queries
-  - **Queries** (`queries/`): Domain-specific raw SQL query functions
-  - **Payment** (`payment/`): PayOS provider, access control gating
-  - **Chat** (`chat/`): OpenRouter AI tutor integration
+    - **Auth** (`auth/`): Login validation, registration, cookie sessions
+    - **Database** (`database/`): Drizzle schema, connection, types, utility queries
+    - **Queries** (`queries/`): Domain-specific raw SQL query functions
+    - **Payment** (`payment/`): PayOS provider, access control gating
+    - **Chat** (`chat/`): OpenRouter AI tutor integration
 - Used by: Middleware, Page loaders/actions
 
 ## Data Flow
@@ -151,12 +158,12 @@
 1. HTTP request hits React Router SSR handler (`app/root.tsx` → `client export`)
 2. Router matches URL against `app/routes.ts` manifest
 3. Middleware executes in order:
-   - `authMiddleware` (`app/middleware/auth.ts`): Reads `__session` cookie, validates, sets `userContext`
-   - `adminMiddleware` (`app/middleware/admin.ts`): Checks `userContext.role === 'staff'`
+    - `authMiddleware` (`app/middleware/auth.ts`): Reads `__session` cookie, validates, sets `userContext`
+    - `adminMiddleware` (`app/middleware/admin.ts`): Checks `userContext.role === 'staff'`
 4. Route loader executes in the matched page component:
-   - Calls query functions from `app/.server/queries/` or `app/.server/database/utils.ts`
-   - Queries execute via `db.execute(sql`...`)` with Zod row parsing
-   - Returns data object (may contain promises for deferred loading)
+    - Calls query functions from `app/.server/queries/` or `app/.server/database/utils.ts`
+    - Queries execute via `db.execute(sql`...`)` with Zod row parsing
+    - Returns data object (may contain promises for deferred loading)
 5. Layout loaders execute (e.g., `MainLayout` reads `userContext`)
 6. React renders component tree: Layout > SectionLayout > Page
 7. Deferred promises resolve via `<Suspense>` + `<Await>` in the component
@@ -194,6 +201,7 @@
 4. Subscription expiry checked on every middleware invocation; expired roles downgraded to `learner`
 
 **State Management:**
+
 - **Server state:** Query results loaded per-route via React Router loaders — no global client store
 - **Session:** Cookie-based (`createCookieSessionStorage`), server-side only
 - **Client state:** Local React state, `useFetcher` for mutations, `useTheme` context for theme
@@ -202,6 +210,7 @@
 ## Key Abstractions
 
 **UserContext:**
+
 - Purpose: Provides authenticated user data (id, name, role, subscription) through the route context
 - Created in: `app/context.ts` via `createContext<UserContext | null>(null)`
 - Set by: `authMiddleware` via `context.set(userContext, ...)`
@@ -209,21 +218,25 @@
 - Pattern: React Router's framework context API (not React's `createContext`)
 
 **Query Functions:**
+
 - Purpose: Encapsulate raw SQL queries with Zod validation
 - Examples: `app/.server/queries/courses.ts`, `app/.server/queries/dashboard.ts`
-- Pattern: `async function getX(params): Promise<XType[]>` → `db.execute(sql\`...\`)` → `z.array(schema).parse(res.rows)`
+- Pattern: `async function getX(params): Promise<XType[]>` → `db.execute(sql\`...\`)`→`z.array(schema).parse(res.rows)`
 
 **Route Handles (SectionMetadata):**
+
 - Purpose: Declarative section title/subtitle per route, consumed by `SectionLayout`
 - Location: Route pages export `export const handle = { section: { title, subtitle } }`
 - Pattern: `useMatches()` in `SectionLayout` walks route matches to find the deepest section handle
 
 **Middleware Guard Pattern:**
+
 - Purpose: Protect route trees from unauthorized access
 - Pattern: A route component file exports `middleware: Route.MiddlewareFunction[]` array
 - Files: `app/routes/protected.tsx`, `app/routes/admin-protected.tsx`
 
 **Database Schema Pattern:**
+
 - Purpose: Single source of truth for table definitions via Drizzle
 - Location: `app/.server/database/schema.ts`
 - Pattern: All tables under `cyberspaceSchema = pgSchema('cyberspace')`, with foreign keys, defaults, and unique constraints
@@ -231,16 +244,19 @@
 ## Entry Points
 
 **Application Entry:**
+
 - Location: `app/root.tsx` - Root Layout component with `<html>`, `<ThemeProvider>`, `<Outlet>`, global error boundary
 - Triggers: Any URL hit on the deployed app
 - Responsibilities: HTML shell, font preconnect, theme flash prevention, error boundary
 
 **Auth Entry:**
+
 - Location: `app/middleware/auth.ts` - `authMiddleware`
 - Triggers: Every request to a route nested under `routes/protected.tsx`
 - Responsibilities: Session verification, user context hydration, subscription expiry check
 
 **API Entry Points:**
+
 - `/payment-webhook` → `app/routes/PaymentWebhook.ts` — PayOS webhook receiver (POST only)
 - `/api/chat` → `app/routes/api.chat.ts` — AI chat endpoint (POST, via action)
 - `/payment` → `app/routes/payment.ts` — Payment link creation (POST, via action)
@@ -275,6 +291,7 @@
 **Strategy:** Route-level error boundaries with React Router's `ErrorBoundary`.
 
 **Patterns:**
+
 - `app/root.tsx` exports `ErrorBoundary` component — catches all unhandled errors
 - `isRouteErrorResponse(error)` check to differentiate HTTP errors (404, 500) from unexpected exceptions
 - Stack traces shown only in `import.meta.env.DEV` mode
@@ -284,20 +301,23 @@
 ## Cross-Cutting Concerns
 
 **Logging:** Ad-hoc `console.log`/`console.error` calls — no structured logging framework
+
 - `app/.server/database/connection.ts`: `console.error` for pool errors
 - `app/.server/auth/login.ts`: `console.log` for DrizzleQueryError
 - `app/routes/PaymentWebhook.ts`: `console.error` for webhook verification failures
 - `app/.server/queries/dashboard.ts`: `console.log(res)` for query debugging
 
 **Validation:** Zod v4 used throughout:
+
 - Form data parsing in route actions
 - Row result parsing in every raw SQL query
 - Drizzle schema validation via `createSelectSchema` in `types.ts`
 
 **Authentication:** Cookie-based sessions with bcrypt password hashing:
+
 - Session cookie: `__session`, httpOnly, sameSite=lax, 1-hour expiry (30-day if "remember me")
 - Password hashing: bcrypt, 10 salt rounds
 
 ---
 
-*Architecture analysis: 2026-07-15*
+_Architecture analysis: 2026-07-15_

@@ -1,56 +1,81 @@
-# AGENTS.md — exe101-web-app
+# CyberSpace Academy — Agent Guide
 
-## Commands
-
-| Command              | What it does                                                 |
-| -------------------- | ------------------------------------------------------------ |
-| `pnpm run dev`       | Dev server at `localhost:5173` (Vite + React Router HMR)     |
-| `pnpm run build`     | Production build → `build/client/`, `build/server/` (SSR)    |
-| `pnpm run typecheck` | **Must run typegen first** — `react-router typegen && tsc`   |
-| `pnpm run fmt`       | Prettier (tabs, 4-space width, single quotes, no semicolons) |
-| `pnpm run db:push`   | Drizzle-kit push (schema → PostgreSQL)                       |
-| `pnpm run db:seed`   | Seed DB via `tsx ./scripts/seed.ts`                          |
-| `pnpm run db:wipe`   | Wipe DB via `tsx ./scripts/wipe.ts`                          |
-
-No test or lint scripts exist.
-
-## Quick DB reset
+## Quick start
 
 ```sh
-pnpm run db:wipe && pnpm run db:push && pnpm run db:seed
+pnpm install
+cp example.env .dev.env   # fill in DATABASE_URL, SESSION_SECRET
+pnpm run db:push && pnpm run db:seed
+pnpm run dev              # http://localhost:5173
 ```
 
-## Environment
+## Env loading
 
-`.env` is gitignored. Copy `example.env` and set:
+- `APP_ENV=dev|preview|prod` selects env file: `.dev.env`, `.preview.env`, `.prod.env`
+- Default is `dev`. Both `drizzle.config.ts` and `app/.server/env.ts` read `APP_ENV`
+- `.env` files are gitignored; never commit secrets
 
-- `DATABASE_URL` (PostgreSQL required)
-- `SESSION_SECRET` (any random string)
-- `OPENROUTER_API_KEY` (optional, for AI tutor)
+## Developer commands (in order when applicable)
+
+| Command                | Notes                                                                |
+| ---------------------- | -------------------------------------------------------------------- |
+| `pnpm run typecheck`   | Runs `react-router typegen && tsc` — **must pass before committing** |
+| `pnpm run fmt`         | Prettier (tabs, single quotes, no semi, 4-space tab width)           |
+| `pnpm run dev`         | Dev server on `:5173`                                                |
+| `pnpm run build`       | Outputs `build/client/` + `build/server/`                            |
+| `pnpm run start`       | Serve production build                                               |
+| `pnpm run db:push`     | Push Drizzle schema to PostgreSQL                                    |
+| `pnpm run db:seed`     | Seed DB (runs `scripts/seed.ts` which executes `scripts/seed.sql`)   |
+| `pnpm run db:wipe`     | Delete all data                                                      |
+| `pnpm run db:generate` | Generate Drizzle migration files                                     |
+| `pnpm run db:migrate`  | Run Drizzle migrations                                               |
+
+**There are no test or lint scripts.** Verification = `typecheck` + `fmt`.
 
 ## Architecture
 
-- **Single route manifest**: `app/routes.ts` — add routes here, not by filesystem.
-- **Server-only code** in `app/.server/` (DB, auth, queries). Importing on client will crash.
-- **Pages** in `app/pages/`. **Route logic** (middleware, loaders, actions) in `app/routes/`.
-- **Auth middleware** in `app/middleware/auth.ts`. Applied via `protected.tsx` layout route. Protects all routes nested under it.
-- **Session**: Cookie `__session`, 1hr maxAge, `httpOnly`, secure in production. Uses React Router `createCookieSessionStorage`.
-- **DB**: PostgreSQL via Drizzle ORM. Most queries use **raw SQL** (`sql` tagged template) with **zod** for row parsing, not the Drizzle query builder.
+```
+app/
+├── .server/          # Server-only: DB, auth, queries, payments, chat — NEVER imported on client
+├── components/       # Shared UI
+├── layouts/          # MainLayout, SectionLayout, UnderConstructionLayout
+├── middleware/       # auth.ts, admin.ts
+├── routes/           # Route loaders/actions/middleware
+├── pages/            # Page components (one per route)
+├── routes.ts         # Single route manifest
+└── root.tsx          # Root layout + error boundary
+```
+
+- **Route protection**: Nest routes under `routes/protected.tsx` (authMiddleware) or `routes/admin-protected.tsx` (adminMiddleware)
 - **Path alias**: `~/*` → `./app/*`
-- **Schema**: `app/.server/database/schema.ts` (Drizzle schema). Drizzle config in `drizzle.config.ts`.
-- **Trigger**: `users_to_lessons` rows auto-populated by PostgreSQL trigger `on_course_enrollment` on INSERT into `users_to_courses`.
+- **SSR**: enabled in `react-router.config.ts`
+
+## Database
+
+- PostgreSQL, schema `cyberspace` (pgSchema in Drizzle, search_path set in connection pool)
+- **Drizzle for schema only** — queries use raw `sql` tagged template + Zod row parsing (never the Drizzle query builder)
+- Schema: `app/.server/database/schema.ts`
+- Queries: `app/.server/queries/`
+- Quick reset: `pnpm run db:wipe && pnpm run db:push && pnpm run db:seed`
 
 ## Style conventions
 
+- Tailwind CSS v4 via `@tailwindcss/vite`
 - Prettier: tabs, single quotes, no semicolons, 4-space tab width
-- Seed passwords are pre-hashed bcrypt (`$2b$10$...`), not plaintext
-- `tsx` runner for scripts (`^4.21.0`)
-- AI tutor uses OpenRouter API (model `google/gemini-2.0-flash-lite-001`)
+- TypeScript strict mode with `verbatimModuleSyntax`
 
-## Git commits
+## Key packages
 
-- Use [Conventional Commits](https://www.conventionalcommits.org/) format: `type: short description`
-- Types: `feat`, `fix`, `refactor`, `style`, `docs`, `chore`, `perf`, `test`
-- Imperative mood, no period at end of subject line
-- Subject ≤ 72 chars; blank line before body if needed
-- Body wraps at 72 chars, explains what and why (not how)
+| Purpose    | Package                                         |
+| ---------- | ----------------------------------------------- |
+| Auth       | bcrypt, session cookies                         |
+| Payments   | @payos/node, @payos/payos-checkout              |
+| AI chat    | OpenRouter API (optional, `OPENROUTER_API_KEY`) |
+| DB ORM     | drizzle-orm + pg                                |
+| Validation | zod v4, drizzle-zod                             |
+| Icons      | lucide-react                                    |
+| Animation  | motion                                          |
+
+## CI
+
+Only docs deployment (MkDocs to GitHub Pages). No test/typecheck CI pipeline.

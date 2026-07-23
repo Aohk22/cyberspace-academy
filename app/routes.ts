@@ -16,6 +16,9 @@ export default [
 		layout('./layouts/MainLayout.tsx', [
 			index('./pages/IndexRedirect.tsx'),
 			route('toggle-view', './routes/ToggleView.ts'),
+			route('payment', './routes/payment.ts'),
+			route('payment/success', './pages/PaymentSuccess.tsx'),
+			route('payment/cancel', './pages/PaymentCancel.tsx'),
 
 			layout('./layouts/SectionLayout.tsx', [
 				// User navigation.
@@ -25,45 +28,54 @@ export default [
 
 				route('courses', './pages/Courses.tsx'),
 				route('courses/:courseId', './pages/CourseDetail.tsx'),
-				route('courses/:courseId/lessons/:lessonId',
+				route(
+					'courses/:courseId/lessons/:lessonId',
 					'./pages/Lesson.tsx',
 				),
 
 				route('learning-path', './pages/LearningPath.tsx'),
-				route('learning-path/:pathId', './pages/LearningPathDetail.tsx'),
+				route(
+					'learning-path/:pathId',
+					'./pages/LearningPathDetail.tsx',
+				),
 
-				layout('./layouts/UnderConstructionLayout.tsx', [
-					route('achievements', './pages/Achievements.tsx'),
-				]),
-
+				route('achievements', './pages/Achievements.tsx'),
 
 				// Admin navigation.
-layout('./routes/admin-protected.tsx', [
-		route('admin', './pages/admin/AdminDashboard.tsx'),
+				layout('./routes/admin-protected.tsx', [
+					route('admin', './pages/admin/AdminDashboard.tsx'),
 
-		route('course-builder', './pages/CourseBuilder.tsx'),
-		route(
-			'course-builder/:courseId/lessons/:lessonId',
-			'./pages/CourseBuilderLesson.tsx',
-		),
-		route('course-builder/:courseId/export', './routes/CourseExport.ts'),
+					route('course-builder', './pages/CourseBuilder.tsx'),
+					route(
+						'course-builder/:courseId/lessons/:lessonId',
+						'./pages/CourseBuilderLesson.tsx',
+					),
+					route(
+						'course-builder/:courseId/export',
+						'./routes/CourseExport.ts',
+					),
 
-		route('users', './pages/admin/AdminUsers.tsx'),
-		route('users/new', './pages/admin/AdminCreateUser.tsx'),
-		route('users/:userId/edit', './pages/admin/AdminUserEdit.tsx'),
+					route('users', './pages/admin/AdminUsers.tsx'),
+					route('users/new', './pages/admin/AdminCreateUser.tsx'),
+					route(
+						'users/:userId/edit',
+						'./pages/admin/AdminUserEdit.tsx',
+					),
 
-		route('categories', './pages/admin/AdminCategories.tsx'),
+					route('categories', './pages/admin/AdminCategories.tsx'),
+					route('admin/payments', './pages/admin/AdminPayments.tsx'),
 
-		route('paths-admin', './pages/admin/AdminPaths.tsx', [
-			route(':pathId', './pages/admin/AdminPathDetail.tsx'),
-		]),
-	]),
-
+					route('paths-admin', './pages/admin/AdminPaths.tsx', [
+						route(':pathId', './pages/admin/AdminPathDetail.tsx'),
+					]),
+				]),
 
 				// General
 				route('settings', './pages/Settings.tsx'),
 			]),
 		]),
 	]),
+	route('payment-webhook', './routes/PaymentWebhook.ts'),
+	route('api/chat', './routes/api.chat.ts'),
 	route('*', './routes/splat-redirect.tsx'),
 ] satisfies RouteConfig

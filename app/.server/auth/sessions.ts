@@ -1,10 +1,11 @@
-import 'dotenv/config'
+import '~/.server/env'
 import { createCookieSessionStorage } from 'react-router'
 
 type SessionData = {
 	userId: string
 	userName: string
 	userRole: string
+	subscriptionEndsAt: string | null
 	viewAsLearner: boolean
 }
 

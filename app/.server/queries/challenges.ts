@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { db } from '~/.server/database/connection'
 import { challenges } from '~/.server/database/schema'
 import { challengeViewSchema } from '~/.server/database/types'
+import { awardBadgesForUser } from './achievements'
 import type { ChallengeView } from '~/.server/database/types'
 
 export async function getChallenges({
@@ -80,6 +81,8 @@ export async function submitFlag({
 	await db.execute(
 		sql`UPDATE users SET achievement_points = achievement_points + ${challenge.points} WHERE id = ${userId}`,
 	)
+
+	await awardBadgesForUser(userId)
 
 	return { correct: true, points: challenge.points }
 }

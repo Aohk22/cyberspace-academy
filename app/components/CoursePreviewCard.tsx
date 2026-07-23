@@ -76,7 +76,7 @@ export default function CoursePreviewCard({
 	return (
 		<div
 			ref={cardRef}
-			className="bg-slate-900 border border-slate-800 rounded-xl shadow-xl shadow-black/20 overflow-hidden"
+			className="bg-primary border border-hairline rounded-xl shadow-xl shadow-black/20 overflow-hidden"
 		>
 			<button
 				type="button"
@@ -87,9 +87,9 @@ export default function CoursePreviewCard({
 						? 'Expand course preview'
 						: 'Collapse course preview'
 				}
-				className="group flex w-full justify-center border-b border-slate-800 bg-slate-800/50 px-6 py-3 transition-colors hover:bg-slate-800/70"
+				className="group flex w-full justify-center border-b border-hairline bg-soft-stone/50 px-6 py-3 transition-colors hover:bg-soft-stone/70"
 			>
-				<span className="block h-1 w-16 rounded-full bg-slate-500/80 transition-colors group-hover:bg-slate-300" />
+				<span className="block h-1 w-16 rounded-full bg-muted/80 transition-colors group-hover:bg-on-primary" />
 			</button>
 
 			<div
@@ -112,7 +112,7 @@ export default function CoursePreviewCard({
 						/>
 						<div className="absolute inset-0 bg-black/40 flex items-center justify-center">
 							<div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-								<Play className="w-6 h-6 text-emerald-600 fill-emerald-600 ml-1" />
+								<Play className="w-6 h-6 text-deep-green fill-deep-green ml-1" />
 							</div>
 						</div>
 					</div>
@@ -121,7 +121,7 @@ export default function CoursePreviewCard({
 						{enrolled ? (
 							<Link
 								to={continuePath}
-								className="flex w-full items-center justify-center py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 active:scale-[0.98]"
+								className="flex w-full items-center justify-center py-4 bg-deep-green text-on-dark rounded-2xl font-bold hover:brightness-110 transition-all shadow-lg shadow-deep-green/20 active:scale-[0.98]"
 							>
 								Continue
 							</Link>
@@ -130,7 +130,7 @@ export default function CoursePreviewCard({
 								<button
 									type="submit"
 									disabled={isSubmittingEnrollment}
-									className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+									className="w-full py-4 bg-deep-green text-on-dark rounded-2xl font-bold hover:brightness-110 transition-all shadow-lg shadow-deep-green/20 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
 								>
 									{isSubmittingEnrollment
 										? 'Enrolling...'
@@ -143,7 +143,7 @@ export default function CoursePreviewCard({
 							<button
 								type="button"
 								onClick={copyCourseAddress}
-								className="w-full py-4 flex items-center justify-center gap-2 border border-slate-800 rounded-2xl text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors"
+								className="w-full py-4 flex items-center justify-center gap-2 border border-hairline rounded-2xl text-sm font-medium text-ink hover:bg-soft-stone transition-colors"
 							>
 								<Share2 className="w-4 h-4" />
 								{shareState === 'copied'

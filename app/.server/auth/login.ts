@@ -22,7 +22,12 @@ async function validateCredentials(email: string, password: string) {
 
 		const match = await bcrypt.compare(password, user.password)
 		if (match) {
-			return { id: user.id, name: user.name, role: user.role }
+			return {
+				id: user.id,
+				name: user.name,
+				role: user.role,
+				subscriptionEndsAt: user.subscriptionEndsAt,
+			}
 		} else {
 			return null
 		}

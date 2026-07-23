@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { formatCourseLength, formatLessonLength } from '~/utils/format-course-length'
+import {
+	formatCourseLength,
+	formatLessonLength,
+} from '~/utils/format-course-length'
 
 describe('formatCourseLength', () => {
 	it('formats a whole number of hours without decimals', () => {

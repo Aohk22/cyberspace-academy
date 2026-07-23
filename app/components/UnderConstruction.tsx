@@ -26,7 +26,7 @@ export default function UnderConstruction({
 				initial={{ opacity: 0, y: 18 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.35, ease: 'easeOut' }}
-				className="under-construction-shell relative overflow-hidden rounded-[2rem] border border-amber-500/20 bg-gradient-to-br from-slate-900 via-slate-900 to-amber-500/10 p-8 sm:p-10"
+				className="under-construction-shell relative overflow-hidden rounded-[2rem] border border-amber-500/20 bg-gradient-to-br from-cohere-black via-cohere-black to-amber-500/10 p-8 sm:p-10"
 			>
 				<div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.2),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(16,185,129,0.14),transparent_28%)]" />
 
@@ -38,10 +38,10 @@ export default function UnderConstruction({
 						</div>
 
 						<div className="space-y-3">
-							<h1 className="text-3xl font-bold text-white sm:text-4xl">
+							<h1 className="text-3xl font-bold text-on-dark sm:text-4xl">
 								{title}
 							</h1>
-							<p className="max-w-xl text-base leading-7 text-slate-300">
+							<p className="max-w-xl text-base leading-7 text-on-dark">
 								{description}
 							</p>
 						</div>
@@ -49,12 +49,12 @@ export default function UnderConstruction({
 						<div className="flex flex-wrap gap-3">
 							<Link
 								to={backHref}
-								className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
+								className="inline-flex items-center gap-2 rounded-xl bg-on-dark px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-soft-stone"
 							>
 								<ArrowLeft className="h-4 w-4" />
 								{backLabel}
 							</Link>
-							<div className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-950/50 px-4 py-2.5 text-sm text-slate-300">
+							<div className="inline-flex items-center gap-2 rounded-xl border border-hairline bg-deep-green/50 px-4 py-2.5 text-sm text-on-primary">
 								<Clock3 className="h-4 w-4 text-amber-300" />
 								We&apos;re polishing this experience now
 							</div>
@@ -62,22 +62,22 @@ export default function UnderConstruction({
 					</div>
 
 					<div className="grid gap-4 sm:grid-cols-2 lg:w-[22rem]">
-						<div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
-							<Sparkles className="mb-3 h-5 w-5 text-emerald-300" />
-							<p className="text-sm font-semibold text-white">
+						<div className="rounded-2xl border border-hairline bg-deep-green/70 p-5">
+							<Sparkles className="mb-3 h-5 w-5 text-coral" />
+							<p className="text-sm font-semibold text-on-primary">
 								Sharper progress stories
 							</p>
-							<p className="mt-2 text-sm leading-6 text-slate-400">
+							<p className="mt-2 text-sm leading-6 text-body-muted">
 								Badge history, streaks, and milestone tracking
 								are being prepared.
 							</p>
 						</div>
-						<div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-5">
+						<div className="rounded-2xl border border-hairline bg-deep-green/70 p-5">
 							<Construction className="mb-3 h-5 w-5 text-amber-300" />
-							<p className="text-sm font-semibold text-white">
+							<p className="text-sm font-semibold text-on-primary">
 								Still in active build
 							</p>
-							<p className="mt-2 text-sm leading-6 text-slate-400">
+							<p className="mt-2 text-sm leading-6 text-body-muted">
 								This route is live in navigation, but the final
 								experience is not ready yet.
 							</p>
@@ -88,13 +88,13 @@ export default function UnderConstruction({
 
 			{children ? (
 				<section className="space-y-4">
-					<div className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-slate-500">
-						<div className="h-px flex-1 bg-slate-800" />
+					<div className="flex items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-muted">
+						<div className="h-px flex-1 bg-on-dark/20" />
 						<span>Preview</span>
-						<div className="h-px flex-1 bg-slate-800" />
+						<div className="h-px flex-1 bg-on-dark/20" />
 					</div>
-					<div className="pointer-events-none relative overflow-hidden rounded-[1.75rem] border border-slate-800 bg-slate-950/40">
-						<div className="absolute inset-0 z-10 bg-slate-950/35 backdrop-blur-[3px]" />
+					<div className="pointer-events-none relative overflow-hidden rounded-[1.75rem] border border-hairline bg-deep-green/40">
+						<div className="absolute inset-0 z-10 bg-deep-green/35 backdrop-blur-[3px]" />
 						<div className="relative p-6 opacity-45 sm:p-8">
 							{children}
 						</div>

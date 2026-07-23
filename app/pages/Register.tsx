@@ -62,7 +62,7 @@ export default function Register({ actionData }: Route.ComponentProps) {
 	const isLoading = navigation.state === 'submitting'
 
 	return (
-		<div data-theme="dark" className="min-h-screen bg-background flex items-center justify-center p-6 text-background-text">
+		<div className="min-h-screen bg-canvas flex items-center justify-center p-6 text-ink">
 			<motion.div
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
@@ -71,76 +71,76 @@ export default function Register({ actionData }: Route.ComponentProps) {
 			>
 				{/* Logo Area */}
 				<div className="flex flex-col items-center mb-10">
-					<div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-primary/20">
-						<GraduationCap className="text-foreground-text-hl w-8 h-8" />
+					<div className="w-14 h-14 bg-deep-green rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-deep-green/20">
+						<GraduationCap className="text-on-dark w-8 h-8" />
 					</div>
-					<h1 className="text-3xl font-bold text-foreground-text-hl tracking-tight">
+					<h1 className="text-3xl font-bold text-ink tracking-tight">
 						CyberSpace Academy
 					</h1>
-					<p className="text-foreground-text mt-2 font-medium">
+					<p className="text-ink mt-2 font-medium">
 						Join thousands of learners worldwide.
 					</p>
 				</div>
 
 				{/* Register Card */}
-				<div className="bg-foreground rounded-xl shadow-2xl shadow-black/50 border border-foreground-elevated p-8 md:p-12">
+				<div className="bg-surface rounded-xl shadow-2xl shadow-black/50 border border-hairline p-8 md:p-12">
 					<div className="mb-8">
-						<h2 className="text-2xl font-bold text-foreground-text-hl">
+						<h2 className="text-2xl font-bold text-ink">
 							Create Account
 						</h2>
-						<p className="text-foreground-text text-sm mt-1">
+						<p className="text-ink text-sm mt-1">
 							Start your 14-day free trial today.
 						</p>
 					</div>
 
 					<Form method="POST" className="space-y-5">
 						<div className="space-y-2">
-							<label className="text-sm font-bold text-foreground-text-secondary ml-1">
+							<label className="text-sm font-bold text-body-muted ml-1">
 								Full Name
 							</label>
 							<div className="relative group">
-								<User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-text-muted group-focus-within:text-primary transition-colors" />
+								<User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted group-focus-within:text-deep-green transition-colors" />
 								<input
 									type="text"
 									name="username"
 									required
 									placeholder="Alex Johnson"
-									className="w-full pl-12 pr-4 py-4 bg-foreground-elevated border border-foreground-active rounded-2xl text-sm text-foreground-text-hl focus:bg-foreground-active focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+									className="w-full pl-12 pr-4 py-4 bg-soft-stone border border-hairline rounded-2xl text-sm text-ink focus:bg-hairline focus:ring-4 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 								/>
 							</div>
 						</div>
 
 						<div className="space-y-2">
-							<label className="text-sm font-bold text-foreground-text-secondary ml-1">
+							<label className="text-sm font-bold text-body-muted ml-1">
 								Email Address
 							</label>
 							<div className="relative group">
-								<Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-text-muted group-focus-within:text-primary transition-colors" />
+								<Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted group-focus-within:text-deep-green transition-colors" />
 								<input
 									type="email"
 									name="email"
 									required
 									placeholder="name@company.com"
-									className="w-full pl-12 pr-4 py-4 bg-foreground-elevated border border-foreground-active rounded-2xl text-sm text-foreground-text-hl focus:bg-foreground-active focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+									className="w-full pl-12 pr-4 py-4 bg-soft-stone border border-hairline rounded-2xl text-sm text-ink focus:bg-hairline focus:ring-4 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 								/>
 							</div>
 						</div>
 
 						<div className="space-y-2">
-							<label className="text-sm font-bold text-foreground-text-secondary ml-1">
+							<label className="text-sm font-bold text-body-muted ml-1">
 								Password
 							</label>
 							<div className="relative group">
-								<Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-text-muted group-focus-within:text-primary transition-colors" />
+								<Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted group-focus-within:text-deep-green transition-colors" />
 								<input
 									type="password"
 									name="password"
 									required
 									placeholder="••••••••"
-									className="w-full pl-12 pr-4 py-4 bg-foreground-elevated border border-foreground-active rounded-2xl text-sm text-foreground-text-hl focus:bg-foreground-active focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+									className="w-full pl-12 pr-4 py-4 bg-soft-stone border border-hairline rounded-2xl text-sm text-ink focus:bg-hairline focus:ring-4 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 								/>
 							</div>
-							<p className="text-[10px] text-foreground-text-muted ml-1">
+							<p className="text-[10px] text-muted ml-1">
 								Must be at least 8 characters long.
 							</p>
 						</div>
@@ -151,23 +151,23 @@ export default function Register({ actionData }: Route.ComponentProps) {
 								name="checkbox"
 								id="terms"
 								required
-								className="mt-1 w-4 h-4 rounded border-foreground-active bg-foreground-elevated text-primary focus:ring-primary"
+								className="mt-1 w-4 h-4 rounded border-hairline bg-soft-stone text-deep-green focus:ring-deep-green"
 							/>
 							<label
 								htmlFor="terms"
-								className="text-xs text-foreground-text font-medium leading-relaxed"
+								className="text-xs text-ink font-medium leading-relaxed"
 							>
 								I agree to the{' '}
 								<button
 									type="button"
-								className="text-primary font-bold"
-							>
-								Terms of Service
-							</button>{' '}
+									className="text-deep-green font-bold"
+								>
+									Terms of Service
+								</button>{' '}
 								and{' '}
 								<button
 									type="button"
-									className="text-primary font-bold"
+									className="text-deep-green font-bold"
 								>
 									Privacy Policy
 								</button>
@@ -179,13 +179,13 @@ export default function Register({ actionData }: Route.ComponentProps) {
 							type="submit"
 							disabled={isLoading}
 							className={`
-								w-full py-4 bg-primary text-foreground-text-hl rounded-2xl font-bold 
-								hover:bg-primary transition-all shadow-lg shadow-primary/20 
+								w-full py-4 bg-deep-green text-on-dark rounded-2xl font-bold 
+								hover:brightness-110 transition-all shadow-lg shadow-deep-green/20 
 								active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed
 								${
 									error
 										? 'bg-error hover:bg-error shadow-error/30'
-										: 'bg-primary hover:bg-primary shadow-primary/30'
+										: 'bg-deep-green hover:brightness-110 shadow-deep-green/30'
 								}
 							`}
 						>
@@ -205,29 +205,35 @@ export default function Register({ actionData }: Route.ComponentProps) {
 					<div className="mt-8">
 						<div className="relative flex items-center justify-center mb-8">
 							<div className="absolute inset-0 flex items-center">
-								<div className="w-full border-t border-foreground-elevated"></div>
+								<div className="w-full border-t border-hairline"></div>
 							</div>
-							<span className="relative px-4 bg-foreground text-xs font-bold text-foreground-text-muted uppercase tracking-widest">
+							<span className="relative px-4 bg-surface text-xs font-bold text-muted uppercase tracking-widest">
 								Or sign up with
 							</span>
 						</div>
 
 						<div className="grid grid-cols-2 gap-4">
-							<button type="button" className="flex items-center justify-center gap-2 py-3 border border-foreground-active rounded-xl text-sm font-bold text-foreground-text-secondary hover:bg-foreground-elevated transition-colors">
+							<button
+								type="button"
+								className="flex items-center justify-center gap-2 py-3 border border-hairline rounded-xl text-sm font-bold text-body-muted hover:bg-soft-stone transition-colors"
+							>
 								<ChromeIcon className="w-5 h-5" /> Google
 							</button>
-							<button type="button" className="flex items-center justify-center gap-2 py-3 border border-foreground-active rounded-xl text-sm font-bold text-foreground-text-secondary hover:bg-foreground-elevated transition-colors">
+							<button
+								type="button"
+								className="flex items-center justify-center gap-2 py-3 border border-hairline rounded-xl text-sm font-bold text-body-muted hover:bg-soft-stone transition-colors"
+							>
 								<GithubIcon className="w-5 h-5" /> GitHub
 							</button>
 						</div>
 					</div>
 				</div>
 
-				<p className="mt-8 text-center text-foreground-text-muted font-medium">
+				<p className="mt-8 text-center text-muted font-medium">
 					Already have an account?{' '}
 					<Link
 						to="/login"
-						className="text-primary font-bold hover:text-primary transition-colors"
+						className="text-deep-green font-bold hover:text-deep-green transition-colors"
 					>
 						Sign in
 					</Link>

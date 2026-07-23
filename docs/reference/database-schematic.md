@@ -198,4 +198,3 @@ erDiagram
     class usersToCourses,usersToLessons,userPaths,userChallenges junction
     class challengeTags,pathCourses,pathChallenges junction
 ```
-

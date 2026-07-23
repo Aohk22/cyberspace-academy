@@ -1,4 +1,11 @@
-import { Save, BookOpen, Download, Upload, Trash2, ExternalLink } from 'lucide-react'
+import {
+	Save,
+	BookOpen,
+	Download,
+	Upload,
+	Trash2,
+	ExternalLink,
+} from 'lucide-react'
 import { Form, Link, useNavigate, useNavigation, useSubmit } from 'react-router'
 import { useRef, useState } from 'react'
 import type { Category } from '~/.server/database/types'
@@ -163,19 +170,19 @@ export default function CourseBuilderWorkspace({
 			modules: current.modules.map((module) =>
 				module.clientId === moduleClientId
 					? {
-						...module,
-						lessons: [
-							...module.lessons,
-							{
-								clientId: lessonClientId,
-								id: null,
-								title: '',
-								length: 0,
-								contentMd: '',
-								challengeQuestions: [],
-							},
-						],
-					}
+							...module,
+							lessons: [
+								...module.lessons,
+								{
+									clientId: lessonClientId,
+									id: null,
+									title: '',
+									length: 0,
+									contentMd: '',
+									challengeQuestions: [],
+								},
+							],
+						}
 					: module,
 			),
 			selectedModuleClientId: moduleClientId,
@@ -216,13 +223,13 @@ export default function CourseBuilderWorkspace({
 			modules: current.modules.map((module) =>
 				module.clientId === moduleClientId
 					? {
-						...module,
-						lessons: module.lessons.map((lesson) =>
-							lesson.clientId === lessonClientId
-								? { ...lesson, title }
-								: lesson,
-						),
-					}
+							...module,
+							lessons: module.lessons.map((lesson) =>
+								lesson.clientId === lessonClientId
+									? { ...lesson, title }
+									: lesson,
+							),
+						}
 					: module,
 			),
 		}))
@@ -237,11 +244,11 @@ export default function CourseBuilderWorkspace({
 			modules: current.modules.map((module) =>
 				module.clientId === moduleClientId
 					? {
-						...module,
-						lessons: module.lessons.filter(
-							(l) => l.clientId !== lessonClientId,
-						),
-					}
+							...module,
+							lessons: module.lessons.filter(
+								(l) => l.clientId !== lessonClientId,
+							),
+						}
 					: module,
 			),
 		}))
@@ -311,13 +318,13 @@ export default function CourseBuilderWorkspace({
 				<aside className="xl:sticky xl:top-24 h-fit space-y-3">
 					{/* Course selector */}
 					<div>
-						<p className="text-[11px] font-semibold uppercase tracking-widest text-foreground-text-muted">
+						<p className="text-[11px] font-semibold uppercase tracking-widest text-muted">
 							Course
 						</p>
 						<select
 							value={selectedCourse?.id ?? '__new__'}
 							onChange={handleCourseChange}
-							className="mt-1.5 w-full rounded-lg border border-foreground-elevated bg-foreground px-2 py-1.5 text-sm text-foreground-text outline-none transition focus:border-primary/40"
+							className="mt-1.5 w-full rounded-lg border border-hairline bg-surface px-2 py-1.5 text-sm text-ink outline-none transition focus:border-deep-green/40"
 						>
 							<option value="__new__">New Course</option>
 							{courses.map((course) => (
@@ -347,7 +354,7 @@ export default function CourseBuilderWorkspace({
 					)}
 
 					{/* Stats */}
-					<div className="border-t border-foreground-elevated pt-2 text-[11px] text-foreground-text-muted">
+					<div className="border-t border-hairline pt-2 text-[11px] text-muted">
 						{draft.modules.length} module
 						{draft.modules.length !== 1 ? 's' : ''}, {totalLessons}{' '}
 						lesson{totalLessons !== 1 ? 's' : ''}
@@ -358,7 +365,7 @@ export default function CourseBuilderWorkspace({
 						{selectedCourse != null ? (
 							<Link
 								to={`/course-builder/${selectedCourse.id}/export`}
-								className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-foreground-active bg-foreground px-3 py-2 text-xs font-semibold text-foreground-text-secondary transition-colors hover:bg-foreground-elevated"
+								className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-hairline bg-surface px-3 py-2 text-xs font-semibold text-body-muted transition-colors hover:bg-soft-stone"
 							>
 								<Download className="h-3.5 w-3.5" />
 								Export
@@ -367,7 +374,7 @@ export default function CourseBuilderWorkspace({
 						<button
 							type="button"
 							onClick={handleImportClick}
-							className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-foreground-active bg-foreground px-3 py-2 text-xs font-semibold text-foreground-text-secondary transition-colors hover:bg-foreground-elevated"
+							className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-hairline bg-surface px-3 py-2 text-xs font-semibold text-body-muted transition-colors hover:bg-soft-stone"
 						>
 							<Upload className="h-3.5 w-3.5" />
 							Import
@@ -387,7 +394,7 @@ export default function CourseBuilderWorkspace({
 							to={`/courses/${selectedCourse.id}`}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-foreground-active bg-foreground px-3 py-2 text-xs font-semibold text-foreground-text-secondary transition-colors hover:bg-foreground-elevated"
+							className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-hairline bg-surface px-3 py-2 text-xs font-semibold text-body-muted transition-colors hover:bg-soft-stone"
 						>
 							<ExternalLink className="h-3.5 w-3.5" />
 							View as user
@@ -409,7 +416,7 @@ export default function CourseBuilderWorkspace({
 					{/* Save */}
 					<button
 						type="submit"
-						className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
+						className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-deep-green px-3 py-2 text-xs font-semibold text-on-dark transition-colors hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
 						disabled={isSaving}
 					>
 						<Save className="h-3.5 w-3.5" />
@@ -429,10 +436,10 @@ export default function CourseBuilderWorkspace({
 						/>
 					) : (
 						<div className="p-6 text-center">
-							<p className="mt-3 text-sm font-medium text-foreground-text">
+							<p className="mt-3 text-sm font-medium text-ink">
 								Select a Course
 							</p>
-							<p className="mt-1 text-xs text-foreground-text-muted">
+							<p className="mt-1 text-xs text-muted">
 								Choose an existing course from the dropdown or
 								start a new one.
 							</p>

@@ -14,7 +14,7 @@ function renderInline(text: string): ReactNode[] {
 					key={index}
 					src={src}
 					alt={alt}
-					className="my-4 w-full rounded-2xl border border-foreground-elevated object-cover"
+					className="my-4 w-full rounded-2xl border border-hairline object-cover"
 					referrerPolicy="no-referrer"
 				/>
 			)
@@ -24,7 +24,7 @@ function renderInline(text: string): ReactNode[] {
 			return (
 				<code
 					key={index}
-					className="rounded-md bg-foreground-elevated px-1.5 py-0.5 text-[0.9em] text-foreground-text"
+					className="rounded-md bg-soft-stone px-1.5 py-0.5 text-[0.9em] text-ink"
 				>
 					{part.slice(1, -1)}
 				</code>
@@ -63,11 +63,11 @@ export default function MarkdownContent({ content }: { content: string }) {
 							<img
 								src={src}
 								alt={alt}
-								className="w-full rounded-3xl border border-foreground-elevated object-cover"
+								className="w-full rounded-3xl border border-hairline object-cover"
 								referrerPolicy="no-referrer"
 							/>
 							{alt ? (
-								<figcaption className="text-sm text-foreground-text-secondary">
+								<figcaption className="text-sm text-body-muted">
 									{alt}
 								</figcaption>
 							) : null}
@@ -80,7 +80,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<pre
 							key={index}
-							className="overflow-x-auto rounded-xl border border-foreground-elevated bg-foreground/60 p-4 text-sm text-foreground-text"
+							className="overflow-x-auto rounded-xl border border-hairline bg-surface/60 p-4 text-sm text-ink"
 						>
 							<code>{code}</code>
 						</pre>
@@ -89,10 +89,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 
 				if (firstLine.startsWith('# ')) {
 					return (
-						<h1
-							key={index}
-							className="text-3xl font-bold text-foreground-text"
-						>
+						<h1 key={index} className="text-3xl font-bold text-ink">
 							{firstLine.slice(2)}
 						</h1>
 					)
@@ -100,10 +97,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 
 				if (firstLine.startsWith('## ')) {
 					return (
-						<h2
-							key={index}
-							className="text-2xl font-bold text-foreground-text"
-						>
+						<h2 key={index} className="text-2xl font-bold text-ink">
 							{firstLine.slice(3)}
 						</h2>
 					)
@@ -111,10 +105,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 
 				if (firstLine.startsWith('### ')) {
 					return (
-						<h3
-							key={index}
-							className="text-xl font-bold text-foreground-text"
-						>
+						<h3 key={index} className="text-xl font-bold text-ink">
 							{firstLine.slice(4)}
 						</h3>
 					)
@@ -124,7 +115,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<ul
 							key={index}
-							className="list-disc space-y-2 pl-6 text-foreground-text"
+							className="list-disc space-y-2 pl-6 text-ink"
 						>
 							{lines.map((line, lineIndex) => (
 								<li key={lineIndex}>
@@ -139,7 +130,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<ol
 							key={index}
-							className="list-decimal space-y-2 pl-6 text-foreground-text"
+							className="list-decimal space-y-2 pl-6 text-ink"
 						>
 							{lines.map((line, lineIndex) => (
 								<li key={lineIndex}>
@@ -154,7 +145,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 					return (
 						<blockquote
 							key={index}
-							className="border-l-4 border-primary/50 pl-4 italic text-foreground-text"
+							className="border-l-4 border-deep-green/50 pl-4 italic text-ink"
 						>
 							{renderInline(
 								lines
@@ -166,7 +157,7 @@ export default function MarkdownContent({ content }: { content: string }) {
 				}
 
 				return (
-					<p key={index} className="leading-7 text-foreground-text">
+					<p key={index} className="leading-7 text-ink">
 						{renderInline(lines.join(' '))}
 					</p>
 				)

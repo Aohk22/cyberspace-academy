@@ -88,8 +88,8 @@ export default function Lesson() {
 				{(lessonData) => {
 					if (lessonData == null) {
 						return (
-							<div className="rounded-xl border border-dashed border-foreground-elevated bg-foreground/50 px-6 py-12 text-center">
-								<h2 className="text-lg font-bold text-foreground-text">
+							<div className="rounded-xl border border-dashed border-hairline bg-surface/50 px-6 py-12 text-center">
+								<h2 className="text-lg font-bold text-ink">
 									Lesson not found
 								</h2>
 							</div>
@@ -130,45 +130,45 @@ function LessonContent({
 	} = lessonData
 
 	return (
-		<div className="flex flex-col text-background-text">
+		<div className="flex flex-col text-ink">
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-4">
 					<Link
 						to={`/courses/${course.id}`}
-						className="p-2 hover:bg-foreground-elevated rounded-full  text-foreground-text hover:text-foreground-text"
+						className="p-2 hover:bg-soft-stone rounded-full  text-ink hover:text-ink"
 					>
 						<ChevronLeft className="w-6 h-6" />
 					</Link>
 					<div>
-						<h1 className="text-xl font-bold text-foreground-text">
+						<h1 className="text-xl font-bold text-ink">
 							{currentLesson.lessonIndex + 1}.{' '}
 							{currentLesson.title}
 						</h1>
-						<p className="text-sm text-foreground-text">{course.title}</p>
+						<p className="text-sm text-ink">{course.title}</p>
 					</div>
 				</div>
 				<div className="flex items-center gap-2">
 					{previousLessonId ? (
 						<Link
 							to={`/courses/${course.id}/lessons/${previousLessonId}`}
-							className="px-4 py-2 border border-foreground-elevated rounded-xl text-sm font-medium text-foreground-text-secondary hover:bg-foreground-elevated "
+							className="px-4 py-2 border border-hairline rounded-xl text-sm font-medium text-body-muted hover:bg-soft-stone "
 						>
 							Previous
 						</Link>
 					) : (
-						<span className="px-4 py-2 border border-foreground-elevated rounded-xl text-sm font-medium text-foreground-text-muted">
+						<span className="px-4 py-2 border border-hairline rounded-xl text-sm font-medium text-muted">
 							Previous
 						</span>
 					)}
 					{nextLessonId ? (
 						<Link
 							to={`/courses/${course.id}/lessons/${nextLessonId}`}
-							className="px-4 py-2 bg-primary text-foreground-text rounded-xl text-sm font-medium hover:bg-primary "
+							className="px-4 py-2 bg-deep-green text-on-dark rounded-xl text-sm font-medium hover:brightness-110"
 						>
 							Next Lesson
 						</Link>
 					) : (
-						<span className="px-4 py-2 bg-foreground-elevated text-foreground-text rounded-xl text-sm font-medium">
+						<span className="px-4 py-2 bg-soft-stone text-ink rounded-xl text-sm font-medium">
 							Completed
 						</span>
 					)}
@@ -176,27 +176,27 @@ function LessonContent({
 			</div>
 
 			<div>
-				<div className="mb-8 flex items-center justify-between gap-4 border-b border-foreground-elevated pb-4">
+				<div className="mb-8 flex items-center justify-between gap-4 border-b border-hairline pb-4">
 					<div>
-						<p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+						<p className="text-xs font-bold uppercase tracking-[0.18em] text-deep-green">
 							{currentLesson.moduleTitle}
 						</p>
-						<h2 className="mt-2 text-2xl font-bold text-foreground-text">
+						<h2 className="mt-2 text-2xl font-bold text-ink">
 							{currentLesson.title}
 						</h2>
-						<p className="mt-2 text-sm text-foreground-text">
+						<p className="mt-2 text-sm text-ink">
 							{completedLessonsCount}/{totalLessonsCount} lessons
 							completed • {progressPercent}% progress
 						</p>
 					</div>
-					<div className="shrink-0 rounded-xl border border-foreground-elevated bg-foreground-elevated/50 px-4 py-2 text-sm font-medium text-foreground-text-secondary">
+					<div className="shrink-0 rounded-xl border border-hairline bg-soft-stone/50 px-4 py-2 text-sm font-medium text-body-muted">
 						{formatLessonLength(currentLesson.length)}
 					</div>
 				</div>
 
 				<Suspense
 					fallback={
-						<div className="h-96 bg-foreground-elevated rounded-xl animate-pulse" />
+						<div className="h-96 bg-soft-stone rounded-xl animate-pulse" />
 					}
 				>
 					<MarkdownContent content={currentLesson.contentMd} />
@@ -204,8 +204,8 @@ function LessonContent({
 
 				<Suspense
 					fallback={
-						<div className="mt-10 border-t border-foreground-elevated pt-8">
-							<div className="h-11 w-40 bg-foreground-elevated rounded-xl animate-pulse" />
+						<div className="mt-10 border-t border-hairline pt-8">
+							<div className="h-11 w-40 bg-soft-stone rounded-xl animate-pulse" />
 						</div>
 					}
 				>
@@ -218,14 +218,14 @@ function LessonContent({
 									lessonId={currentLesson.id}
 								/>
 							) : currentLesson.completed ? (
-								<div className="mt-10 border-t border-foreground-elevated pt-8">
-									<span className="inline-flex items-center gap-2 rounded-xl bg-primary/20 px-5 py-3 text-sm font-medium text-primary">
+								<div className="mt-10 border-t border-hairline pt-8">
+									<span className="inline-flex items-center gap-2 rounded-xl bg-deep-green/20 px-5 py-3 text-sm font-medium text-deep-green">
 										<CheckCircle2 className="w-4 h-4" />
 										Completed
 									</span>
 								</div>
 							) : (
-								<div className="mt-10 border-t border-foreground-elevated pt-8">
+								<div className="mt-10 border-t border-hairline pt-8">
 									<fetcher.Form method="post">
 										<input
 											type="hidden"
@@ -234,10 +234,8 @@ function LessonContent({
 										/>
 										<button
 											type="submit"
-											disabled={
-												fetcher.state !== 'idle'
-											}
-											className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-foreground-text hover:bg-primary  disabled:opacity-50 disabled:cursor-not-allowed"
+											disabled={fetcher.state !== 'idle'}
+											className="inline-flex items-center gap-2 rounded-xl bg-deep-green px-5 py-3 text-sm font-medium text-on-dark hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
 										>
 											<CheckCircle2 className="w-4 h-4" />
 											{fetcher.state !== 'idle'
@@ -260,22 +258,22 @@ function LessonSkeleton() {
 		<div className="flex flex-col animate-pulse">
 			<div className="flex items-center justify-between mb-6">
 				<div className="flex items-center gap-4">
-					<div className="w-10 h-10 bg-foreground-elevated rounded-full" />
+					<div className="w-10 h-10 bg-soft-stone rounded-full" />
 					<div className="space-y-2">
-						<div className="h-5 w-64 bg-foreground-elevated rounded" />
-						<div className="h-4 w-32 bg-foreground-elevated rounded" />
+						<div className="h-5 w-64 bg-soft-stone rounded" />
+						<div className="h-4 w-32 bg-soft-stone rounded" />
 					</div>
 				</div>
 				<div className="flex gap-2">
-					<div className="h-10 w-24 bg-foreground-elevated rounded-xl" />
-					<div className="h-10 w-28 bg-foreground-elevated rounded-xl" />
+					<div className="h-10 w-24 bg-soft-stone rounded-xl" />
+					<div className="h-10 w-28 bg-soft-stone rounded-xl" />
 				</div>
 			</div>
 			<div className="space-y-4">
-				<div className="h-4 w-32 bg-foreground-elevated rounded" />
-				<div className="h-8 w-3/4 bg-foreground-elevated rounded" />
-				<div className="h-4 w-48 bg-foreground-elevated rounded" />
-				<div className="h-96 bg-foreground-elevated rounded-xl" />
+				<div className="h-4 w-32 bg-soft-stone rounded" />
+				<div className="h-8 w-3/4 bg-soft-stone rounded" />
+				<div className="h-4 w-48 bg-soft-stone rounded" />
+				<div className="h-96 bg-soft-stone rounded-xl" />
 			</div>
 		</div>
 	)

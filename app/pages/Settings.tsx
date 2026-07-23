@@ -92,22 +92,20 @@ export default function Settings() {
 		<div className="space-y-8">
 			<Form method="POST" className="space-y-6">
 				<input type="hidden" name="_action" value="update-profile" />
-				<h2 className="text-lg font-bold text-foreground-text">
+				<h2 className="text-lg font-bold text-ink">
 					Account Information
 				</h2>
 				<div className="flex items-center gap-4 mb-6">
-					<div className="w-16 h-16 rounded-full bg-foreground-elevated flex items-center justify-center overflow-hidden border border-foreground-active">
-						<User className="w-8 h-8 text-foreground-text-muted" />
+					<div className="w-16 h-16 rounded-full bg-soft-stone flex items-center justify-center overflow-hidden border border-hairline">
+						<User className="w-8 h-8 text-muted" />
 					</div>
-					<h3 className="font-bold text-foreground-text text-sm">
-						{user.name}
-					</h3>
+					<h3 className="font-bold text-ink text-sm">{user.name}</h3>
 				</div>
 
 				<div className="grid sm:grid-cols-2 gap-4">
 					<div className="space-y-1.5">
 						<label
-							className="text-xs font-bold text-foreground-text-muted uppercase tracking-widest"
+							className="text-xs font-bold text-muted uppercase tracking-widest"
 							htmlFor="name"
 						>
 							Full Name
@@ -117,12 +115,12 @@ export default function Settings() {
 							name="name"
 							type="text"
 							defaultValue={user.name}
-							className="w-full px-3 py-2 bg-foreground-elevated/50 border border-foreground-active rounded-lg text-sm text-foreground-text focus:bg-foreground-elevated focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+							className="w-full px-3 py-2 bg-soft-stone/50 border border-hairline rounded-lg text-sm text-ink focus:bg-soft-stone focus:ring-2 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 						/>
 					</div>
 					<div className="space-y-1.5">
 						<label
-							className="text-xs font-bold text-foreground-text-muted uppercase tracking-widest"
+							className="text-xs font-bold text-muted uppercase tracking-widest"
 							htmlFor="email"
 						>
 							Email Address
@@ -132,21 +130,21 @@ export default function Settings() {
 							name="email"
 							type="email"
 							defaultValue={user.email}
-							className="w-full px-3 py-2 bg-foreground-elevated/50 border border-foreground-active rounded-lg text-sm text-foreground-text focus:bg-foreground-elevated focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+							className="w-full px-3 py-2 bg-soft-stone/50 border border-hairline rounded-lg text-sm text-ink focus:bg-soft-stone focus:ring-2 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 						/>
 					</div>
 				</div>
 
-				<div className="flex justify-end gap-3 pt-4 border-t border-foreground-elevated">
+				<div className="flex justify-end gap-3 pt-4 border-t border-hairline">
 					<button
 						type="reset"
-						className="px-4 py-2 text-sm font-bold text-foreground-text hover:text-foreground-text-secondary "
+						className="px-4 py-2 text-sm font-bold text-ink hover:text-body-muted "
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						className="px-6 py-2 bg-foreground-elevated text-foreground-text rounded-lg text-sm font-bold hover:bg-foreground-active transition-all"
+						className="px-6 py-2 bg-soft-stone text-ink rounded-lg text-sm font-bold hover:bg-hairline transition-all"
 					>
 						Save Changes
 					</button>
@@ -154,12 +152,12 @@ export default function Settings() {
 			</Form>
 
 			<div className="space-y-6">
-				<h2 className="text-lg font-bold text-foreground-text">
+				<h2 className="text-lg font-bold text-ink">
 					Security Settings
 				</h2>
 
 				<div className="space-y-3">
-					<h4 className="font-bold text-foreground-text text-sm">
+					<h4 className="font-bold text-ink text-sm">
 						Change Password
 					</h4>
 					<passwordFetcher.Form method="POST" className="space-y-3">
@@ -174,7 +172,7 @@ export default function Settings() {
 							required
 							minLength={8}
 							placeholder="Current Password"
-							className="w-full px-3 py-2 bg-foreground-elevated/50 border border-foreground-active rounded-lg text-sm text-foreground-text placeholder-foreground-text-muted focus:bg-foreground-elevated focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+							className="w-full px-3 py-2 bg-soft-stone/50 border border-hairline rounded-lg text-sm text-ink placeholder-muted focus:bg-soft-stone focus:ring-2 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 						/>
 						<input
 							type="password"
@@ -182,19 +180,19 @@ export default function Settings() {
 							required
 							minLength={8}
 							placeholder="New Password (min 8 chars)"
-							className="w-full px-3 py-2 bg-foreground-elevated/50 border border-foreground-active rounded-lg text-sm text-foreground-text placeholder-foreground-text-muted focus:bg-foreground-elevated focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none transition-all"
+							className="w-full px-3 py-2 bg-soft-stone/50 border border-hairline rounded-lg text-sm text-ink placeholder-muted focus:bg-soft-stone focus:ring-2 focus:ring-deep-green/10 focus:border-deep-green outline-none transition-all"
 						/>
 						<button
 							type="submit"
 							disabled={passwordFetcher.state === 'submitting'}
-							className="w-full py-2 bg-foreground-elevated text-foreground-text rounded-lg text-sm font-bold hover:bg-foreground-active transition-all disabled:opacity-50"
+							className="w-full py-2 bg-soft-stone text-ink rounded-lg text-sm font-bold hover:bg-hairline transition-all disabled:opacity-50"
 						>
 							{passwordFetcher.state === 'submitting'
 								? 'Updating...'
 								: 'Update Password'}
 						</button>
 						{passwordResult?.ok && (
-							<div className="flex items-center gap-2 text-xs text-primary bg-primary/10 rounded-lg px-3 py-2">
+							<div className="flex items-center gap-2 text-xs text-deep-green bg-deep-green/10 rounded-lg px-3 py-2">
 								<CheckCircle2 className="w-4 h-4" />
 								Password updated successfully.
 							</div>
@@ -209,7 +207,7 @@ export default function Settings() {
 				</div>
 			</div>
 
-			<div className="flex justify-end pt-4 border-t border-foreground-elevated">
+			<div className="flex justify-end pt-4 border-t border-hairline">
 				<Form method="POST">
 					<input type="hidden" name="_action" value="logout" />
 					<button

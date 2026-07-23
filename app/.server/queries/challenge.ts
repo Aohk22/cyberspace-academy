@@ -12,6 +12,7 @@ import {
 	challengeOptionSchema,
 	challengeSubmissionSchema,
 } from '~/.server/database/types'
+import { awardBadgesForUser } from './achievements'
 
 const challengeQuestionWithOptionsSchema = challengeQuestionSchema.extend({
 	options: z.array(challengeOptionSchema).default([]),
@@ -147,6 +148,8 @@ export async function markLessonComplete(lessonId: number, userId: number) {
 			target: [usersToLessons.userId, usersToLessons.lessonId],
 			set: { completed: true },
 		})
+
+	await awardBadgesForUser(userId)
 }
 
 export async function checkAndMarkIfAllCorrect(

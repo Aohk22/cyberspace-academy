@@ -18,10 +18,13 @@ import {
 	tags,
 	challengeTags,
 	userChallenges,
+	chatMessages,
+	badges,
+	userBadges,
 } from './schema'
 import { z } from 'zod'
 
-export const USER_ROLES = ['learner', 'staff'] as const
+export const USER_ROLES = ['learner', 'staff', 'lite', 'pro'] as const
 export type UserRole = (typeof USER_ROLES)[number]
 
 export type User = typeof users.$inferSelect
@@ -40,6 +43,8 @@ export type ChallengeTag = typeof challengeTags.$inferSelect
 export type UserChallenge = typeof userChallenges.$inferSelect
 export type UserPath = typeof userPaths.$inferSelect
 export type PathChallenge = typeof pathChallenges.$inferSelect
+export type Badge = typeof badges.$inferSelect
+export type UserBadge = typeof userBadges.$inferSelect
 
 export const userSchema = createSelectSchema(users)
 export const courseSchema = createSelectSchema(courses)
@@ -57,6 +62,8 @@ export const challengeSchema = createSelectSchema(challenges)
 export const tagSchema = createSelectSchema(tags)
 export const challengeTagSchema = createSelectSchema(challengeTags)
 export const userChallengeSchema = createSelectSchema(userChallenges)
+export const badgeSchema = createSelectSchema(badges)
+export const userBadgeSchema = createSelectSchema(userBadges)
 
 export const learningPathRoadmapItemSchema = z.object({
 	position: z.coerce.number(),
@@ -133,5 +140,7 @@ export const challengeViewSchema = challengeSchema.extend({
 	tags: z.array(z.string()),
 	createdAt: z.coerce.date(),
 })
+
+export type ChatMessage = typeof chatMessages.$inferSelect
 
 export type ChallengeView = z.infer<typeof challengeViewSchema>

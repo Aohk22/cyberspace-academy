@@ -1,63 +1,63 @@
 name: Deploy MkDocs to Pages
 on:
-  workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "docs/**"
-      - "mkdocs.yml"
+    workflow_dispatch:
+    push:
+        branches: [main]
+        paths:
+            - 'docs/**'
+            - 'mkdocs.yml'
 
 permissions:
-  contents: write
-  id-token: write
-  pages: write
+    contents: write
+    id-token: write
+    pages: write
 
 jobs:
-  build_mkdocs:
-    runs-on: ubuntu-latest
+    build_mkdocs:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
 
-      - name: Install python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
+            - name: Install python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: 3.9
 
-      - name: Install dependencies
-        run: pip install \
-          mkdocs-material \
-          mkdocs-material-extensions \
-          mkdocs-mermaid2-plugin \
-          mkdocs-panzoom-plugin
+            - name: Install dependencies
+              run: pip install \
+                  mkdocs-material \
+                  mkdocs-material-extensions \
+                  mkdocs-mermaid2-plugin \
+                  mkdocs-panzoom-plugin
 
-      - name: Deploy to default branch gh-pages
-        run: mkdocs gh-deploy --config-file mkdocs.yml
+            - name: Deploy to default branch gh-pages
+              run: mkdocs gh-deploy --config-file mkdocs.yml
 
-  deploy_mkdocs:
-    needs: build_mkdocs
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    deploy_mkdocs:
+        needs: build_mkdocs
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: gh-pages
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+            - name: Setup Pages
+              uses: actions/configure-pages@v5
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "."
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: '.'
 
-      - name: Deploy to Github Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+            - name: Deploy to Github Pages
+              id: deployment
+              uses: actions/deploy-pages@v4

@@ -6,83 +6,83 @@ tags: [permissions, role-access-control, can, react-router, vitest]
 
 # Dependency graph
 requires:
-  - phase: 01-01
-    provides: shared `can(user, action)` helper at app/auth/permissions.ts, importable client+server
+    - phase: 01-01
+      provides: shared `can(user, action)` helper at app/auth/permissions.ts, importable client+server
 provides:
-  - full D-04 migration: every page-level admin guard + MainLayout staff nav gate now uses can(user,'admin')
-  - admin role zod-enums widened to USER_ROLES (lite/pro accepted)
-  - IndexRedirect migrated to can(user,'admin')
+    - full D-04 migration: every page-level admin guard + MainLayout staff nav gate now uses can(user,'admin')
+    - admin role zod-enums widened to USER_ROLES (lite/pro accepted)
+    - IndexRedirect migrated to can(user,'admin')
 affects:
-  - all admin pages and role-checked routes (now consistently gated through can())
+    - all admin pages and role-checked routes (now consistently gated through can())
 
 # Tech tracking
 tech-stack:
-  added: []
-  patterns:
-    - "Page guards: `if (!can(user, 'admin')) throw redirect(...)` after the existing NoUserContextError null guard"
-    - "Render-gated nav: `{user && can(user,'admin') && (...)}` in MainLayout"
-    - "Admin role schemas use `z.enum(USER_ROLES)` from ~/.server/database/types (server-only module eval at load — safe in route modules)"
+    added: []
+    patterns:
+        - "Page guards: `if (!can(user, 'admin')) throw redirect(...)` after the existing NoUserContextError null guard"
+        - "Render-gated nav: `{user && can(user,'admin') && (...)}` in MainLayout"
+        - 'Admin role schemas use `z.enum(USER_ROLES)` from ~/.server/database/types (server-only module eval at load — safe in route modules)'
 
 key-files:
-  created: []
-  modified:
-    - app/pages/admin/AdminUsers.tsx
-    - app/pages/admin/AdminDashboard.tsx
-    - app/pages/admin/AdminCategories.tsx
-    - app/pages/admin/AdminPaths.tsx
-    - app/pages/admin/AdminPathDetail.tsx
-    - app/pages/admin/AdminUserEdit.tsx
-    - app/pages/admin/AdminCreateUser.tsx
-    - app/pages/CourseBuilder.tsx
-    - app/pages/CourseBuilderLesson.tsx
-    - app/layouts/MainLayout.tsx
-    - app/pages/IndexRedirect.tsx
+    created: []
+    modified:
+        - app/pages/admin/AdminUsers.tsx
+        - app/pages/admin/AdminDashboard.tsx
+        - app/pages/admin/AdminCategories.tsx
+        - app/pages/admin/AdminPaths.tsx
+        - app/pages/admin/AdminPathDetail.tsx
+        - app/pages/admin/AdminUserEdit.tsx
+        - app/pages/admin/AdminCreateUser.tsx
+        - app/pages/CourseBuilder.tsx
+        - app/pages/CourseBuilderLesson.tsx
+        - app/layouts/MainLayout.tsx
+        - app/pages/IndexRedirect.tsx
 
 key-decisions:
-  - "Challenges.tsx was already migrated in Wave 1 (01-01 deviation #1); no canAccessChallenges references remained, so Task 3's Challenges portion was a no-op verification"
-  - "Task 1 (guards) and Task 2 (USER_ROLES enum) edits landed in the same files; both were committed together in b78b2bb since the enum edits were made before the Task 1 commit"
+    - "Challenges.tsx was already migrated in Wave 1 (01-01 deviation #1); no canAccessChallenges references remained, so Task 3's Challenges portion was a no-op verification"
+    - 'Task 1 (guards) and Task 2 (USER_ROLES enum) edits landed in the same files; both were committed together in b78b2bb since the enum edits were made before the Task 1 commit'
 
 patterns-established:
-  - "can(user,'admin') is the single source of truth for every admin gate (loaders, actions, render nav)"
+    - "can(user,'admin') is the single source of truth for every admin gate (loaders, actions, render nav)"
 
 requirements-completed: []
 
 # Coverage metadata (#1602)
 coverage:
-  - id: D1
-    description: "All 8 admin page guards + CourseBuilder/CourseBuilderLesson requireStaffUser migrated from user.role!=='staff' to !can(user,'admin')"
-    verification:
-      - kind: other
-        ref: "grep -rn 'user.role === '\"'\"'staff'\"'\"'|user.role !== '\"'\"'staff'\"'\"'' app/layouts app/pages app/middleware (no matches, exit=1)"
-        status: pass
-      - kind: other
-        ref: "pnpm run typecheck (exit=0)"
-        status: pass
-    human_judgment: false
-  - id: D2
-    description: "MainLayout.tsx:188 staff nav gate migrated to {user && can(user,'admin') && (...)}"
-    verification:
-      - kind: other
-        ref: "grep no matches for user.role==='staff' in app/layouts; typecheck exit=0"
-        status: pass
-    human_judgment: false
-  - id: D3
-    description: "AdminUserEdit + AdminCreateUser role enums widened to z.enum(USER_ROLES) (accepts lite/pro)"
-    verification:
-      - kind: other
-        ref: "grep -rn \"z.enum(['learner', 'staff'])\" app/pages/admin (no matches, exit=1)"
-        status: pass
-      - kind: other
-        ref: "pnpm run typecheck (exit=0)"
-        status: pass
-    human_judgment: false
-  - id: D4
-    description: "IndexRedirect loader migrated to can(user,'admin'); canAccessChallenges fully removed from app/pages"
-    verification:
-      - kind: other
-        ref: "grep -rn canAccessChallenges app/pages (no matches, exit=1); typecheck exit=0"
-        status: pass
-    human_judgment: false
+    - id: D1
+      description: "All 8 admin page guards + CourseBuilder/CourseBuilderLesson requireStaffUser migrated from user.role!=='staff' to !can(user,'admin')"
+      verification:
+          - kind: other
+            ref: 'grep -rn ''user.role === ''"''"''staff''"''"''|user.role !== ''"''"''staff''"''"'''' app/layouts app/pages app/middleware (no matches, exit=1)'
+            status: pass
+          - kind: other
+            ref: 'pnpm run typecheck (exit=0)'
+            status: pass
+      human_judgment: false
+    - id: D2
+      description: "MainLayout.tsx:188 staff nav gate migrated to {user && can(user,'admin') && (...)}"
+      verification:
+          - kind: other
+            ref: "grep no matches for user.role==='staff' in app/layouts; typecheck exit=0"
+            status: pass
+      human_judgment: false
+    - id: D3
+      description: 'AdminUserEdit + AdminCreateUser role enums widened to z.enum(USER_ROLES) (accepts lite/pro)'
+      verification:
+          - kind: other
+            ref: 'grep -rn "z.enum([''learner'', ''staff''])" app/pages/admin (no matches, exit=1)'
+            status: pass
+          - kind: other
+            ref: 'pnpm run typecheck (exit=0)'
+            status: pass
+      human_judgment: false
+    - id: D4
+      description: "IndexRedirect loader migrated to can(user,'admin'); canAccessChallenges fully removed from app/pages"
+      verification:
+          - kind: other
+            ref: 'grep -rn canAccessChallenges app/pages (no matches, exit=1); typecheck exit=0'
+            status: pass
+      human_judgment: false
 
 # Metrics
 duration: 20min
@@ -162,8 +162,9 @@ None - no external service configuration required.
 - D-04 (full migration) is complete. New routes should import `can` from `~/auth/permissions` rather than re-introducing role literals.
 
 ---
-*Phase: 01-role-access-control-implementation*
-*Completed: 2026-07-16*
+
+_Phase: 01-role-access-control-implementation_
+_Completed: 2026-07-16_
 
 ## Self-Check: PASSED
 
